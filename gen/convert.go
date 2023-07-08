@@ -71,6 +71,7 @@ func processClassSchema(pkg *GoPackage, s *schema.Schema, imports []PackageConte
 
 		pkg.ClassMsgSendWrappers = append(pkg.ClassMsgSendWrappers, msg)
 		pkg.CGoWrapperFuncs = append(pkg.CGoWrapperFuncs, wrapper)
+
 	})
 	cb.EachInstanceMethod(func(m schema.Method) {
 		defer ignoreIfUnimplemented(fmt.Sprintf("%s.%s", s.Class.Name, m.Name))
@@ -80,6 +81,14 @@ func processClassSchema(pkg *GoPackage, s *schema.Schema, imports []PackageConte
 
 		classDef.InstanceMethods = append(classDef.InstanceMethods, method)
 		pkg.MsgSendWrappers = append(pkg.MsgSendWrappers, msg)
+		// handle typed init methods
+		if m.Name == "init" {
+			method.Name += fmt.Sprintf("_As%s", cb.Class.Name)
+			m.Description = "is a typed version of Init."
+			method.Description = formatComment(m, method.Name)
+			classDef.InstanceMethods = append(classDef.InstanceMethods, method)
+		}
+
 	})
 
 	return classDef, nil

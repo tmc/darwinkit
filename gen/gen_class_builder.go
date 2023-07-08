@@ -47,6 +47,10 @@ func (cb *classBuilder) EachInstanceMethod(f func(schema.Method)) {
 			Return: schema.DataType{Name: "instancetype"},
 		})
 	}
+	// f(schema.Method{
+	// 	Name:   fmt.Sprintf("init_As%s", cb.Class.Name),
+	// 	Return: schema.DataType{Name: "instancetype"},
+	// })
 	for _, p := range cb.Class.InstanceProperties {
 		func() {
 			defer ignoreIfUnimplemented(fmt.Sprintf("%s.%s", cb.Class.Name, p.Name))
@@ -63,11 +67,19 @@ func (cb *classBuilder) EachInstanceMethod(f func(schema.Method)) {
 
 func (cb *classBuilder) instanceMethod(method schema.Method) MethodDef {
 	ident := toExportedName(selectorNameToGoIdent(cb.generatedNames, method.Name))
+
+	if method.Name == "init" && method.Description == "" {
+		method.Description = fmt.Sprintf("initializes a new instance of the %s class.", cb.Class.Name)
+	}
+
 	r := MethodDef{
 		Description: formatComment(method, ident),
 		Name:        ident,
 		WrappedFunc: cb.cgoWrapperFunc(method, false),
 	}
+	// if method.Name == "init" && isInstanceType(method.Return) {
+	// 	r.Name += "_As" + cb.Class.Name
+	// }
 	return r
 }
 
