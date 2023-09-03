@@ -141,6 +141,7 @@ func (db *Generator) TypeFromSymbol(sym Symbol) typing.Type {
 
 }
 
+// ParseType parses a type from a declparse.TypeInfo.
 func (db *Generator) ParseType(ti declparse.TypeInfo) (typ typing.Type) {
 	defer func() {
 		if r := recover(); r != nil {
@@ -152,18 +153,6 @@ func (db *Generator) ParseType(ti declparse.TypeInfo) (typ typing.Type) {
 			}
 		}
 	}()
-	if ti.Name == "CFURLRef" {
-		log.Printf("ParseType: %s\n", ti.Name)
-		log.Printf("info: %v\n", ti)
-		log.Printf("info fn: %v\n", ti.Func)
-		defer func() {
-			log.Printf("info typ: %T %+v\n", typ, typ)
-			if pt, ok := typ.(*typing.PointerType); ok {
-				log.Printf("info typ: %T %+v\n", pt.Type, pt.Type)
-			}
-
-		}()
-	}
 	if ti.Func != nil {
 		var blockParams []typing.BlockParam
 		for _, arg := range ti.Func.Args {
@@ -247,15 +236,15 @@ func (db *Generator) ParseType(ti declparse.TypeInfo) (typ typing.Type) {
 	default:
 		var ok bool
 		typ, ok = typing.GetPrimitiveType(ti.Name)
-		log.Println("primitive", ti.Name, ok)
+		// log.Println("primitive", ti.Name, ok)
 		if !ok {
 			typ, ok = typing.GetDispatchType(ti.Name)
 		}
-		log.Println("dispatch", ti.Name, ok)
+		// log.Println("dispatch", ti.Name, ok)
 		if !ok {
 			typ, ok = typing.GetKernelType(ti.Name)
 		}
-		log.Println("kernel", ti.Name, ok)
+		// log.Println("kernel", ti.Name, ok)
 		if !ok {
 			typ = db.TypeFromSymbolName(ti.Name)
 			log.Println("symbol", ti.Name, typ, ok)
@@ -270,6 +259,10 @@ func (db *Generator) ParseType(ti declparse.TypeInfo) (typ typing.Type) {
 		}
 	}
 
+	if _, ok := typ.(*typing.CStringType); ok {
+		return typ
+	}
+
 	if ti.IsPtr && !ref {
 		if _, ok := typ.(*typing.VoidType); ok {
 			typ = &typing.VoidPointerType{}
@@ -278,7 +271,8 @@ func (db *Generator) ParseType(ti declparse.TypeInfo) (typ typing.Type) {
 				panic("nil type")
 			}
 			typ = &typing.PointerType{
-				Type: typ,
+				Type:    typ,
+				IsConst: ti.Annots[declparse.TypeAnnotConst],
 			}
 		}
 	}
