@@ -108,6 +108,20 @@ func NewNNBinaryArithmeticNodeWithSources(sourceNodes []INNImageNode) NNBinaryAr
 	return instance
 }
 
+func (n_ NNBinaryArithmeticNode) InitWithLeftSourceRightSource(left INNImageNode, right INNImageNode) NNBinaryArithmeticNode {
+	rv := objc.Call[NNBinaryArithmeticNode](n_, objc.Sel("initWithLeftSource:rightSource:"), objc.Ptr(left), objc.Ptr(right))
+	return rv
+}
+
+//	[Full Topic]
+//
+// [Full Topic]: https://developer.apple.com/documentation/metalperformanceshaders/mpsnnbinaryarithmeticnode/2890825-initwithleftsource?language=objc
+func NewNNBinaryArithmeticNodeWithLeftSourceRightSource(left INNImageNode, right INNImageNode) NNBinaryArithmeticNode {
+	instance := NNBinaryArithmeticNodeClass.Alloc().InitWithLeftSourceRightSource(left, right)
+	instance.Autorelease()
+	return instance
+}
+
 func (nc _NNBinaryArithmeticNodeClass) Alloc() NNBinaryArithmeticNode {
 	rv := objc.Call[NNBinaryArithmeticNode](nc, objc.Sel("alloc"))
 	return rv
@@ -213,32 +227,62 @@ func (n_ NNBinaryArithmeticNode) SetSecondaryStrideInPixelsX(value uint) {
 
 //	[Full Topic]
 //
-// [Full Topic]: https://developer.apple.com/documentation/metalperformanceshaders/mpsnnbinaryarithmeticnode/2952974-secondarystrideinfeaturechannels?language=objc
-func (n_ NNBinaryArithmeticNode) SecondaryStrideInFeatureChannels() uint {
-	rv := objc.Call[uint](n_, objc.Sel("secondaryStrideInFeatureChannels"))
+// [Full Topic]: https://developer.apple.com/documentation/metalperformanceshaders/mpsnnbinaryarithmeticnode/2952996-primarystrideinpixelsy?language=objc
+func (n_ NNBinaryArithmeticNode) PrimaryStrideInPixelsY() uint {
+	rv := objc.Call[uint](n_, objc.Sel("primaryStrideInPixelsY"))
 	return rv
 }
 
 //	[Full Topic]
 //
-// [Full Topic]: https://developer.apple.com/documentation/metalperformanceshaders/mpsnnbinaryarithmeticnode/2952974-secondarystrideinfeaturechannels?language=objc
-func (n_ NNBinaryArithmeticNode) SetSecondaryStrideInFeatureChannels(value uint) {
-	objc.Call[objc.Void](n_, objc.Sel("setSecondaryStrideInFeatureChannels:"), value)
+// [Full Topic]: https://developer.apple.com/documentation/metalperformanceshaders/mpsnnbinaryarithmeticnode/2952996-primarystrideinpixelsy?language=objc
+func (n_ NNBinaryArithmeticNode) SetPrimaryStrideInPixelsY(value uint) {
+	objc.Call[objc.Void](n_, objc.Sel("setPrimaryStrideInPixelsY:"), value)
 }
 
 //	[Full Topic]
 //
-// [Full Topic]: https://developer.apple.com/documentation/metalperformanceshaders/mpsnnbinaryarithmeticnode/2952983-primarystrideinfeaturechannels?language=objc
-func (n_ NNBinaryArithmeticNode) PrimaryStrideInFeatureChannels() uint {
-	rv := objc.Call[uint](n_, objc.Sel("primaryStrideInFeatureChannels"))
+// [Full Topic]: https://developer.apple.com/documentation/metalperformanceshaders/mpsnnbinaryarithmeticnode/2952979-maximumvalue?language=objc
+func (n_ NNBinaryArithmeticNode) MaximumValue() float64 {
+	rv := objc.Call[float64](n_, objc.Sel("maximumValue"))
 	return rv
 }
 
 //	[Full Topic]
 //
-// [Full Topic]: https://developer.apple.com/documentation/metalperformanceshaders/mpsnnbinaryarithmeticnode/2952983-primarystrideinfeaturechannels?language=objc
-func (n_ NNBinaryArithmeticNode) SetPrimaryStrideInFeatureChannels(value uint) {
-	objc.Call[objc.Void](n_, objc.Sel("setPrimaryStrideInFeatureChannels:"), value)
+// [Full Topic]: https://developer.apple.com/documentation/metalperformanceshaders/mpsnnbinaryarithmeticnode/2952979-maximumvalue?language=objc
+func (n_ NNBinaryArithmeticNode) SetMaximumValue(value float64) {
+	objc.Call[objc.Void](n_, objc.Sel("setMaximumValue:"), value)
+}
+
+//	[Full Topic]
+//
+// [Full Topic]: https://developer.apple.com/documentation/metalperformanceshaders/mpsnnbinaryarithmeticnode/2952973-primarystrideinpixelsx?language=objc
+func (n_ NNBinaryArithmeticNode) PrimaryStrideInPixelsX() uint {
+	rv := objc.Call[uint](n_, objc.Sel("primaryStrideInPixelsX"))
+	return rv
+}
+
+//	[Full Topic]
+//
+// [Full Topic]: https://developer.apple.com/documentation/metalperformanceshaders/mpsnnbinaryarithmeticnode/2952973-primarystrideinpixelsx?language=objc
+func (n_ NNBinaryArithmeticNode) SetPrimaryStrideInPixelsX(value uint) {
+	objc.Call[objc.Void](n_, objc.Sel("setPrimaryStrideInPixelsX:"), value)
+}
+
+//	[Full Topic]
+//
+// [Full Topic]: https://developer.apple.com/documentation/metalperformanceshaders/mpsnnbinaryarithmeticnode/2952966-primaryscale?language=objc
+func (n_ NNBinaryArithmeticNode) PrimaryScale() float64 {
+	rv := objc.Call[float64](n_, objc.Sel("primaryScale"))
+	return rv
+}
+
+//	[Full Topic]
+//
+// [Full Topic]: https://developer.apple.com/documentation/metalperformanceshaders/mpsnnbinaryarithmeticnode/2952966-primaryscale?language=objc
+func (n_ NNBinaryArithmeticNode) SetPrimaryScale(value float64) {
+	objc.Call[objc.Void](n_, objc.Sel("setPrimaryScale:"), value)
 }
 
 //	[Full Topic]
@@ -273,30 +317,30 @@ func (n_ NNBinaryArithmeticNode) SetBias(value float32) {
 
 //	[Full Topic]
 //
-// [Full Topic]: https://developer.apple.com/documentation/metalperformanceshaders/mpsnnbinaryarithmeticnode/2952973-primarystrideinpixelsx?language=objc
-func (n_ NNBinaryArithmeticNode) PrimaryStrideInPixelsX() uint {
-	rv := objc.Call[uint](n_, objc.Sel("primaryStrideInPixelsX"))
+// [Full Topic]: https://developer.apple.com/documentation/metalperformanceshaders/mpsnnbinaryarithmeticnode/2952974-secondarystrideinfeaturechannels?language=objc
+func (n_ NNBinaryArithmeticNode) SecondaryStrideInFeatureChannels() uint {
+	rv := objc.Call[uint](n_, objc.Sel("secondaryStrideInFeatureChannels"))
 	return rv
 }
 
 //	[Full Topic]
 //
-// [Full Topic]: https://developer.apple.com/documentation/metalperformanceshaders/mpsnnbinaryarithmeticnode/2952973-primarystrideinpixelsx?language=objc
-func (n_ NNBinaryArithmeticNode) SetPrimaryStrideInPixelsX(value uint) {
-	objc.Call[objc.Void](n_, objc.Sel("setPrimaryStrideInPixelsX:"), value)
+// [Full Topic]: https://developer.apple.com/documentation/metalperformanceshaders/mpsnnbinaryarithmeticnode/2952974-secondarystrideinfeaturechannels?language=objc
+func (n_ NNBinaryArithmeticNode) SetSecondaryStrideInFeatureChannels(value uint) {
+	objc.Call[objc.Void](n_, objc.Sel("setSecondaryStrideInFeatureChannels:"), value)
 }
 
 //	[Full Topic]
 //
-// [Full Topic]: https://developer.apple.com/documentation/metalperformanceshaders/mpsnnbinaryarithmeticnode/2952996-primarystrideinpixelsy?language=objc
-func (n_ NNBinaryArithmeticNode) PrimaryStrideInPixelsY() uint {
-	rv := objc.Call[uint](n_, objc.Sel("primaryStrideInPixelsY"))
+// [Full Topic]: https://developer.apple.com/documentation/metalperformanceshaders/mpsnnbinaryarithmeticnode/2952983-primarystrideinfeaturechannels?language=objc
+func (n_ NNBinaryArithmeticNode) PrimaryStrideInFeatureChannels() uint {
+	rv := objc.Call[uint](n_, objc.Sel("primaryStrideInFeatureChannels"))
 	return rv
 }
 
 //	[Full Topic]
 //
-// [Full Topic]: https://developer.apple.com/documentation/metalperformanceshaders/mpsnnbinaryarithmeticnode/2952996-primarystrideinpixelsy?language=objc
-func (n_ NNBinaryArithmeticNode) SetPrimaryStrideInPixelsY(value uint) {
-	objc.Call[objc.Void](n_, objc.Sel("setPrimaryStrideInPixelsY:"), value)
+// [Full Topic]: https://developer.apple.com/documentation/metalperformanceshaders/mpsnnbinaryarithmeticnode/2952983-primarystrideinfeaturechannels?language=objc
+func (n_ NNBinaryArithmeticNode) SetPrimaryStrideInFeatureChannels(value uint) {
+	objc.Call[objc.Void](n_, objc.Sel("setPrimaryStrideInFeatureChannels:"), value)
 }

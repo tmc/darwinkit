@@ -38,6 +38,9 @@ type INNLossGradient interface {
 	Epsilon() float32
 	SetEpsilon(value float32)
 	ReduceAcrossBatch() bool
+	LossType() CNNLossType
+	LabelSmoothing() float64
+	SetLabelSmoothing(value float64)
 }
 
 //	[Full Topic]
@@ -175,9 +178,9 @@ func (n_ NNLossGradient) SetWeight(value float32) {
 
 //	[Full Topic]
 //
-// [Full Topic]: https://developer.apple.com/documentation/metalperformanceshaders/mpsnnlossgradient/3131820-numberofclasses?language=objc
-func (n_ NNLossGradient) NumberOfClasses() uint {
-	rv := objc.Call[uint](n_, objc.Sel("numberOfClasses"))
+// [Full Topic]: https://developer.apple.com/documentation/metalperformanceshaders/mpsnnlossgradient/3131815-epsilon?language=objc
+func (n_ NNLossGradient) Epsilon() float64 {
+	rv := objc.Call[float64](n_, objc.Sel("epsilon"))
 	return rv
 }
 
@@ -255,4 +258,27 @@ func (n_ NNLossGradient) SetEpsilon(value float32) {
 func (n_ NNLossGradient) ReduceAcrossBatch() bool {
 	rv := objc.Call[bool](n_, objc.Sel("reduceAcrossBatch"))
 	return rv
+}
+
+//	[Full Topic]
+//
+// [Full Topic]: https://developer.apple.com/documentation/metalperformanceshaders/mpsnnlossgradient/3131819-losstype?language=objc
+func (n_ NNLossGradient) LossType() CNNLossType {
+	rv := objc.Call[CNNLossType](n_, objc.Sel("lossType"))
+	return rv
+}
+
+//	[Full Topic]
+//
+// [Full Topic]: https://developer.apple.com/documentation/metalperformanceshaders/mpsnnlossgradient/3131818-labelsmoothing?language=objc
+func (n_ NNLossGradient) LabelSmoothing() float64 {
+	rv := objc.Call[float64](n_, objc.Sel("labelSmoothing"))
+	return rv
+}
+
+//	[Full Topic]
+//
+// [Full Topic]: https://developer.apple.com/documentation/metalperformanceshaders/mpsnnlossgradient/3131818-labelsmoothing?language=objc
+func (n_ NNLossGradient) SetLabelSmoothing(value float64) {
+	objc.Call[objc.Void](n_, objc.Sel("setLabelSmoothing:"), value)
 }

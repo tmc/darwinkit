@@ -37,6 +37,18 @@ func CNNSpatialNormalizationNodeFrom(ptr unsafe.Pointer) CNNSpatialNormalization
 	}
 }
 
+func (cc _CNNSpatialNormalizationNodeClass) NodeWithSourceKernelSize(sourceNode INNImageNode, kernelSize uint) CNNSpatialNormalizationNode {
+	rv := objc.Call[CNNSpatialNormalizationNode](cc, objc.Sel("nodeWithSource:kernelSize:"), objc.Ptr(sourceNode), kernelSize)
+	return rv
+}
+
+//	[Full Topic]
+//
+// [Full Topic]: https://developer.apple.com/documentation/metalperformanceshaders/mpscnnspatialnormalizationnode/2866401-nodewithsource?language=objc
+func CNNSpatialNormalizationNode_NodeWithSourceKernelSize(sourceNode INNImageNode, kernelSize uint) CNNSpatialNormalizationNode {
+	return CNNSpatialNormalizationNodeClass.NodeWithSourceKernelSize(sourceNode, kernelSize)
+}
+
 func (c_ CNNSpatialNormalizationNode) InitWithSource(sourceNode INNImageNode) CNNSpatialNormalizationNode {
 	rv := objc.Call[CNNSpatialNormalizationNode](c_, objc.Sel("initWithSource:"), sourceNode)
 	return rv

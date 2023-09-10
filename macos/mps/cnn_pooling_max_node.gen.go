@@ -53,6 +53,18 @@ func (c_ CNNPoolingMaxNode) Init() CNNPoolingMaxNode {
 	return rv
 }
 
+func (cc _CNNPoolingMaxNodeClass) NodeWithSourceFilterSize(sourceNode INNImageNode, size uint) CNNPoolingMaxNode {
+	rv := objc.Call[CNNPoolingMaxNode](cc, objc.Sel("nodeWithSource:filterSize:"), objc.Ptr(sourceNode), size)
+	return rv
+}
+
+//	[Full Topic]
+//
+// [Full Topic]: https://developer.apple.com/documentation/metalperformanceshaders/mpscnnpoolingnode/2866508-nodewithsource?language=objc
+func CNNPoolingMaxNode_NodeWithSourceFilterSize(sourceNode INNImageNode, size uint) CNNPoolingMaxNode {
+	return CNNPoolingMaxNodeClass.NodeWithSourceFilterSize(sourceNode, size)
+}
+
 func (c_ CNNPoolingMaxNode) InitWithSourceFilterSize(sourceNode INNImageNode, size uint) CNNPoolingMaxNode {
 	rv := objc.Call[CNNPoolingMaxNode](c_, objc.Sel("initWithSource:filterSize:"), sourceNode, size)
 	return rv

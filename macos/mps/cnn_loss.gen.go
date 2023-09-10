@@ -22,20 +22,16 @@ type ICNNLoss interface {
 	ICNNKernel
 	EncodeBatchToCommandBufferSourceImagesLabels(commandBuffer metal.PCommandBuffer, sourceImage *foundation.Array, labels *foundation.Array) *foundation.Array
 	EncodeBatchToCommandBufferObjectSourceImagesLabels(commandBufferObject objc.IObject, sourceImage *foundation.Array, labels *foundation.Array) *foundation.Array
-	EncodeToCommandBufferSourceImageLabelsDestinationImage(commandBuffer metal.PCommandBuffer, sourceImage IImage, labels ICNNLossLabels, destinationImage IImage)
-	EncodeToCommandBufferObjectSourceImageLabelsDestinationImage(commandBufferObject objc.IObject, sourceImage IImage, labels ICNNLossLabels, destinationImage IImage)
-	EncodeBatchToCommandBufferSourceImagesLabelsDestinationImages(commandBuffer metal.PCommandBuffer, sourceImage *foundation.Array, labels *foundation.Array, destinationImage *foundation.Array)
-	EncodeBatchToCommandBufferObjectSourceImagesLabelsDestinationImages(commandBufferObject objc.IObject, sourceImage *foundation.Array, labels *foundation.Array, destinationImage *foundation.Array)
 	EncodeToCommandBufferSourceImageLabels(commandBuffer metal.PCommandBuffer, sourceImage IImage, labels ICNNLossLabels) Image
 	EncodeToCommandBufferObjectSourceImageLabels(commandBufferObject objc.IObject, sourceImage IImage, labels ICNNLossLabels) Image
-	LossType() CNNLossType
-	ReductionType() CNNReductionType
 	NumberOfClasses() uint
 	Delta() float32
 	Weight() float32
 	LabelSmoothing() float32
 	Epsilon() float32
 	ReduceAcrossBatch() bool
+	LossType() CNNLossType
+	LabelSmoothing() float64
 }
 
 // A kernel that computes the loss and loss gradient between specified predictions and labels. [Full Topic]
@@ -182,22 +178,6 @@ func (c_ CNNLoss) EncodeToCommandBufferObjectSourceImageLabels(commandBufferObje
 
 //	[Full Topic]
 //
-// [Full Topic]: https://developer.apple.com/documentation/metalperformanceshaders/mpscnnloss/2942359-losstype?language=objc
-func (c_ CNNLoss) LossType() CNNLossType {
-	rv := objc.Call[CNNLossType](c_, objc.Sel("lossType"))
-	return rv
-}
-
-//	[Full Topic]
-//
-// [Full Topic]: https://developer.apple.com/documentation/metalperformanceshaders/mpscnnloss/2942365-reductiontype?language=objc
-func (c_ CNNLoss) ReductionType() CNNReductionType {
-	rv := objc.Call[CNNReductionType](c_, objc.Sel("reductionType"))
-	return rv
-}
-
-//	[Full Topic]
-//
 // [Full Topic]: https://developer.apple.com/documentation/metalperformanceshaders/mpscnnloss/2942389-numberofclasses?language=objc
 func (c_ CNNLoss) NumberOfClasses() uint {
 	rv := objc.Call[uint](c_, objc.Sel("numberOfClasses"))
@@ -241,5 +221,21 @@ func (c_ CNNLoss) Epsilon() float32 {
 // [Full Topic]: https://developer.apple.com/documentation/metalperformanceshaders/mpscnnloss/3547981-reduceacrossbatch?language=objc
 func (c_ CNNLoss) ReduceAcrossBatch() bool {
 	rv := objc.Call[bool](c_, objc.Sel("reduceAcrossBatch"))
+	return rv
+}
+
+//	[Full Topic]
+//
+// [Full Topic]: https://developer.apple.com/documentation/metalperformanceshaders/mpscnnloss/2942359-losstype?language=objc
+func (c_ CNNLoss) LossType() CNNLossType {
+	rv := objc.Call[CNNLossType](c_, objc.Sel("lossType"))
+	return rv
+}
+
+//	[Full Topic]
+//
+// [Full Topic]: https://developer.apple.com/documentation/metalperformanceshaders/mpscnnloss/2942358-labelsmoothing?language=objc
+func (c_ CNNLoss) LabelSmoothing() float64 {
+	rv := objc.Call[float64](c_, objc.Sel("labelSmoothing"))
 	return rv
 }

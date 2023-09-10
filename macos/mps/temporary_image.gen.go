@@ -96,6 +96,20 @@ func (t_ TemporaryImage) Init() TemporaryImage {
 	return rv
 }
 
+func (t_ TemporaryImage) InitWithParentImageSliceRangeFeatureChannels(parent IImage, sliceRange foundation.Range, featureChannels uint) TemporaryImage {
+	rv := objc.Call[TemporaryImage](t_, objc.Sel("initWithParentImage:sliceRange:featureChannels:"), objc.Ptr(parent), sliceRange, featureChannels)
+	return rv
+}
+
+//	[Full Topic]
+//
+// [Full Topic]: https://developer.apple.com/documentation/metalperformanceshaders/mpsimage/2942493-initwithparentimage?language=objc
+func NewTemporaryImageWithParentImageSliceRangeFeatureChannels(parent IImage, sliceRange foundation.Range, featureChannels uint) TemporaryImage {
+	instance := TemporaryImageClass.Alloc().InitWithParentImageSliceRangeFeatureChannels(parent, sliceRange, featureChannels)
+	instance.Autorelease()
+	return instance
+}
+
 func (t_ TemporaryImage) InitWithTextureFeatureChannels(texture metal.PTexture, featureChannels uint) TemporaryImage {
 	po0 := objc.WrapAsProtocol("MTLTexture", texture)
 	rv := objc.Call[TemporaryImage](t_, objc.Sel("initWithTexture:featureChannels:"), po0, featureChannels)

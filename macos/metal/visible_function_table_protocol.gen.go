@@ -20,6 +20,10 @@ type PVisibleFunctionTable interface {
 	// optional
 	SetFunctionAtIndex(function FunctionHandleObject, index uint)
 	HasSetFunctionAtIndex() bool
+
+	// optional
+	SetFunctionsWithRange(functions *FunctionHandleObject, range_ foundation.Range)
+	HasSetFunctionsWithRange() bool
 }
 
 // ensure impl type implements protocol interface
@@ -52,4 +56,15 @@ func (v_ VisibleFunctionTableObject) HasSetFunctionAtIndex() bool {
 func (v_ VisibleFunctionTableObject) SetFunctionAtIndex(function FunctionHandleObject, index uint) {
 	po0 := objc.WrapAsProtocol("MTLFunctionHandle", function)
 	objc.Call[objc.Void](v_, objc.Sel("setFunction:atIndex:"), po0, index)
+}
+
+func (v_ VisibleFunctionTableObject) HasSetFunctionsWithRange() bool {
+	return v_.RespondsToSelector(objc.Sel("setFunctions:withRange:"))
+}
+
+// Sets a range of table entries to point to an array of callable functions. [Full Topic]
+//
+// [Full Topic]: https://developer.apple.com/documentation/metal/mtlvisiblefunctiontable/3554057-setfunctions?language=objc
+func (v_ VisibleFunctionTableObject) SetFunctionsWithRange(functions *FunctionHandleObject, range_ foundation.Range) {
+	objc.Call[objc.Void](v_, objc.Sel("setFunctions:withRange:"), functions, range_)
 }

@@ -19,11 +19,11 @@ type _CNNInstanceNormalizationGradientStateClass struct {
 // An interface definition for the [CNNInstanceNormalizationGradientState] class.
 type ICNNInstanceNormalizationGradientState interface {
 	INNGradientState
-	Beta() metal.BufferObject
 	InstanceNormalization() CNNInstanceNormalization
-	GradientForBeta() metal.BufferObject
-	Gamma() metal.BufferObject
 	GradientForGamma() metal.BufferObject
+	Beta() metal.BufferObject
+	Gamma() metal.BufferObject
+	GradientForBeta() metal.BufferObject
 }
 
 // An object that stores information required to execute a gradient pass for instance normalization. [Full Topic]
@@ -117,23 +117,24 @@ func NewCNNInstanceNormalizationGradientStateWithDeviceBufferSize(device metal.P
 	return instance
 }
 
-func (c_ CNNInstanceNormalizationGradientState) InitWithResources(resources []metal.PResource) CNNInstanceNormalizationGradientState {
-	rv := objc.Call[CNNInstanceNormalizationGradientState](c_, objc.Sel("initWithResources:"), resources)
+func (c_ CNNInstanceNormalizationGradientState) InitWithResource(resource metal.PResource) CNNInstanceNormalizationGradientState {
+	po0 := objc.WrapAsProtocol("MTLResource", resource)
+	rv := objc.Call[CNNInstanceNormalizationGradientState](c_, objc.Sel("initWithResource:"), po0)
 	return rv
 }
 
 //	[Full Topic]
 //
-// [Full Topic]: https://developer.apple.com/documentation/metalperformanceshaders/mpsstate/2947895-initwithresources?language=objc
-func NewCNNInstanceNormalizationGradientStateWithResources(resources []metal.PResource) CNNInstanceNormalizationGradientState {
-	instance := CNNInstanceNormalizationGradientStateClass.Alloc().InitWithResources(resources)
+// [Full Topic]: https://developer.apple.com/documentation/metalperformanceshaders/mpsstate/2942390-initwithresource?language=objc
+func NewCNNInstanceNormalizationGradientStateWithResource(resource metal.PResource) CNNInstanceNormalizationGradientState {
+	instance := CNNInstanceNormalizationGradientStateClass.Alloc().InitWithResource(resource)
 	instance.Autorelease()
 	return instance
 }
 
-func (cc _CNNInstanceNormalizationGradientStateClass) TemporaryStateWithCommandBufferBufferSize(cmdBuf metal.PCommandBuffer, bufferSize uint) CNNInstanceNormalizationGradientState {
-	po0 := objc.WrapAsProtocol("MTLCommandBuffer", cmdBuf)
-	rv := objc.Call[CNNInstanceNormalizationGradientState](cc, objc.Sel("temporaryStateWithCommandBuffer:bufferSize:"), po0, bufferSize)
+func (cc _CNNInstanceNormalizationGradientStateClass) TemporaryStateWithCommandBufferResourceList(commandBuffer metal.PCommandBuffer, resourceList IStateResourceList) CNNInstanceNormalizationGradientState {
+	po0 := objc.WrapAsProtocol("MTLCommandBuffer", commandBuffer)
+	rv := objc.Call[CNNInstanceNormalizationGradientState](cc, objc.Sel("temporaryStateWithCommandBuffer:resourceList:"), po0, objc.Ptr(resourceList))
 	return rv
 }
 
@@ -203,9 +204,17 @@ func (c_ CNNInstanceNormalizationGradientState) InstanceNormalization() CNNInsta
 
 //	[Full Topic]
 //
-// [Full Topic]: https://developer.apple.com/documentation/metalperformanceshaders/mpscnninstancenormalizationgradientstate/2953930-gradientforbeta?language=objc
-func (c_ CNNInstanceNormalizationGradientState) GradientForBeta() metal.BufferObject {
-	rv := objc.Call[metal.BufferObject](c_, objc.Sel("gradientForBeta"))
+// [Full Topic]: https://developer.apple.com/documentation/metalperformanceshaders/mpscnninstancenormalizationgradientstate/2953928-gradientforgamma?language=objc
+func (c_ CNNInstanceNormalizationGradientState) GradientForGamma() metal.BufferObject {
+	rv := objc.Call[metal.BufferObject](c_, objc.Sel("gradientForGamma"))
+	return rv
+}
+
+//	[Full Topic]
+//
+// [Full Topic]: https://developer.apple.com/documentation/metalperformanceshaders/mpscnninstancenormalizationgradientstate/2956162-beta?language=objc
+func (c_ CNNInstanceNormalizationGradientState) Beta() metal.BufferObject {
+	rv := objc.Call[metal.BufferObject](c_, objc.Sel("beta"))
 	return rv
 }
 
@@ -219,8 +228,8 @@ func (c_ CNNInstanceNormalizationGradientState) Gamma() metal.BufferObject {
 
 //	[Full Topic]
 //
-// [Full Topic]: https://developer.apple.com/documentation/metalperformanceshaders/mpscnninstancenormalizationgradientstate/2953928-gradientforgamma?language=objc
-func (c_ CNNInstanceNormalizationGradientState) GradientForGamma() metal.BufferObject {
-	rv := objc.Call[metal.BufferObject](c_, objc.Sel("gradientForGamma"))
+// [Full Topic]: https://developer.apple.com/documentation/metalperformanceshaders/mpscnninstancenormalizationgradientstate/2953930-gradientforbeta?language=objc
+func (c_ CNNInstanceNormalizationGradientState) GradientForBeta() metal.BufferObject {
+	rv := objc.Call[metal.BufferObject](c_, objc.Sel("gradientForBeta"))
 	return rv
 }

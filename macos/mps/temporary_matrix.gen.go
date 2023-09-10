@@ -114,6 +114,21 @@ func NewTemporaryMatrixWithDeviceDescriptor(device metal.PDevice, descriptor IMa
 	return instance
 }
 
+func (t_ TemporaryMatrix) InitWithBufferOffsetDescriptor(buffer metal.PBuffer, offset uint, descriptor IMatrixDescriptor) TemporaryMatrix {
+	po0 := objc.WrapAsProtocol("MTLBuffer", buffer)
+	rv := objc.Call[TemporaryMatrix](t_, objc.Sel("initWithBuffer:offset:descriptor:"), po0, offset, objc.Ptr(descriptor))
+	return rv
+}
+
+//	[Full Topic]
+//
+// [Full Topic]: https://developer.apple.com/documentation/metalperformanceshaders/mpsmatrix/3229863-initwithbuffer?language=objc
+func NewTemporaryMatrixWithBufferOffsetDescriptor(buffer metal.PBuffer, offset uint, descriptor IMatrixDescriptor) TemporaryMatrix {
+	instance := TemporaryMatrixClass.Alloc().InitWithBufferOffsetDescriptor(buffer, offset, descriptor)
+	instance.Autorelease()
+	return instance
+}
+
 //	[Full Topic]
 //
 // [Full Topic]: https://developer.apple.com/documentation/metalperformanceshaders/mpstemporarymatrix/2867073-prefetchstoragewithcommandbuffer?language=objc

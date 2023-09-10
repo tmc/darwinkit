@@ -197,3 +197,33 @@ func (m_ MatrixRandomDistributionDescriptor) StandardDeviation() float32 {
 func (m_ MatrixRandomDistributionDescriptor) SetStandardDeviation(value float32) {
 	objc.Call[objc.Void](m_, objc.Sel("setStandardDeviation:"), value)
 }
+
+//	[Full Topic]
+//
+// [Full Topic]: https://developer.apple.com/documentation/metalperformanceshaders/mpsmatrixrandomdistributiondescriptor/3242858-maximum?language=objc
+func (m_ MatrixRandomDistributionDescriptor) Maximum() float64 {
+	rv := objc.Call[float64](m_, objc.Sel("maximum"))
+	return rv
+}
+
+//	[Full Topic]
+//
+// [Full Topic]: https://developer.apple.com/documentation/metalperformanceshaders/mpsmatrixrandomdistributiondescriptor/3242858-maximum?language=objc
+func (m_ MatrixRandomDistributionDescriptor) SetMaximum(value float64) {
+	objc.Call[objc.Void](m_, objc.Sel("setMaximum:"), value)
+}
+
+//	[Full Topic]
+//
+// [Full Topic]: https://developer.apple.com/documentation/metalperformanceshaders/mpsmatrixrandomdistributiondescriptor/3242859-mean?language=objc
+func (m_ MatrixRandomDistributionDescriptor) Mean() float64 {
+	rv := objc.Call[float64](m_, objc.Sel("mean"))
+	return rv
+}
+
+//	[Full Topic]
+//
+// [Full Topic]: https://developer.apple.com/documentation/metalperformanceshaders/mpsmatrixrandomdistributiondescriptor/3242859-mean?language=objc
+func (m_ MatrixRandomDistributionDescriptor) SetMean(value float64) {
+	objc.Call[objc.Void](m_, objc.Sel("setMean:"), value)
+}

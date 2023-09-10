@@ -104,3 +104,17 @@ func NewNNDivisionNodeWithSources(sourceNodes []INNImageNode) NNDivisionNode {
 	instance.Autorelease()
 	return instance
 }
+
+func (n_ NNDivisionNode) InitWithLeftSourceRightSource(left INNImageNode, right INNImageNode) NNDivisionNode {
+	rv := objc.Call[NNDivisionNode](n_, objc.Sel("initWithLeftSource:rightSource:"), objc.Ptr(left), objc.Ptr(right))
+	return rv
+}
+
+//	[Full Topic]
+//
+// [Full Topic]: https://developer.apple.com/documentation/metalperformanceshaders/mpsnnbinaryarithmeticnode/2890825-initwithleftsource?language=objc
+func NewNNDivisionNodeWithLeftSourceRightSource(left INNImageNode, right INNImageNode) NNDivisionNode {
+	instance := NNDivisionNodeClass.Alloc().InitWithLeftSourceRightSource(left, right)
+	instance.Autorelease()
+	return instance
+}

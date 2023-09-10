@@ -54,6 +54,18 @@ func (n_ NNBilinearScaleNode) Init() NNBilinearScaleNode {
 	return rv
 }
 
+func (nc _NNBilinearScaleNodeClass) NodeWithSourceOutputSize(sourceNode INNImageNode, size metal.Size) NNBilinearScaleNode {
+	rv := objc.Call[NNBilinearScaleNode](nc, objc.Sel("nodeWithSource:outputSize:"), objc.Ptr(sourceNode), size)
+	return rv
+}
+
+//	[Full Topic]
+//
+// [Full Topic]: https://developer.apple.com/documentation/metalperformanceshaders/mpsnnscalenode/2915280-nodewithsource?language=objc
+func NNBilinearScaleNode_NodeWithSourceOutputSize(sourceNode INNImageNode, size metal.Size) NNBilinearScaleNode {
+	return NNBilinearScaleNodeClass.NodeWithSourceOutputSize(sourceNode, size)
+}
+
 func (n_ NNBilinearScaleNode) InitWithSourceOutputSize(sourceNode INNImageNode, size metal.Size) NNBilinearScaleNode {
 	rv := objc.Call[NNBilinearScaleNode](n_, objc.Sel("initWithSource:outputSize:"), sourceNode, size)
 	return rv

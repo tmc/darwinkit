@@ -22,14 +22,14 @@ type IMatrix interface {
 	ResourceSize() uint
 	SynchronizeOnCommandBuffer(commandBuffer metal.PCommandBuffer)
 	SynchronizeOnCommandBufferObject(commandBufferObject objc.IObject)
-	Rows() uint
-	Data() metal.BufferObject
-	RowBytes() uint
 	Device() metal.DeviceObject
-	DataType() DataType
+	RowBytes() uint
 	Columns() uint
-	Matrices() uint
+	Data() metal.BufferObject
 	Offset() uint
+	DataType() DataType
+	Rows() uint
+	Matrices() uint
 	MatrixBytes() uint
 }
 
@@ -91,6 +91,21 @@ func NewMatrixWithDeviceDescriptor(device metal.PDevice, descriptor IMatrixDescr
 	return instance
 }
 
+func (m_ Matrix) InitWithBufferOffsetDescriptor(buffer metal.PBuffer, offset uint, descriptor IMatrixDescriptor) Matrix {
+	po0 := objc.WrapAsProtocol("MTLBuffer", buffer)
+	rv := objc.Call[Matrix](m_, objc.Sel("initWithBuffer:offset:descriptor:"), po0, offset, objc.Ptr(descriptor))
+	return rv
+}
+
+//	[Full Topic]
+//
+// [Full Topic]: https://developer.apple.com/documentation/metalperformanceshaders/mpsmatrix/3229863-initwithbuffer?language=objc
+func NewMatrixWithBufferOffsetDescriptor(buffer metal.PBuffer, offset uint, descriptor IMatrixDescriptor) Matrix {
+	instance := MatrixClass.Alloc().InitWithBufferOffsetDescriptor(buffer, offset, descriptor)
+	instance.Autorelease()
+	return instance
+}
+
 func (mc _MatrixClass) Alloc() Matrix {
 	rv := objc.Call[Matrix](mc, objc.Sel("alloc"))
 	return rv
@@ -134,19 +149,11 @@ func (m_ Matrix) SynchronizeOnCommandBufferObject(commandBufferObject objc.IObje
 	objc.Call[objc.Void](m_, objc.Sel("synchronizeOnCommandBuffer:"), commandBufferObject)
 }
 
-// The number of rows in the matrix. [Full Topic]
+// The device on which the matrix will be used. [Full Topic]
 //
-// [Full Topic]: https://developer.apple.com/documentation/metalperformanceshaders/mpsmatrix/2143210-rows?language=objc
-func (m_ Matrix) Rows() uint {
-	rv := objc.Call[uint](m_, objc.Sel("rows"))
-	return rv
-}
-
-// The buffer that stores the matrix data. [Full Topic]
-//
-// [Full Topic]: https://developer.apple.com/documentation/metalperformanceshaders/mpsmatrix/2143205-data?language=objc
-func (m_ Matrix) Data() metal.BufferObject {
-	rv := objc.Call[metal.BufferObject](m_, objc.Sel("data"))
+// [Full Topic]: https://developer.apple.com/documentation/metalperformanceshaders/mpsmatrix/2143209-device?language=objc
+func (m_ Matrix) Device() metal.DeviceObject {
+	rv := objc.Call[metal.DeviceObject](m_, objc.Sel("device"))
 	return rv
 }
 
@@ -158,11 +165,27 @@ func (m_ Matrix) RowBytes() uint {
 	return rv
 }
 
-// The device on which the matrix will be used. [Full Topic]
+// The number of columns in the matrix. [Full Topic]
 //
-// [Full Topic]: https://developer.apple.com/documentation/metalperformanceshaders/mpsmatrix/2143209-device?language=objc
-func (m_ Matrix) Device() metal.DeviceObject {
-	rv := objc.Call[metal.DeviceObject](m_, objc.Sel("device"))
+// [Full Topic]: https://developer.apple.com/documentation/metalperformanceshaders/mpsmatrix/2143207-columns?language=objc
+func (m_ Matrix) Columns() uint {
+	rv := objc.Call[uint](m_, objc.Sel("columns"))
+	return rv
+}
+
+// The buffer that stores the matrix data. [Full Topic]
+//
+// [Full Topic]: https://developer.apple.com/documentation/metalperformanceshaders/mpsmatrix/2143205-data?language=objc
+func (m_ Matrix) Data() metal.BufferObject {
+	rv := objc.Call[metal.BufferObject](m_, objc.Sel("data"))
+	return rv
+}
+
+//	[Full Topic]
+//
+// [Full Topic]: https://developer.apple.com/documentation/metalperformanceshaders/mpsmatrix/3375740-offset?language=objc
+func (m_ Matrix) Offset() uint {
+	rv := objc.Call[uint](m_, objc.Sel("offset"))
 	return rv
 }
 
@@ -174,11 +197,11 @@ func (m_ Matrix) DataType() DataType {
 	return rv
 }
 
-// The number of columns in the matrix. [Full Topic]
+// The number of rows in the matrix. [Full Topic]
 //
-// [Full Topic]: https://developer.apple.com/documentation/metalperformanceshaders/mpsmatrix/2143207-columns?language=objc
-func (m_ Matrix) Columns() uint {
-	rv := objc.Call[uint](m_, objc.Sel("columns"))
+// [Full Topic]: https://developer.apple.com/documentation/metalperformanceshaders/mpsmatrix/2143210-rows?language=objc
+func (m_ Matrix) Rows() uint {
+	rv := objc.Call[uint](m_, objc.Sel("rows"))
 	return rv
 }
 
@@ -187,14 +210,6 @@ func (m_ Matrix) Columns() uint {
 // [Full Topic]: https://developer.apple.com/documentation/metalperformanceshaders/mpsmatrix/2873334-matrices?language=objc
 func (m_ Matrix) Matrices() uint {
 	rv := objc.Call[uint](m_, objc.Sel("matrices"))
-	return rv
-}
-
-//	[Full Topic]
-//
-// [Full Topic]: https://developer.apple.com/documentation/metalperformanceshaders/mpsmatrix/3375740-offset?language=objc
-func (m_ Matrix) Offset() uint {
-	rv := objc.Call[uint](m_, objc.Sel("offset"))
 	return rv
 }
 

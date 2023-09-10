@@ -19,14 +19,6 @@ type _NNOptimizerRMSPropClass struct {
 // An interface definition for the [NNOptimizerRMSProp] class.
 type INNOptimizerRMSProp interface {
 	INNOptimizer
-	EncodeToCommandBufferBatchNormalizationStateInputSumOfSquaresVectorsResultState(commandBuffer metal.PCommandBuffer, batchNormalizationState ICNNBatchNormalizationState, inputSumOfSquaresVectors []IVector, resultState ICNNNormalizationGammaAndBetaState)
-	EncodeToCommandBufferObjectBatchNormalizationStateInputSumOfSquaresVectorsResultState(commandBufferObject objc.IObject, batchNormalizationState ICNNBatchNormalizationState, inputSumOfSquaresVectors []IVector, resultState ICNNNormalizationGammaAndBetaState)
-	EncodeToCommandBufferBatchNormalizationGradientStateBatchNormalizationSourceStateInputSumOfSquaresVectorsResultState(commandBuffer metal.PCommandBuffer, batchNormalizationGradientState ICNNBatchNormalizationState, batchNormalizationSourceState ICNNBatchNormalizationState, inputSumOfSquaresVectors []IVector, resultState ICNNNormalizationGammaAndBetaState)
-	EncodeToCommandBufferObjectBatchNormalizationGradientStateBatchNormalizationSourceStateInputSumOfSquaresVectorsResultState(commandBufferObject objc.IObject, batchNormalizationGradientState ICNNBatchNormalizationState, batchNormalizationSourceState ICNNBatchNormalizationState, inputSumOfSquaresVectors []IVector, resultState ICNNNormalizationGammaAndBetaState)
-	EncodeToCommandBufferConvolutionGradientStateConvolutionSourceStateInputSumOfSquaresVectorsResultState(commandBuffer metal.PCommandBuffer, convolutionGradientState ICNNConvolutionGradientState, convolutionSourceState ICNNConvolutionWeightsAndBiasesState, inputSumOfSquaresVectors []IVector, resultState ICNNConvolutionWeightsAndBiasesState)
-	EncodeToCommandBufferObjectConvolutionGradientStateConvolutionSourceStateInputSumOfSquaresVectorsResultState(commandBufferObject objc.IObject, convolutionGradientState ICNNConvolutionGradientState, convolutionSourceState ICNNConvolutionWeightsAndBiasesState, inputSumOfSquaresVectors []IVector, resultState ICNNConvolutionWeightsAndBiasesState)
-	EncodeToCommandBufferInputGradientVectorInputValuesVectorInputSumOfSquaresVectorResultValuesVector(commandBuffer metal.PCommandBuffer, inputGradientVector IVector, inputValuesVector IVector, inputSumOfSquaresVector IVector, resultValuesVector IVector)
-	EncodeToCommandBufferObjectInputGradientVectorInputValuesVectorInputSumOfSquaresVectorResultValuesVector(commandBufferObject objc.IObject, inputGradientVector IVector, inputValuesVector IVector, inputSumOfSquaresVector IVector, resultValuesVector IVector)
 	EncodeToCommandBufferInputGradientMatrixInputValuesMatrixInputSumOfSquaresMatrixResultValuesMatrix(commandBuffer metal.PCommandBuffer, inputGradientMatrix IMatrix, inputValuesMatrix IMatrix, inputSumOfSquaresMatrix IMatrix, resultValuesMatrix IMatrix)
 	EncodeToCommandBufferObjectInputGradientMatrixInputValuesMatrixInputSumOfSquaresMatrixResultValuesMatrix(commandBufferObject objc.IObject, inputGradientMatrix IMatrix, inputValuesMatrix IMatrix, inputSumOfSquaresMatrix IMatrix, resultValuesMatrix IMatrix)
 	Decay() float64
@@ -96,21 +88,6 @@ func (n_ NNOptimizerRMSProp) Init() NNOptimizerRMSProp {
 	return rv
 }
 
-func (n_ NNOptimizerRMSProp) CopyWithZoneDevice(zone unsafe.Pointer, device metal.PDevice) NNOptimizerRMSProp {
-	po1 := objc.WrapAsProtocol("MTLDevice", device)
-	rv := objc.Call[NNOptimizerRMSProp](n_, objc.Sel("copyWithZone:device:"), zone, po1)
-	return rv
-}
-
-// Makes a copy of this kernel object for a new device. [Full Topic]
-//
-// [Full Topic]: https://developer.apple.com/documentation/metalperformanceshaders/mpskernel/1618912-copywithzone?language=objc
-func NNOptimizerRMSProp_CopyWithZoneDevice(zone unsafe.Pointer, device metal.PDevice) NNOptimizerRMSProp {
-	instance := NNOptimizerRMSPropClass.Alloc().CopyWithZoneDevice(zone, device)
-	instance.Autorelease()
-	return instance
-}
-
 func (n_ NNOptimizerRMSProp) InitWithDevice(device metal.PDevice) NNOptimizerRMSProp {
 	po0 := objc.WrapAsProtocol("MTLDevice", device)
 	rv := objc.Call[NNOptimizerRMSProp](n_, objc.Sel("initWithDevice:"), po0)
@@ -134,7 +111,7 @@ func (n_ NNOptimizerRMSProp) EncodeToCommandBufferBatchNormalizationStateInputSu
 	objc.Call[objc.Void](n_, objc.Sel("encodeToCommandBuffer:batchNormalizationState:inputSumOfSquaresVectors:resultState:"), po0, batchNormalizationState, inputSumOfSquaresVectors, resultState)
 }
 
-//	[Full Topic]
+// Makes a copy of this kernel object for a new device. [Full Topic]
 //
 // [Full Topic]: https://developer.apple.com/documentation/metalperformanceshaders/mpsnnoptimizerrmsprop/3019335-encodetocommandbuffer?language=objc
 func (n_ NNOptimizerRMSProp) EncodeToCommandBufferObjectBatchNormalizationStateInputSumOfSquaresVectorsResultState(commandBufferObject objc.IObject, batchNormalizationState ICNNBatchNormalizationState, inputSumOfSquaresVectors []IVector, resultState ICNNNormalizationGammaAndBetaState) {

@@ -106,6 +106,14 @@ func CNNCrossChannelNormalization_CopyWithZoneDevice(zone unsafe.Pointer, device
 	return instance
 }
 
+// The size of the square kernel window. [Full Topic]
+//
+// [Full Topic]: https://developer.apple.com/documentation/metalperformanceshaders/mpscnncrosschannelnormalization/1648811-kernelsize?language=objc
+func (c_ CNNCrossChannelNormalization) KernelSize() uint {
+	rv := objc.Call[uint](c_, objc.Sel("kernelSize"))
+	return rv
+}
+
 // The "beta" variable of the kernel function. [Full Topic]
 //
 // [Full Topic]: https://developer.apple.com/documentation/metalperformanceshaders/mpscnncrosschannelnormalization/1648879-beta?language=objc
@@ -157,4 +165,19 @@ func (c_ CNNCrossChannelNormalization) Delta() float32 {
 // [Full Topic]: https://developer.apple.com/documentation/metalperformanceshaders/mpscnncrosschannelnormalization/1648881-delta?language=objc
 func (c_ CNNCrossChannelNormalization) SetDelta(value float32) {
 	objc.Call[objc.Void](c_, objc.Sel("setDelta:"), value)
+}
+
+// The "alpha" variable of the kernel function. [Full Topic]
+//
+// [Full Topic]: https://developer.apple.com/documentation/metalperformanceshaders/mpscnncrosschannelnormalization/1648896-alpha?language=objc
+func (c_ CNNCrossChannelNormalization) Alpha() float64 {
+	rv := objc.Call[float64](c_, objc.Sel("alpha"))
+	return rv
+}
+
+// The "alpha" variable of the kernel function. [Full Topic]
+//
+// [Full Topic]: https://developer.apple.com/documentation/metalperformanceshaders/mpscnncrosschannelnormalization/1648896-alpha?language=objc
+func (c_ CNNCrossChannelNormalization) SetAlpha(value float64) {
+	objc.Call[objc.Void](c_, objc.Sel("setAlpha:"), value)
 }

@@ -20,7 +20,6 @@ type IRasterizationRateLayerDescriptor interface {
 	objc.IObject
 	VerticalSampleStorage() *float32
 	SampleCount() Size
-	Vertical() RasterizationRateSampleArray
 	MaxSampleCount() Size
 	Horizontal() RasterizationRateSampleArray
 	HorizontalSampleStorage() *float32
@@ -87,6 +86,14 @@ func (r_ RasterizationRateLayerDescriptor) Init() RasterizationRateLayerDescript
 	return rv
 }
 
+// A pointer to the storage for the layer map's horizontal rasterization rates. [Full Topic]
+//
+// [Full Topic]: https://developer.apple.com/documentation/metal/mtlrasterizationratelayerdescriptor/3088859-horizontalsamplestorage?language=objc
+func (r_ RasterizationRateLayerDescriptor) HorizontalSampleStorage() *float64 {
+	rv := objc.Call[*float64](r_, objc.Sel("horizontalSampleStorage"))
+	return rv
+}
+
 // A pointer to the storage for the layer map's vertical rasterization rates. [Full Topic]
 //
 // [Full Topic]: https://developer.apple.com/documentation/metal/mtlrasterizationratelayerdescriptor/3088863-verticalsamplestorage?language=objc
@@ -100,14 +107,6 @@ func (r_ RasterizationRateLayerDescriptor) VerticalSampleStorage() *float32 {
 // [Full Topic]: https://developer.apple.com/documentation/metal/mtlrasterizationratelayerdescriptor/3088861-samplecount?language=objc
 func (r_ RasterizationRateLayerDescriptor) SampleCount() Size {
 	rv := objc.Call[Size](r_, objc.Sel("sampleCount"))
-	return rv
-}
-
-// The vertical rasterization rates for the layer map’s rows. [Full Topic]
-//
-// [Full Topic]: https://developer.apple.com/documentation/metal/mtlrasterizationratelayerdescriptor/3088862-vertical?language=objc
-func (r_ RasterizationRateLayerDescriptor) Vertical() RasterizationRateSampleArray {
-	rv := objc.Call[RasterizationRateSampleArray](r_, objc.Sel("vertical"))
 	return rv
 }
 
@@ -127,7 +126,7 @@ func (r_ RasterizationRateLayerDescriptor) Horizontal() RasterizationRateSampleA
 	return rv
 }
 
-// A pointer to the storage for the layer map's horizontal rasterization rates. [Full Topic]
+// The vertical rasterization rates for the layer map’s rows. [Full Topic]
 //
 // [Full Topic]: https://developer.apple.com/documentation/metal/mtlrasterizationratelayerdescriptor/3088859-horizontalsamplestorage?language=objc
 func (r_ RasterizationRateLayerDescriptor) HorizontalSampleStorage() *float32 {

@@ -33,6 +33,18 @@ func CNNNeuronGeLUNodeFrom(ptr unsafe.Pointer) CNNNeuronGeLUNode {
 	}
 }
 
+func (cc _CNNNeuronGeLUNodeClass) NodeWithSource(sourceNode INNImageNode) CNNNeuronGeLUNode {
+	rv := objc.Call[CNNNeuronGeLUNode](cc, objc.Sel("nodeWithSource:"), objc.Ptr(sourceNode))
+	return rv
+}
+
+//	[Full Topic]
+//
+// [Full Topic]: https://developer.apple.com/documentation/metalperformanceshaders/mpscnnneurongelunode/3237267-nodewithsource?language=objc
+func CNNNeuronGeLUNode_NodeWithSource(sourceNode INNImageNode) CNNNeuronGeLUNode {
+	return CNNNeuronGeLUNodeClass.NodeWithSource(sourceNode)
+}
+
 func (c_ CNNNeuronGeLUNode) InitWithSource(sourceNode INNImageNode) CNNNeuronGeLUNode {
 	rv := objc.Call[CNNNeuronGeLUNode](c_, objc.Sel("initWithSource:"), sourceNode)
 	return rv

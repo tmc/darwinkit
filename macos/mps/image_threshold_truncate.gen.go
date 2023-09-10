@@ -116,3 +116,11 @@ func (i_ ImageThresholdTruncate) Transform() *float32 {
 	rv := objc.Call[*float32](i_, objc.Sel("transform"))
 	return rv
 }
+
+// The threshold value used to initialize the threshold filter. [Full Topic]
+//
+// [Full Topic]: https://developer.apple.com/documentation/metalperformanceshaders/mpsimagethresholdtruncate/1618882-thresholdvalue?language=objc
+func (i_ ImageThresholdTruncate) ThresholdValue() float64 {
+	rv := objc.Call[float64](i_, objc.Sel("thresholdValue"))
+	return rv
+}

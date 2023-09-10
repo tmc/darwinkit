@@ -14,6 +14,78 @@ import (
 // [Full Topic]: https://developer.apple.com/documentation/metal/mtlcomputecommandencoder?language=objc
 type PComputeCommandEncoder interface {
 	// optional
+	SetThreadgroupMemoryLengthAtIndex(length uint, index uint)
+	HasSetThreadgroupMemoryLengthAtIndex() bool
+
+	// optional
+	SetSamplerStateAtIndex(sampler SamplerStateObject, index uint)
+	HasSetSamplerStateAtIndex() bool
+
+	// optional
+	SetComputePipelineState(state ComputePipelineStateObject)
+	HasSetComputePipelineState() bool
+
+	// optional
+	SetStageInRegionWithIndirectBufferIndirectBufferOffset(indirectBuffer BufferObject, indirectBufferOffset uint)
+	HasSetStageInRegionWithIndirectBufferIndirectBufferOffset() bool
+
+	// optional
+	SetBuffersOffsetsWithRange(buffers *BufferObject, offsets *uint, range_ foundation.Range)
+	HasSetBuffersOffsetsWithRange() bool
+
+	// optional
+	UseResourceUsage(resource ResourceObject, usage ResourceUsage)
+	HasUseResourceUsage() bool
+
+	// optional
+	SetVisibleFunctionTableAtBufferIndex(visibleFunctionTable VisibleFunctionTableObject, bufferIndex uint)
+	HasSetVisibleFunctionTableAtBufferIndex() bool
+
+	// optional
+	SetBytesLengthAtIndex(bytes unsafe.Pointer, length uint, index uint)
+	HasSetBytesLengthAtIndex() bool
+
+	// optional
+	SetSamplerStatesWithRange(samplers *SamplerStateObject, range_ foundation.Range)
+	HasSetSamplerStatesWithRange() bool
+
+	// optional
+	MemoryBarrierWithResourcesCount(resources *ResourceObject, count uint)
+	HasMemoryBarrierWithResourcesCount() bool
+
+	// optional
+	SampleCountersInBufferAtSampleIndexWithBarrier(sampleBuffer CounterSampleBufferObject, sampleIndex uint, barrier bool)
+	HasSampleCountersInBufferAtSampleIndexWithBarrier() bool
+
+	// optional
+	SetAccelerationStructureAtBufferIndex(accelerationStructure AccelerationStructureObject, bufferIndex uint)
+	HasSetAccelerationStructureAtBufferIndex() bool
+
+	// optional
+	SetStageInRegion(region Region)
+	HasSetStageInRegion() bool
+
+	// optional
+	SetBufferOffsetAtIndex(offset uint, index uint)
+	HasSetBufferOffsetAtIndex() bool
+
+	// optional
+	DispatchThreadgroupsThreadsPerThreadgroup(threadgroupsPerGrid Size, threadsPerThreadgroup Size)
+	HasDispatchThreadgroupsThreadsPerThreadgroup() bool
+
+	// optional
+	ExecuteCommandsInBufferWithRange(indirectCommandBuffer IndirectCommandBufferObject, executionRange foundation.Range)
+	HasExecuteCommandsInBufferWithRange() bool
+
+	// optional
+	SetVisibleFunctionTablesWithBufferRange(visibleFunctionTables *VisibleFunctionTableObject, range_ foundation.Range)
+	HasSetVisibleFunctionTablesWithBufferRange() bool
+
+	// optional
+	SetTexturesWithRange(textures *TextureObject, range_ foundation.Range)
+	HasSetTexturesWithRange() bool
+
+	// optional
 	MemoryBarrierWithScope(scope BarrierScope)
 	HasMemoryBarrierWithScope() bool
 
@@ -138,16 +210,20 @@ type PComputeCommandEncoder interface {
 	HasUseResourcesCountUsage() bool
 
 	// optional
+	UseHeapsCount(heaps *HeapObject, count uint)
+	HasUseHeapsCount() bool
+
+	// optional
 	UpdateFence(fence FenceObject)
 	HasUpdateFence() bool
 
 	// optional
-	SampleCountersInBufferAtSampleIndexWithBarrier(sampleBuffer CounterSampleBufferObject, sampleIndex uint, barrier bool)
-	HasSampleCountersInBufferAtSampleIndexWithBarrier() bool
+	SetImageblockWidthHeight(width uint, height uint)
+	HasSetImageblockWidthHeight() bool
 
 	// optional
-	SetThreadgroupMemoryLengthAtIndex(length uint, index uint)
-	HasSetThreadgroupMemoryLengthAtIndex() bool
+	WaitForFence(fence FenceObject)
+	HasWaitForFence() bool
 
 	// optional
 	DispatchType() DispatchType
@@ -162,6 +238,212 @@ type ComputeCommandEncoderObject struct {
 	objc.Object
 }
 
+func (c_ ComputeCommandEncoderObject) HasSetThreadgroupMemoryLengthAtIndex() bool {
+	return c_.RespondsToSelector(objc.Sel("setThreadgroupMemoryLength:atIndex:"))
+}
+
+// Sets the size of a block of threadgroup memory. [Full Topic]
+//
+// [Full Topic]: https://developer.apple.com/documentation/metal/mtlcomputecommandencoder/1443142-setthreadgroupmemorylength?language=objc
+func (c_ ComputeCommandEncoderObject) SetThreadgroupMemoryLengthAtIndex(length uint, index uint) {
+	objc.Call[objc.Void](c_, objc.Sel("setThreadgroupMemoryLength:atIndex:"), length, index)
+}
+
+func (c_ ComputeCommandEncoderObject) HasSetSamplerStateAtIndex() bool {
+	return c_.RespondsToSelector(objc.Sel("setSamplerState:atIndex:"))
+}
+
+// Sets a sampler for the compute function. [Full Topic]
+//
+// [Full Topic]: https://developer.apple.com/documentation/metal/mtlcomputecommandencoder/1443144-setsamplerstate?language=objc
+func (c_ ComputeCommandEncoderObject) SetSamplerStateAtIndex(sampler SamplerStateObject, index uint) {
+	po0 := objc.WrapAsProtocol("MTLSamplerState", sampler)
+	objc.Call[objc.Void](c_, objc.Sel("setSamplerState:atIndex:"), po0, index)
+}
+
+func (c_ ComputeCommandEncoderObject) HasSetComputePipelineState() bool {
+	return c_.RespondsToSelector(objc.Sel("setComputePipelineState:"))
+}
+
+// Sets the current compute pipeline state object. [Full Topic]
+//
+// [Full Topic]: https://developer.apple.com/documentation/metal/mtlcomputecommandencoder/1443140-setcomputepipelinestate?language=objc
+func (c_ ComputeCommandEncoderObject) SetComputePipelineState(state ComputePipelineStateObject) {
+	po0 := objc.WrapAsProtocol("MTLComputePipelineState", state)
+	objc.Call[objc.Void](c_, objc.Sel("setComputePipelineState:"), po0)
+}
+
+func (c_ ComputeCommandEncoderObject) HasSetStageInRegionWithIndirectBufferIndirectBufferOffset() bool {
+	return c_.RespondsToSelector(objc.Sel("setStageInRegionWithIndirectBuffer:indirectBufferOffset:"))
+}
+
+// Sets the region of the stage-in attributes to apply to the compute kernel using an indirect buffer. [Full Topic]
+//
+// [Full Topic]: https://developer.apple.com/documentation/metal/mtlcomputecommandencoder/2966554-setstageinregionwithindirectbuff?language=objc
+func (c_ ComputeCommandEncoderObject) SetStageInRegionWithIndirectBufferIndirectBufferOffset(indirectBuffer BufferObject, indirectBufferOffset uint) {
+	po0 := objc.WrapAsProtocol("MTLBuffer", indirectBuffer)
+	objc.Call[objc.Void](c_, objc.Sel("setStageInRegionWithIndirectBuffer:indirectBufferOffset:"), po0, indirectBufferOffset)
+}
+
+func (c_ ComputeCommandEncoderObject) HasSetBuffersOffsetsWithRange() bool {
+	return c_.RespondsToSelector(objc.Sel("setBuffers:offsets:withRange:"))
+}
+
+// Sets an array of buffers for the compute function. [Full Topic]
+//
+// [Full Topic]: https://developer.apple.com/documentation/metal/mtlcomputecommandencoder/1443134-setbuffers?language=objc
+func (c_ ComputeCommandEncoderObject) SetBuffersOffsetsWithRange(buffers *BufferObject, offsets *uint, range_ foundation.Range) {
+	objc.Call[objc.Void](c_, objc.Sel("setBuffers:offsets:withRange:"), buffers, offsets, range_)
+}
+
+func (c_ ComputeCommandEncoderObject) HasUseResourceUsage() bool {
+	return c_.RespondsToSelector(objc.Sel("useResource:usage:"))
+}
+
+// Specifies that a resource in an argument buffer can be safely used by a compute pass. [Full Topic]
+//
+// [Full Topic]: https://developer.apple.com/documentation/metal/mtlcomputecommandencoder/2866548-useresource?language=objc
+func (c_ ComputeCommandEncoderObject) UseResourceUsage(resource ResourceObject, usage ResourceUsage) {
+	po0 := objc.WrapAsProtocol("MTLResource", resource)
+	objc.Call[objc.Void](c_, objc.Sel("useResource:usage:"), po0, usage)
+}
+
+func (c_ ComputeCommandEncoderObject) HasSetVisibleFunctionTableAtBufferIndex() bool {
+	return c_.RespondsToSelector(objc.Sel("setVisibleFunctionTable:atBufferIndex:"))
+}
+
+// Sets a visible function table for the compute function. [Full Topic]
+//
+// [Full Topic]: https://developer.apple.com/documentation/metal/mtlcomputecommandencoder/3566539-setvisiblefunctiontable?language=objc
+func (c_ ComputeCommandEncoderObject) SetVisibleFunctionTableAtBufferIndex(visibleFunctionTable VisibleFunctionTableObject, bufferIndex uint) {
+	po0 := objc.WrapAsProtocol("MTLVisibleFunctionTable", visibleFunctionTable)
+	objc.Call[objc.Void](c_, objc.Sel("setVisibleFunctionTable:atBufferIndex:"), po0, bufferIndex)
+}
+
+func (c_ ComputeCommandEncoderObject) HasSetBytesLengthAtIndex() bool {
+	return c_.RespondsToSelector(objc.Sel("setBytes:length:atIndex:"))
+}
+
+// Sets a block of data for the compute shader. [Full Topic]
+//
+// [Full Topic]: https://developer.apple.com/documentation/metal/mtlcomputecommandencoder/1443159-setbytes?language=objc
+func (c_ ComputeCommandEncoderObject) SetBytesLengthAtIndex(bytes unsafe.Pointer, length uint, index uint) {
+	objc.Call[objc.Void](c_, objc.Sel("setBytes:length:atIndex:"), bytes, length, index)
+}
+
+func (c_ ComputeCommandEncoderObject) HasSetSamplerStatesWithRange() bool {
+	return c_.RespondsToSelector(objc.Sel("setSamplerStates:withRange:"))
+}
+
+// Sets multiple samplers for the compute function. [Full Topic]
+//
+// [Full Topic]: https://developer.apple.com/documentation/metal/mtlcomputecommandencoder/1443155-setsamplerstates?language=objc
+func (c_ ComputeCommandEncoderObject) SetSamplerStatesWithRange(samplers *SamplerStateObject, range_ foundation.Range) {
+	objc.Call[objc.Void](c_, objc.Sel("setSamplerStates:withRange:"), samplers, range_)
+}
+
+func (c_ ComputeCommandEncoderObject) HasMemoryBarrierWithResourcesCount() bool {
+	return c_.RespondsToSelector(objc.Sel("memoryBarrierWithResources:count:"))
+}
+
+// Encodes a barrier so that changes to a set of resources made by commands encoded before the barrier are completed before further commands are executed. [Full Topic]
+//
+// [Full Topic]: https://developer.apple.com/documentation/metal/mtlcomputecommandencoder/2966552-memorybarrierwithresources?language=objc
+func (c_ ComputeCommandEncoderObject) MemoryBarrierWithResourcesCount(resources *ResourceObject, count uint) {
+	objc.Call[objc.Void](c_, objc.Sel("memoryBarrierWithResources:count:"), resources, count)
+}
+
+func (c_ ComputeCommandEncoderObject) HasSampleCountersInBufferAtSampleIndexWithBarrier() bool {
+	return c_.RespondsToSelector(objc.Sel("sampleCountersInBuffer:atSampleIndex:withBarrier:"))
+}
+
+// Encodes a command to sample hardware counters at this point in the compute pass and store the samples into a counter sample buffer. [Full Topic]
+//
+// [Full Topic]: https://developer.apple.com/documentation/metal/mtlcomputecommandencoder/3194349-samplecountersinbuffer?language=objc
+func (c_ ComputeCommandEncoderObject) SampleCountersInBufferAtSampleIndexWithBarrier(sampleBuffer CounterSampleBufferObject, sampleIndex uint, barrier bool) {
+	po0 := objc.WrapAsProtocol("MTLCounterSampleBuffer", sampleBuffer)
+	objc.Call[objc.Void](c_, objc.Sel("sampleCountersInBuffer:atSampleIndex:withBarrier:"), po0, sampleIndex, barrier)
+}
+
+func (c_ ComputeCommandEncoderObject) HasSetAccelerationStructureAtBufferIndex() bool {
+	return c_.RespondsToSelector(objc.Sel("setAccelerationStructure:atBufferIndex:"))
+}
+
+// Sets an acceleration structure for the compute function. [Full Topic]
+//
+// [Full Topic]: https://developer.apple.com/documentation/metal/mtlcomputecommandencoder/3553958-setaccelerationstructure?language=objc
+func (c_ ComputeCommandEncoderObject) SetAccelerationStructureAtBufferIndex(accelerationStructure AccelerationStructureObject, bufferIndex uint) {
+	po0 := objc.WrapAsProtocol("MTLAccelerationStructure", accelerationStructure)
+	objc.Call[objc.Void](c_, objc.Sel("setAccelerationStructure:atBufferIndex:"), po0, bufferIndex)
+}
+
+func (c_ ComputeCommandEncoderObject) HasSetStageInRegion() bool {
+	return c_.RespondsToSelector(objc.Sel("setStageInRegion:"))
+}
+
+// Sets the region of the stage-in attributes to apply to the compute kernel. [Full Topic]
+//
+// [Full Topic]: https://developer.apple.com/documentation/metal/mtlcomputecommandencoder/2097047-setstageinregion?language=objc
+func (c_ ComputeCommandEncoderObject) SetStageInRegion(region Region) {
+	objc.Call[objc.Void](c_, objc.Sel("setStageInRegion:"), region)
+}
+
+func (c_ ComputeCommandEncoderObject) HasSetBufferOffsetAtIndex() bool {
+	return c_.RespondsToSelector(objc.Sel("setBufferOffset:atIndex:"))
+}
+
+// Sets where the data begins in a buffer already bound to the compute shader. [Full Topic]
+//
+// [Full Topic]: https://developer.apple.com/documentation/metal/mtlcomputecommandencoder/1443146-setbufferoffset?language=objc
+func (c_ ComputeCommandEncoderObject) SetBufferOffsetAtIndex(offset uint, index uint) {
+	objc.Call[objc.Void](c_, objc.Sel("setBufferOffset:atIndex:"), offset, index)
+}
+
+func (c_ ComputeCommandEncoderObject) HasDispatchThreadgroupsThreadsPerThreadgroup() bool {
+	return c_.RespondsToSelector(objc.Sel("dispatchThreadgroups:threadsPerThreadgroup:"))
+}
+
+// Encodes a compute command using a grid aligned to threadgroup boundaries. [Full Topic]
+//
+// [Full Topic]: https://developer.apple.com/documentation/metal/mtlcomputecommandencoder/1443138-dispatchthreadgroups?language=objc
+func (c_ ComputeCommandEncoderObject) DispatchThreadgroupsThreadsPerThreadgroup(threadgroupsPerGrid Size, threadsPerThreadgroup Size) {
+	objc.Call[objc.Void](c_, objc.Sel("dispatchThreadgroups:threadsPerThreadgroup:"), threadgroupsPerGrid, threadsPerThreadgroup)
+}
+
+func (c_ ComputeCommandEncoderObject) HasExecuteCommandsInBufferWithRange() bool {
+	return c_.RespondsToSelector(objc.Sel("executeCommandsInBuffer:withRange:"))
+}
+
+// Encodes a command to execute commands in an indirect command buffer. [Full Topic]
+//
+// [Full Topic]: https://developer.apple.com/documentation/metal/mtlcomputecommandencoder/2967419-executecommandsinbuffer?language=objc
+func (c_ ComputeCommandEncoderObject) ExecuteCommandsInBufferWithRange(indirectCommandBuffer IndirectCommandBufferObject, executionRange foundation.Range) {
+	po0 := objc.WrapAsProtocol("MTLIndirectCommandBuffer", indirectCommandBuffer)
+	objc.Call[objc.Void](c_, objc.Sel("executeCommandsInBuffer:withRange:"), po0, executionRange)
+}
+
+func (c_ ComputeCommandEncoderObject) HasSetVisibleFunctionTablesWithBufferRange() bool {
+	return c_.RespondsToSelector(objc.Sel("setVisibleFunctionTables:withBufferRange:"))
+}
+
+// Sets an array of visible function tables for the compute function. [Full Topic]
+//
+// [Full Topic]: https://developer.apple.com/documentation/metal/mtlcomputecommandencoder/3566540-setvisiblefunctiontables?language=objc
+func (c_ ComputeCommandEncoderObject) SetVisibleFunctionTablesWithBufferRange(visibleFunctionTables *VisibleFunctionTableObject, range_ foundation.Range) {
+	objc.Call[objc.Void](c_, objc.Sel("setVisibleFunctionTables:withBufferRange:"), visibleFunctionTables, range_)
+}
+
+func (c_ ComputeCommandEncoderObject) HasSetTexturesWithRange() bool {
+	return c_.RespondsToSelector(objc.Sel("setTextures:withRange:"))
+}
+
+// Sets an array of textures for the compute function. [Full Topic]
+//
+// [Full Topic]: https://developer.apple.com/documentation/metal/mtlcomputecommandencoder/1443148-settextures?language=objc
+func (c_ ComputeCommandEncoderObject) SetTexturesWithRange(textures *TextureObject, range_ foundation.Range) {
+	objc.Call[objc.Void](c_, objc.Sel("setTextures:withRange:"), textures, range_)
+}
+
 func (c_ ComputeCommandEncoderObject) HasMemoryBarrierWithScope() bool {
 	return c_.RespondsToSelector(objc.Sel("memoryBarrierWithScope:"))
 }
@@ -173,11 +455,11 @@ func (c_ ComputeCommandEncoderObject) MemoryBarrierWithScope(scope BarrierScope)
 	objc.Call[objc.Void](c_, objc.Sel("memoryBarrierWithScope:"), scope)
 }
 
-func (c_ ComputeCommandEncoderObject) HasUseHeapsCount() bool {
-	return c_.RespondsToSelector(objc.Sel("useHeaps:count:"))
+func (c_ ComputeCommandEncoderObject) HasDispatchThreadsThreadsPerThreadgroup() bool {
+	return c_.RespondsToSelector(objc.Sel("dispatchThreads:threadsPerThreadgroup:"))
 }
 
-// Specifies that an array of heaps containing resources in an argument buffer can be safely used by a compute pass. [Full Topic]
+// Encodes a compute command using an arbitrarily sized grid. [Full Topic]
 //
 // [Full Topic]: https://developer.apple.com/documentation/metal/mtlcomputecommandencoder/2866538-useheaps?language=objc
 func (c_ ComputeCommandEncoderObject) UseHeapsCount(heaps unsafe.Pointer, count uint) {
@@ -540,27 +822,27 @@ func (c_ ComputeCommandEncoderObject) UpdateFence(fence FenceObject) {
 	objc.Call[objc.Void](c_, objc.Sel("updateFence:"), po0)
 }
 
-func (c_ ComputeCommandEncoderObject) HasSampleCountersInBufferAtSampleIndexWithBarrier() bool {
-	return c_.RespondsToSelector(objc.Sel("sampleCountersInBuffer:atSampleIndex:withBarrier:"))
+func (c_ ComputeCommandEncoderObject) HasSetImageblockWidthHeight() bool {
+	return c_.RespondsToSelector(objc.Sel("setImageblockWidth:height:"))
 }
 
-// Encodes a command to sample hardware counters at this point in the compute pass and store the samples into a counter sample buffer. [Full Topic]
+// Sets the size, in pixels, of the imageblock. [Full Topic]
 //
-// [Full Topic]: https://developer.apple.com/documentation/metal/mtlcomputecommandencoder/3194349-samplecountersinbuffer?language=objc
-func (c_ ComputeCommandEncoderObject) SampleCountersInBufferAtSampleIndexWithBarrier(sampleBuffer CounterSampleBufferObject, sampleIndex uint, barrier bool) {
-	po0 := objc.WrapAsProtocol("MTLCounterSampleBuffer", sampleBuffer)
-	objc.Call[objc.Void](c_, objc.Sel("sampleCountersInBuffer:atSampleIndex:withBarrier:"), po0, sampleIndex, barrier)
+// [Full Topic]: https://developer.apple.com/documentation/metal/mtlcomputecommandencoder/2928282-setimageblockwidth?language=objc
+func (c_ ComputeCommandEncoderObject) SetImageblockWidthHeight(width uint, height uint) {
+	objc.Call[objc.Void](c_, objc.Sel("setImageblockWidth:height:"), width, height)
 }
 
-func (c_ ComputeCommandEncoderObject) HasSetThreadgroupMemoryLengthAtIndex() bool {
-	return c_.RespondsToSelector(objc.Sel("setThreadgroupMemoryLength:atIndex:"))
+func (c_ ComputeCommandEncoderObject) HasWaitForFence() bool {
+	return c_.RespondsToSelector(objc.Sel("waitForFence:"))
 }
 
-// Sets the size of a block of threadgroup memory. [Full Topic]
+// Tells the GPU to wait until the fence is updated before executing any commands encoded by the compute command encoder. [Full Topic]
 //
-// [Full Topic]: https://developer.apple.com/documentation/metal/mtlcomputecommandencoder/1443142-setthreadgroupmemorylength?language=objc
-func (c_ ComputeCommandEncoderObject) SetThreadgroupMemoryLengthAtIndex(length uint, index uint) {
-	objc.Call[objc.Void](c_, objc.Sel("setThreadgroupMemoryLength:atIndex:"), length, index)
+// [Full Topic]: https://developer.apple.com/documentation/metal/mtlcomputecommandencoder/1649790-waitforfence?language=objc
+func (c_ ComputeCommandEncoderObject) WaitForFence(fence FenceObject) {
+	po0 := objc.WrapAsProtocol("MTLFence", fence)
+	objc.Call[objc.Void](c_, objc.Sel("waitForFence:"), po0)
 }
 
 func (c_ ComputeCommandEncoderObject) HasDispatchType() bool {

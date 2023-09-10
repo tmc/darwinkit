@@ -19,10 +19,6 @@ type _NDArrayUnaryKernelClass struct {
 // An interface definition for the [NDArrayUnaryKernel] class.
 type INDArrayUnaryKernel interface {
 	INDArrayMultiaryKernel
-	EncodeToCommandBufferSourceArrayDestinationArray(cmdBuf metal.PCommandBuffer, sourceArray INDArray, destination INDArray)
-	EncodeToCommandBufferObjectSourceArrayDestinationArray(cmdBufObject objc.IObject, sourceArray INDArray, destination INDArray)
-	EncodeToCommandBufferSourceArray(cmdBuf metal.PCommandBuffer, sourceArray INDArray) NDArray
-	EncodeToCommandBufferObjectSourceArray(cmdBufObject objc.IObject, sourceArray INDArray) NDArray
 	EncodeToCommandBufferSourceArrayResultStateDestinationArray(cmdBuf metal.PCommandBuffer, sourceArray INDArray, outGradientState IState, destination INDArray)
 	EncodeToCommandBufferObjectSourceArrayResultStateDestinationArray(cmdBufObject objc.IObject, sourceArray INDArray, outGradientState IState, destination INDArray)
 	EncodeToCommandBufferSourceArrayResultStateOutputStateIsTemporary(cmdBuf metal.PCommandBuffer, sourceArray INDArray, outGradientState unsafe.Pointer, outputStateIsTemporary bool) NDArray

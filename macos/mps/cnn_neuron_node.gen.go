@@ -70,6 +70,14 @@ func (c_ CNNNeuronNode) Init() CNNNeuronNode {
 
 //	[Full Topic]
 //
+// [Full Topic]: https://developer.apple.com/documentation/metalperformanceshaders/mpscnnneuronnode/2921459-a?language=objc
+func (c_ CNNNeuronNode) A() float64 {
+	rv := objc.Call[float64](c_, objc.Sel("a"))
+	return rv
+}
+
+//	[Full Topic]
+//
 // [Full Topic]: https://developer.apple.com/documentation/metalperformanceshaders/mpscnnneuronnode/2935553-c?language=objc
 func (c_ CNNNeuronNode) C() float32 {
 	rv := objc.Call[float32](c_, objc.Sel("c"))

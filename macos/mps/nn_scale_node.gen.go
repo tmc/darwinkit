@@ -83,9 +83,11 @@ func (nc _NNScaleNodeClass) NodeWithSourceTransformProviderOutputSize(sourceNode
 
 //	[Full Topic]
 //
-// [Full Topic]: https://developer.apple.com/documentation/metalperformanceshaders/mpsnnscalenode/2915286-nodewithsource?language=objc
-func NNScaleNode_NodeWithSourceTransformProviderOutputSize(sourceNode INNImageNode, transformProvider PImageTransformProvider, size metal.Size) NNScaleNode {
-	return NNScaleNodeClass.NodeWithSourceTransformProviderOutputSize(sourceNode, transformProvider, size)
+// [Full Topic]: https://developer.apple.com/documentation/metalperformanceshaders/mpsnnscalenode/2915285-initwithsource?language=objc
+func NewNNScaleNodeWithSourceOutputSize(sourceNode INNImageNode, size metal.Size) NNScaleNode {
+	instance := NNScaleNodeClass.Alloc().InitWithSourceOutputSize(sourceNode, size)
+	instance.Autorelease()
+	return instance
 }
 
 func (nc _NNScaleNodeClass) Alloc() NNScaleNode {

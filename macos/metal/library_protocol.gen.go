@@ -14,14 +14,6 @@ import (
 // [Full Topic]: https://developer.apple.com/documentation/metal/mtllibrary?language=objc
 type PLibrary interface {
 	// optional
-	NewFunctionWithNameConstantValuesCompletionHandler(name string, constantValues FunctionConstantValues, completionHandler func(function FunctionObject, error foundation.Error))
-	HasNewFunctionWithNameConstantValuesCompletionHandler() bool
-
-	// optional
-	NewFunctionWithName(functionName string) FunctionObject
-	HasNewFunctionWithName() bool
-
-	// optional
 	NewFunctionWithDescriptorCompletionHandler(descriptor FunctionDescriptor, completionHandler func(function FunctionObject, error foundation.Error))
 	HasNewFunctionWithDescriptorCompletionHandler() bool
 
@@ -42,6 +34,18 @@ type PLibrary interface {
 	HasNewFunctionWithNameConstantValuesError() bool
 
 	// optional
+	InstallName() string
+	HasInstallName() bool
+
+	// optional
+	Device() DeviceObject
+	HasDevice() bool
+
+	// optional
+	Type() LibraryType
+	HasType() bool
+
+	// optional
 	SetLabel(value string)
 	HasSetLabel() bool
 
@@ -50,20 +54,8 @@ type PLibrary interface {
 	HasLabel() bool
 
 	// optional
-	Device() DeviceObject
-	HasDevice() bool
-
-	// optional
 	FunctionNames() []string
 	HasFunctionNames() bool
-
-	// optional
-	Type() LibraryType
-	HasType() bool
-
-	// optional
-	InstallName() string
-	HasInstallName() bool
 }
 
 // ensure impl type implements protocol interface
@@ -155,6 +147,42 @@ func (l_ LibraryObject) NewFunctionWithNameConstantValuesError(name string, cons
 	return rv
 }
 
+func (l_ LibraryObject) HasInstallName() bool {
+	return l_.RespondsToSelector(objc.Sel("installName"))
+}
+
+// The installation name for a dynamic library. [Full Topic]
+//
+// [Full Topic]: https://developer.apple.com/documentation/metal/mtllibrary/3554039-installname?language=objc
+func (l_ LibraryObject) InstallName() string {
+	rv := objc.Call[string](l_, objc.Sel("installName"))
+	return rv
+}
+
+func (l_ LibraryObject) HasDevice() bool {
+	return l_.RespondsToSelector(objc.Sel("device"))
+}
+
+// The Metal device object that created the library. [Full Topic]
+//
+// [Full Topic]: https://developer.apple.com/documentation/metal/mtllibrary/1515661-device?language=objc
+func (l_ LibraryObject) Device() DeviceObject {
+	rv := objc.Call[DeviceObject](l_, objc.Sel("device"))
+	return rv
+}
+
+func (l_ LibraryObject) HasType() bool {
+	return l_.RespondsToSelector(objc.Sel("type"))
+}
+
+// The library’s basic type. [Full Topic]
+//
+// [Full Topic]: https://developer.apple.com/documentation/metal/mtllibrary/3554042-type?language=objc
+func (l_ LibraryObject) Type() LibraryType {
+	rv := objc.Call[LibraryType](l_, objc.Sel("type"))
+	return rv
+}
+
 func (l_ LibraryObject) HasSetLabel() bool {
 	return l_.RespondsToSelector(objc.Sel("setLabel:"))
 }
@@ -178,18 +206,6 @@ func (l_ LibraryObject) Label() string {
 	return rv
 }
 
-func (l_ LibraryObject) HasDevice() bool {
-	return l_.RespondsToSelector(objc.Sel("device"))
-}
-
-// The Metal device object that created the library. [Full Topic]
-//
-// [Full Topic]: https://developer.apple.com/documentation/metal/mtllibrary/1515661-device?language=objc
-func (l_ LibraryObject) Device() DeviceObject {
-	rv := objc.Call[DeviceObject](l_, objc.Sel("device"))
-	return rv
-}
-
 func (l_ LibraryObject) HasFunctionNames() bool {
 	return l_.RespondsToSelector(objc.Sel("functionNames"))
 }
@@ -199,29 +215,5 @@ func (l_ LibraryObject) HasFunctionNames() bool {
 // [Full Topic]: https://developer.apple.com/documentation/metal/mtllibrary/1515651-functionnames?language=objc
 func (l_ LibraryObject) FunctionNames() []string {
 	rv := objc.Call[[]string](l_, objc.Sel("functionNames"))
-	return rv
-}
-
-func (l_ LibraryObject) HasType() bool {
-	return l_.RespondsToSelector(objc.Sel("type"))
-}
-
-// The library’s basic type. [Full Topic]
-//
-// [Full Topic]: https://developer.apple.com/documentation/metal/mtllibrary/3554042-type?language=objc
-func (l_ LibraryObject) Type() LibraryType {
-	rv := objc.Call[LibraryType](l_, objc.Sel("type"))
-	return rv
-}
-
-func (l_ LibraryObject) HasInstallName() bool {
-	return l_.RespondsToSelector(objc.Sel("installName"))
-}
-
-// The installation name for a dynamic library. [Full Topic]
-//
-// [Full Topic]: https://developer.apple.com/documentation/metal/mtllibrary/3554039-installname?language=objc
-func (l_ LibraryObject) InstallName() string {
-	rv := objc.Call[string](l_, objc.Sel("installName"))
 	return rv
 }

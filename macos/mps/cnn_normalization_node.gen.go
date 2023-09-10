@@ -39,6 +39,18 @@ func CNNNormalizationNodeFrom(ptr unsafe.Pointer) CNNNormalizationNode {
 	}
 }
 
+func (cc _CNNNormalizationNodeClass) NodeWithSource(sourceNode INNImageNode) CNNNormalizationNode {
+	rv := objc.Call[CNNNormalizationNode](cc, objc.Sel("nodeWithSource:"), objc.Ptr(sourceNode))
+	return rv
+}
+
+//	[Full Topic]
+//
+// [Full Topic]: https://developer.apple.com/documentation/metalperformanceshaders/mpscnnnormalizationnode/2866460-nodewithsource?language=objc
+func CNNNormalizationNode_NodeWithSource(sourceNode INNImageNode) CNNNormalizationNode {
+	return CNNNormalizationNodeClass.NodeWithSource(sourceNode)
+}
+
 func (c_ CNNNormalizationNode) InitWithSource(sourceNode INNImageNode) CNNNormalizationNode {
 	rv := objc.Call[CNNNormalizationNode](c_, objc.Sel("initWithSource:"), sourceNode)
 	return rv
@@ -128,4 +140,19 @@ func (c_ CNNNormalizationNode) Delta() float32 {
 // [Full Topic]: https://developer.apple.com/documentation/metalperformanceshaders/mpscnnnormalizationnode/2866482-delta?language=objc
 func (c_ CNNNormalizationNode) SetDelta(value float32) {
 	objc.Call[objc.Void](c_, objc.Sel("setDelta:"), value)
+}
+
+//	[Full Topic]
+//
+// [Full Topic]: https://developer.apple.com/documentation/metalperformanceshaders/mpscnnnormalizationnode/2866474-alpha?language=objc
+func (c_ CNNNormalizationNode) Alpha() float64 {
+	rv := objc.Call[float64](c_, objc.Sel("alpha"))
+	return rv
+}
+
+//	[Full Topic]
+//
+// [Full Topic]: https://developer.apple.com/documentation/metalperformanceshaders/mpscnnnormalizationnode/2866474-alpha?language=objc
+func (c_ CNNNormalizationNode) SetAlpha(value float64) {
+	objc.Call[objc.Void](c_, objc.Sel("setAlpha:"), value)
 }

@@ -31,22 +31,24 @@ type ICNNConvolutionTranspose interface {
 	ExportWeightsAndBiasesWithCommandBufferResultStateCanBeTemporary(commandBuffer metal.PCommandBuffer, resultStateCanBeTemporary bool) CNNConvolutionWeightsAndBiasesState
 	ExportWeightsAndBiasesWithCommandBufferObjectResultStateCanBeTemporary(commandBufferObject objc.IObject, resultStateCanBeTemporary bool) CNNConvolutionWeightsAndBiasesState
 	ReloadWeightsAndBiasesFromDataSource()
-	EncodeToCommandBufferSourceImageConvolutionGradientStateDestinationImage(commandBuffer metal.PCommandBuffer, sourceImage IImage, convolutionGradientState ICNNConvolutionGradientState, destinationImage IImage)
-	EncodeToCommandBufferObjectSourceImageConvolutionGradientStateDestinationImage(commandBufferObject objc.IObject, sourceImage IImage, convolutionGradientState ICNNConvolutionGradientState, destinationImage IImage)
-	EncodeBatchToCommandBufferSourceImagesConvolutionGradientStatesDestinationImages(commandBuffer metal.PCommandBuffer, sourceImage *foundation.Array, convolutionGradientState *foundation.Array, destinationImage *foundation.Array)
-	EncodeBatchToCommandBufferObjectSourceImagesConvolutionGradientStatesDestinationImages(commandBufferObject objc.IObject, sourceImage *foundation.Array, convolutionGradientState *foundation.Array, destinationImage *foundation.Array)
 	EncodeBatchToCommandBufferSourceImagesConvolutionGradientStates(commandBuffer metal.PCommandBuffer, sourceImage *foundation.Array, convolutionGradientState *foundation.Array) *foundation.Array
 	EncodeBatchToCommandBufferObjectSourceImagesConvolutionGradientStates(commandBufferObject objc.IObject, sourceImage *foundation.Array, convolutionGradientState *foundation.Array) *foundation.Array
+	ReloadWeightsAndBiasesWithCommandBufferState(commandBuffer metal.PCommandBuffer, state ICNNConvolutionWeightsAndBiasesState)
+	ReloadWeightsAndBiasesWithCommandBufferObjectState(commandBufferObject objc.IObject, state ICNNConvolutionWeightsAndBiasesState)
+	ExportWeightsAndBiasesWithCommandBufferResultStateCanBeTemporary(commandBuffer metal.PCommandBuffer, resultStateCanBeTemporary bool) CNNConvolutionWeightsAndBiasesState
+	ExportWeightsAndBiasesWithCommandBufferObjectResultStateCanBeTemporary(commandBufferObject objc.IObject, resultStateCanBeTemporary bool) CNNConvolutionWeightsAndBiasesState
+	EncodeToCommandBufferSourceImageConvolutionGradientState(commandBuffer metal.PCommandBuffer, sourceImage IImage, convolutionGradientState ICNNConvolutionGradientState) Image
+	EncodeToCommandBufferObjectSourceImageConvolutionGradientState(commandBufferObject objc.IObject, sourceImage IImage, convolutionGradientState ICNNConvolutionGradientState) Image
+	DataSource() CNNConvolutionDataSourceObject
 	OutputFeatureChannels() uint
-	AccumulatorPrecisionOption() NNConvolutionAccumulatorPrecisionOption
-	SetAccumulatorPrecisionOption(value NNConvolutionAccumulatorPrecisionOption)
-	KernelOffsetY() int
-	SetKernelOffsetY(value int)
+	InputFeatureChannels() uint
 	KernelOffsetX() int
 	SetKernelOffsetX(value int)
-	DataSource() CNNConvolutionDataSourceObject
 	Groups() uint
-	InputFeatureChannels() uint
+	KernelOffsetY() int
+	SetKernelOffsetY(value int)
+	AccumulatorPrecisionOption() NNConvolutionAccumulatorPrecisionOption
+	SetAccumulatorPrecisionOption(value NNConvolutionAccumulatorPrecisionOption)
 }
 
 // A transposed convolution kernel. [Full Topic]
@@ -126,6 +128,30 @@ func CNNConvolutionTranspose_CopyWithZoneDevice(zone unsafe.Pointer, device meta
 	instance := CNNConvolutionTransposeClass.Alloc().CopyWithZoneDevice(zone, device)
 	instance.Autorelease()
 	return instance
+}
+
+//	[Full Topic]
+//
+// [Full Topic]: https://developer.apple.com/documentation/metalperformanceshaders/mpscnnconvolutiontranspose/3131773-reloadweightsandbiasesfromdataso?language=objc
+func (c_ CNNConvolutionTranspose) ReloadWeightsAndBiasesFromDataSource() {
+	objc.Call[objc.Void](c_, objc.Sel("reloadWeightsAndBiasesFromDataSource"))
+}
+
+//	[Full Topic]
+//
+// [Full Topic]: https://developer.apple.com/documentation/metalperformanceshaders/mpscnnconvolutiontranspose/2942406-encodebatchtocommandbuffer?language=objc
+func (c_ CNNConvolutionTranspose) EncodeBatchToCommandBufferSourceImagesConvolutionGradientStates(commandBuffer metal.PCommandBuffer, sourceImage *foundation.Array, convolutionGradientState *foundation.Array) *foundation.Array {
+	po0 := objc.WrapAsProtocol("MTLCommandBuffer", commandBuffer)
+	rv := objc.Call[*foundation.Array](c_, objc.Sel("encodeBatchToCommandBuffer:sourceImages:convolutionGradientStates:"), po0, sourceImage, convolutionGradientState)
+	return rv
+}
+
+//	[Full Topic]
+//
+// [Full Topic]: https://developer.apple.com/documentation/metalperformanceshaders/mpscnnconvolutiontranspose/2942406-encodebatchtocommandbuffer?language=objc
+func (c_ CNNConvolutionTranspose) EncodeBatchToCommandBufferObjectSourceImagesConvolutionGradientStates(commandBufferObject objc.IObject, sourceImage *foundation.Array, convolutionGradientState *foundation.Array) *foundation.Array {
+	rv := objc.Call[*foundation.Array](c_, objc.Sel("encodeBatchToCommandBuffer:sourceImages:convolutionGradientStates:"), objc.Ptr(commandBufferObject), sourceImage, convolutionGradientState)
+	return rv
 }
 
 //	[Full Topic]
@@ -275,32 +301,10 @@ func (c_ CNNConvolutionTranspose) OutputFeatureChannels() uint {
 
 //	[Full Topic]
 //
-// [Full Topic]: https://developer.apple.com/documentation/metalperformanceshaders/mpscnnconvolutiontranspose/2951924-accumulatorprecisionoption?language=objc
-func (c_ CNNConvolutionTranspose) AccumulatorPrecisionOption() NNConvolutionAccumulatorPrecisionOption {
-	rv := objc.Call[NNConvolutionAccumulatorPrecisionOption](c_, objc.Sel("accumulatorPrecisionOption"))
+// [Full Topic]: https://developer.apple.com/documentation/metalperformanceshaders/mpscnnconvolutiontranspose/2867174-inputfeaturechannels?language=objc
+func (c_ CNNConvolutionTranspose) InputFeatureChannels() uint {
+	rv := objc.Call[uint](c_, objc.Sel("inputFeatureChannels"))
 	return rv
-}
-
-//	[Full Topic]
-//
-// [Full Topic]: https://developer.apple.com/documentation/metalperformanceshaders/mpscnnconvolutiontranspose/2951924-accumulatorprecisionoption?language=objc
-func (c_ CNNConvolutionTranspose) SetAccumulatorPrecisionOption(value NNConvolutionAccumulatorPrecisionOption) {
-	objc.Call[objc.Void](c_, objc.Sel("setAccumulatorPrecisionOption:"), value)
-}
-
-//	[Full Topic]
-//
-// [Full Topic]: https://developer.apple.com/documentation/metalperformanceshaders/mpscnnconvolutiontranspose/2867086-kerneloffsety?language=objc
-func (c_ CNNConvolutionTranspose) KernelOffsetY() int {
-	rv := objc.Call[int](c_, objc.Sel("kernelOffsetY"))
-	return rv
-}
-
-//	[Full Topic]
-//
-// [Full Topic]: https://developer.apple.com/documentation/metalperformanceshaders/mpscnnconvolutiontranspose/2867086-kerneloffsety?language=objc
-func (c_ CNNConvolutionTranspose) SetKernelOffsetY(value int) {
-	objc.Call[objc.Void](c_, objc.Sel("setKernelOffsetY:"), value)
 }
 
 //	[Full Topic]
@@ -320,14 +324,6 @@ func (c_ CNNConvolutionTranspose) SetKernelOffsetX(value int) {
 
 //	[Full Topic]
 //
-// [Full Topic]: https://developer.apple.com/documentation/metalperformanceshaders/mpscnnconvolutiontranspose/3131769-datasource?language=objc
-func (c_ CNNConvolutionTranspose) DataSource() CNNConvolutionDataSourceObject {
-	rv := objc.Call[CNNConvolutionDataSourceObject](c_, objc.Sel("dataSource"))
-	return rv
-}
-
-//	[Full Topic]
-//
 // [Full Topic]: https://developer.apple.com/documentation/metalperformanceshaders/mpscnnconvolutiontranspose/2867099-groups?language=objc
 func (c_ CNNConvolutionTranspose) Groups() uint {
 	rv := objc.Call[uint](c_, objc.Sel("groups"))
@@ -336,8 +332,30 @@ func (c_ CNNConvolutionTranspose) Groups() uint {
 
 //	[Full Topic]
 //
-// [Full Topic]: https://developer.apple.com/documentation/metalperformanceshaders/mpscnnconvolutiontranspose/2867174-inputfeaturechannels?language=objc
-func (c_ CNNConvolutionTranspose) InputFeatureChannels() uint {
-	rv := objc.Call[uint](c_, objc.Sel("inputFeatureChannels"))
+// [Full Topic]: https://developer.apple.com/documentation/metalperformanceshaders/mpscnnconvolutiontranspose/2867086-kerneloffsety?language=objc
+func (c_ CNNConvolutionTranspose) KernelOffsetY() int {
+	rv := objc.Call[int](c_, objc.Sel("kernelOffsetY"))
 	return rv
+}
+
+//	[Full Topic]
+//
+// [Full Topic]: https://developer.apple.com/documentation/metalperformanceshaders/mpscnnconvolutiontranspose/2867086-kerneloffsety?language=objc
+func (c_ CNNConvolutionTranspose) SetKernelOffsetY(value int) {
+	objc.Call[objc.Void](c_, objc.Sel("setKernelOffsetY:"), value)
+}
+
+//	[Full Topic]
+//
+// [Full Topic]: https://developer.apple.com/documentation/metalperformanceshaders/mpscnnconvolutiontranspose/2951924-accumulatorprecisionoption?language=objc
+func (c_ CNNConvolutionTranspose) AccumulatorPrecisionOption() NNConvolutionAccumulatorPrecisionOption {
+	rv := objc.Call[NNConvolutionAccumulatorPrecisionOption](c_, objc.Sel("accumulatorPrecisionOption"))
+	return rv
+}
+
+//	[Full Topic]
+//
+// [Full Topic]: https://developer.apple.com/documentation/metalperformanceshaders/mpscnnconvolutiontranspose/2951924-accumulatorprecisionoption?language=objc
+func (c_ CNNConvolutionTranspose) SetAccumulatorPrecisionOption(value NNConvolutionAccumulatorPrecisionOption) {
+	objc.Call[objc.Void](c_, objc.Sel("setAccumulatorPrecisionOption:"), value)
 }

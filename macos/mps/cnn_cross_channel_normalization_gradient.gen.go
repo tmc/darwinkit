@@ -153,8 +153,15 @@ func (c_ CNNCrossChannelNormalizationGradient) SetDelta(value float32) {
 
 //	[Full Topic]
 //
-// [Full Topic]: https://developer.apple.com/documentation/metalperformanceshaders/mpscnncrosschannelnormalizationgradient/2942468-kernelsize?language=objc
-func (c_ CNNCrossChannelNormalizationGradient) KernelSize() uint {
-	rv := objc.Call[uint](c_, objc.Sel("kernelSize"))
+// [Full Topic]: https://developer.apple.com/documentation/metalperformanceshaders/mpscnncrosschannelnormalizationgradient/2942464-alpha?language=objc
+func (c_ CNNCrossChannelNormalizationGradient) Alpha() float64 {
+	rv := objc.Call[float64](c_, objc.Sel("alpha"))
 	return rv
+}
+
+//	[Full Topic]
+//
+// [Full Topic]: https://developer.apple.com/documentation/metalperformanceshaders/mpscnncrosschannelnormalizationgradient/2942464-alpha?language=objc
+func (c_ CNNCrossChannelNormalizationGradient) SetAlpha(value float64) {
+	objc.Call[objc.Void](c_, objc.Sel("setAlpha:"), value)
 }

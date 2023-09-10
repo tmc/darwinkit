@@ -149,7 +149,7 @@ func (n_ NNReshape) EncodeBatchToCommandBufferObjectSourceImagesReshapedWidthRes
 // [Full Topic]: https://developer.apple.com/documentation/metalperformanceshaders/mpsnnreshape/3547989-encodebatchtocommandbuffer?language=objc
 func (n_ NNReshape) EncodeBatchToCommandBufferSourceImagesDestinationStatesDestinationStateIsTemporaryReshapedWidthReshapedHeightReshapedFeatureChannels(commandBuffer metal.PCommandBuffer, sourceImages *foundation.Array, outStates unsafe.Pointer, isTemporary bool, reshapedWidth uint, reshapedHeight uint, reshapedFeatureChannels uint) *foundation.Array {
 	po0 := objc.WrapAsProtocol("MTLCommandBuffer", commandBuffer)
-	rv := objc.Call[*foundation.Array](n_, objc.Sel("encodeBatchToCommandBuffer:sourceImages:destinationStates:destinationStateIsTemporary:reshapedWidth:reshapedHeight:reshapedFeatureChannels:"), po0, sourceImages, outStates, isTemporary, reshapedWidth, reshapedHeight, reshapedFeatureChannels)
+	rv := objc.Call[Image](n_, objc.Sel("encodeToCommandBuffer:sourceImage:reshapedWidth:reshapedHeight:reshapedFeatureChannels:"), po0, objc.Ptr(sourceImage), reshapedWidth, reshapedHeight, reshapedFeatureChannels)
 	return rv
 }
 

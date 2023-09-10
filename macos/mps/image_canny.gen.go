@@ -132,6 +132,14 @@ func (i_ ImageCanny) SetLowThreshold(value float32) {
 
 //	[Full Topic]
 //
+// [Full Topic]: https://developer.apple.com/documentation/metalperformanceshaders/mpsimagecanny/3547969-colortransform?language=objc
+func (i_ ImageCanny) ColorTransform() *float64 {
+	rv := objc.Call[*float64](i_, objc.Sel("colorTransform"))
+	return rv
+}
+
+//	[Full Topic]
+//
 // [Full Topic]: https://developer.apple.com/documentation/metalperformanceshaders/mpsimagecanny/3547976-usefastmode?language=objc
 func (i_ ImageCanny) UseFastMode() bool {
 	rv := objc.Call[bool](i_, objc.Sel("useFastMode"))
@@ -143,6 +151,14 @@ func (i_ ImageCanny) UseFastMode() bool {
 // [Full Topic]: https://developer.apple.com/documentation/metalperformanceshaders/mpsimagecanny/3547976-usefastmode?language=objc
 func (i_ ImageCanny) SetUseFastMode(value bool) {
 	objc.Call[objc.Void](i_, objc.Sel("setUseFastMode:"), value)
+}
+
+//	[Full Topic]
+//
+// [Full Topic]: https://developer.apple.com/documentation/metalperformanceshaders/mpsimagecanny/3547975-sigma?language=objc
+func (i_ ImageCanny) Sigma() float64 {
+	rv := objc.Call[float64](i_, objc.Sel("sigma"))
+	return rv
 }
 
 //	[Full Topic]

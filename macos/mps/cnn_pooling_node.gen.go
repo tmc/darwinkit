@@ -18,9 +18,9 @@ type _CNNPoolingNodeClass struct {
 // An interface definition for the [CNNPoolingNode] class.
 type ICNNPoolingNode interface {
 	INNFilterNode
+	StrideInPixelsY() uint
 	StrideInPixelsX() uint
 	KernelHeight() uint
-	StrideInPixelsY() uint
 	KernelWidth() uint
 }
 
@@ -125,6 +125,14 @@ func (c_ CNNPoolingNode) Init() CNNPoolingNode {
 
 //	[Full Topic]
 //
+// [Full Topic]: https://developer.apple.com/documentation/metalperformanceshaders/mpscnnpoolingnode/2993004-strideinpixelsy?language=objc
+func (c_ CNNPoolingNode) StrideInPixelsY() uint {
+	rv := objc.Call[uint](c_, objc.Sel("strideInPixelsY"))
+	return rv
+}
+
+//	[Full Topic]
+//
 // [Full Topic]: https://developer.apple.com/documentation/metalperformanceshaders/mpscnnpoolingnode/2993003-strideinpixelsx?language=objc
 func (c_ CNNPoolingNode) StrideInPixelsX() uint {
 	rv := objc.Call[uint](c_, objc.Sel("strideInPixelsX"))
@@ -136,14 +144,6 @@ func (c_ CNNPoolingNode) StrideInPixelsX() uint {
 // [Full Topic]: https://developer.apple.com/documentation/metalperformanceshaders/mpscnnpoolingnode/2993001-kernelheight?language=objc
 func (c_ CNNPoolingNode) KernelHeight() uint {
 	rv := objc.Call[uint](c_, objc.Sel("kernelHeight"))
-	return rv
-}
-
-//	[Full Topic]
-//
-// [Full Topic]: https://developer.apple.com/documentation/metalperformanceshaders/mpscnnpoolingnode/2993004-strideinpixelsy?language=objc
-func (c_ CNNPoolingNode) StrideInPixelsY() uint {
-	rv := objc.Call[uint](c_, objc.Sel("strideInPixelsY"))
 	return rv
 }
 

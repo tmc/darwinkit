@@ -19,16 +19,6 @@ type _NNOptimizerAdamClass struct {
 // An interface definition for the [NNOptimizerAdam] class.
 type INNOptimizerAdam interface {
 	INNOptimizer
-	EncodeToCommandBufferInputGradientVectorInputValuesVectorInputMomentumVectorInputVelocityVectorMaximumVelocityVectorResultValuesVector(commandBuffer metal.PCommandBuffer, inputGradientVector IVector, inputValuesVector IVector, inputMomentumVector IVector, inputVelocityVector IVector, maximumVelocityVector IVector, resultValuesVector IVector)
-	EncodeToCommandBufferObjectInputGradientVectorInputValuesVectorInputMomentumVectorInputVelocityVectorMaximumVelocityVectorResultValuesVector(commandBufferObject objc.IObject, inputGradientVector IVector, inputValuesVector IVector, inputMomentumVector IVector, inputVelocityVector IVector, maximumVelocityVector IVector, resultValuesVector IVector)
-	EncodeToCommandBufferInputGradientMatrixInputValuesMatrixInputMomentumMatrixInputVelocityMatrixMaximumVelocityMatrixResultValuesMatrix(commandBuffer metal.PCommandBuffer, inputGradientMatrix IMatrix, inputValuesMatrix IMatrix, inputMomentumMatrix IMatrix, inputVelocityMatrix IMatrix, maximumVelocityMatrix IMatrix, resultValuesMatrix IMatrix)
-	EncodeToCommandBufferObjectInputGradientMatrixInputValuesMatrixInputMomentumMatrixInputVelocityMatrixMaximumVelocityMatrixResultValuesMatrix(commandBufferObject objc.IObject, inputGradientMatrix IMatrix, inputValuesMatrix IMatrix, inputMomentumMatrix IMatrix, inputVelocityMatrix IMatrix, maximumVelocityMatrix IMatrix, resultValuesMatrix IMatrix)
-	EncodeToCommandBufferBatchNormalizationStateInputMomentumVectorsInputVelocityVectorsResultState(commandBuffer metal.PCommandBuffer, batchNormalizationState ICNNBatchNormalizationState, inputMomentumVectors []IVector, inputVelocityVectors []IVector, resultState ICNNNormalizationGammaAndBetaState)
-	EncodeToCommandBufferObjectBatchNormalizationStateInputMomentumVectorsInputVelocityVectorsResultState(commandBufferObject objc.IObject, batchNormalizationState ICNNBatchNormalizationState, inputMomentumVectors []IVector, inputVelocityVectors []IVector, resultState ICNNNormalizationGammaAndBetaState)
-	EncodeToCommandBufferConvolutionGradientStateConvolutionSourceStateInputMomentumVectorsInputVelocityVectorsResultState(commandBuffer metal.PCommandBuffer, convolutionGradientState ICNNConvolutionGradientState, convolutionSourceState ICNNConvolutionWeightsAndBiasesState, inputMomentumVectors []IVector, inputVelocityVectors []IVector, resultState ICNNConvolutionWeightsAndBiasesState)
-	EncodeToCommandBufferObjectConvolutionGradientStateConvolutionSourceStateInputMomentumVectorsInputVelocityVectorsResultState(commandBufferObject objc.IObject, convolutionGradientState ICNNConvolutionGradientState, convolutionSourceState ICNNConvolutionWeightsAndBiasesState, inputMomentumVectors []IVector, inputVelocityVectors []IVector, resultState ICNNConvolutionWeightsAndBiasesState)
-	EncodeToCommandBufferInputGradientVectorInputValuesVectorInputMomentumVectorInputVelocityVectorResultValuesVector(commandBuffer metal.PCommandBuffer, inputGradientVector IVector, inputValuesVector IVector, inputMomentumVector IVector, inputVelocityVector IVector, resultValuesVector IVector)
-	EncodeToCommandBufferObjectInputGradientVectorInputValuesVectorInputMomentumVectorInputVelocityVectorResultValuesVector(commandBufferObject objc.IObject, inputGradientVector IVector, inputValuesVector IVector, inputMomentumVector IVector, inputVelocityVector IVector, resultValuesVector IVector)
 	EncodeToCommandBufferInputGradientMatrixInputValuesMatrixInputMomentumMatrixInputVelocityMatrixResultValuesMatrix(commandBuffer metal.PCommandBuffer, inputGradientMatrix IMatrix, inputValuesMatrix IMatrix, inputMomentumMatrix IMatrix, inputVelocityMatrix IMatrix, resultValuesMatrix IMatrix)
 	EncodeToCommandBufferObjectInputGradientMatrixInputValuesMatrixInputMomentumMatrixInputVelocityMatrixResultValuesMatrix(commandBufferObject objc.IObject, inputGradientMatrix IMatrix, inputValuesMatrix IMatrix, inputMomentumMatrix IMatrix, inputVelocityMatrix IMatrix, resultValuesMatrix IMatrix)
 	EncodeToCommandBufferConvolutionGradientStateConvolutionSourceStateInputMomentumVectorsInputVelocityVectorsMaximumVelocityVectorsResultState(commandBuffer metal.PCommandBuffer, convolutionGradientState ICNNConvolutionGradientState, convolutionSourceState ICNNConvolutionWeightsAndBiasesState, inputMomentumVectors []IVector, inputVelocityVectors []IVector, maximumVelocityVectors []IVector, resultState ICNNConvolutionWeightsAndBiasesState)
@@ -109,21 +99,6 @@ func (n_ NNOptimizerAdam) Init() NNOptimizerAdam {
 	return rv
 }
 
-func (n_ NNOptimizerAdam) CopyWithZoneDevice(zone unsafe.Pointer, device metal.PDevice) NNOptimizerAdam {
-	po1 := objc.WrapAsProtocol("MTLDevice", device)
-	rv := objc.Call[NNOptimizerAdam](n_, objc.Sel("copyWithZone:device:"), zone, po1)
-	return rv
-}
-
-// Makes a copy of this kernel object for a new device. [Full Topic]
-//
-// [Full Topic]: https://developer.apple.com/documentation/metalperformanceshaders/mpskernel/1618912-copywithzone?language=objc
-func NNOptimizerAdam_CopyWithZoneDevice(zone unsafe.Pointer, device metal.PDevice) NNOptimizerAdam {
-	instance := NNOptimizerAdamClass.Alloc().CopyWithZoneDevice(zone, device)
-	instance.Autorelease()
-	return instance
-}
-
 func (n_ NNOptimizerAdam) InitWithDevice(device metal.PDevice) NNOptimizerAdam {
 	po0 := objc.WrapAsProtocol("MTLDevice", device)
 	rv := objc.Call[NNOptimizerAdam](n_, objc.Sel("initWithDevice:"), po0)
@@ -147,7 +122,7 @@ func (n_ NNOptimizerAdam) EncodeToCommandBufferInputGradientVectorInputValuesVec
 	objc.Call[objc.Void](n_, objc.Sel("encodeToCommandBuffer:inputGradientVector:inputValuesVector:inputMomentumVector:inputVelocityVector:maximumVelocityVector:resultValuesVector:"), po0, inputGradientVector, inputValuesVector, inputMomentumVector, inputVelocityVector, maximumVelocityVector, resultValuesVector)
 }
 
-//	[Full Topic]
+// Makes a copy of this kernel object for a new device. [Full Topic]
 //
 // [Full Topic]: https://developer.apple.com/documentation/metalperformanceshaders/mpsnnoptimizeradam/3175016-encodetocommandbuffer?language=objc
 func (n_ NNOptimizerAdam) EncodeToCommandBufferObjectInputGradientVectorInputValuesVectorInputMomentumVectorInputVelocityVectorMaximumVelocityVectorResultValuesVector(commandBufferObject objc.IObject, inputGradientVector IVector, inputValuesVector IVector, inputMomentumVector IVector, inputVelocityVector IVector, maximumVelocityVector IVector, resultValuesVector IVector) {

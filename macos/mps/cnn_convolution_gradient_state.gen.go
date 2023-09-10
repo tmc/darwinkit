@@ -20,9 +20,9 @@ type _CNNConvolutionGradientStateClass struct {
 type ICNNConvolutionGradientState interface {
 	INNGradientState
 	GradientForWeightsLayout() CNNConvolutionWeightsLayout
-	GradientForBiases() metal.BufferObject
-	GradientForWeights() metal.BufferObject
 	Convolution() CNNConvolution
+	GradientForWeights() metal.BufferObject
+	GradientForBiases() metal.BufferObject
 }
 
 // An object that exposes a gradient convolution kernel's gradient with respect to weights and biases. [Full Topic]
@@ -116,23 +116,24 @@ func NewCNNConvolutionGradientStateWithDeviceBufferSize(device metal.PDevice, bu
 	return instance
 }
 
-func (c_ CNNConvolutionGradientState) InitWithResources(resources []metal.PResource) CNNConvolutionGradientState {
-	rv := objc.Call[CNNConvolutionGradientState](c_, objc.Sel("initWithResources:"), resources)
+func (c_ CNNConvolutionGradientState) InitWithResource(resource metal.PResource) CNNConvolutionGradientState {
+	po0 := objc.WrapAsProtocol("MTLResource", resource)
+	rv := objc.Call[CNNConvolutionGradientState](c_, objc.Sel("initWithResource:"), po0)
 	return rv
 }
 
 //	[Full Topic]
 //
-// [Full Topic]: https://developer.apple.com/documentation/metalperformanceshaders/mpsstate/2947895-initwithresources?language=objc
-func NewCNNConvolutionGradientStateWithResources(resources []metal.PResource) CNNConvolutionGradientState {
-	instance := CNNConvolutionGradientStateClass.Alloc().InitWithResources(resources)
+// [Full Topic]: https://developer.apple.com/documentation/metalperformanceshaders/mpsstate/2942390-initwithresource?language=objc
+func NewCNNConvolutionGradientStateWithResource(resource metal.PResource) CNNConvolutionGradientState {
+	instance := CNNConvolutionGradientStateClass.Alloc().InitWithResource(resource)
 	instance.Autorelease()
 	return instance
 }
 
-func (cc _CNNConvolutionGradientStateClass) TemporaryStateWithCommandBufferBufferSize(cmdBuf metal.PCommandBuffer, bufferSize uint) CNNConvolutionGradientState {
-	po0 := objc.WrapAsProtocol("MTLCommandBuffer", cmdBuf)
-	rv := objc.Call[CNNConvolutionGradientState](cc, objc.Sel("temporaryStateWithCommandBuffer:bufferSize:"), po0, bufferSize)
+func (cc _CNNConvolutionGradientStateClass) TemporaryStateWithCommandBufferResourceList(commandBuffer metal.PCommandBuffer, resourceList IStateResourceList) CNNConvolutionGradientState {
+	po0 := objc.WrapAsProtocol("MTLCommandBuffer", commandBuffer)
+	rv := objc.Call[CNNConvolutionGradientState](cc, objc.Sel("temporaryStateWithCommandBuffer:resourceList:"), po0, objc.Ptr(resourceList))
 	return rv
 }
 
@@ -194,9 +195,9 @@ func (c_ CNNConvolutionGradientState) GradientForWeightsLayout() CNNConvolutionW
 
 //	[Full Topic]
 //
-// [Full Topic]: https://developer.apple.com/documentation/metalperformanceshaders/mpscnnconvolutiongradientstate/2947887-gradientforbiases?language=objc
-func (c_ CNNConvolutionGradientState) GradientForBiases() metal.BufferObject {
-	rv := objc.Call[metal.BufferObject](c_, objc.Sel("gradientForBiases"))
+// [Full Topic]: https://developer.apple.com/documentation/metalperformanceshaders/mpscnnconvolutiongradientstate/2953958-convolution?language=objc
+func (c_ CNNConvolutionGradientState) Convolution() CNNConvolution {
+	rv := objc.Call[CNNConvolution](c_, objc.Sel("convolution"))
 	return rv
 }
 
@@ -210,8 +211,8 @@ func (c_ CNNConvolutionGradientState) GradientForWeights() metal.BufferObject {
 
 //	[Full Topic]
 //
-// [Full Topic]: https://developer.apple.com/documentation/metalperformanceshaders/mpscnnconvolutiongradientstate/2953958-convolution?language=objc
-func (c_ CNNConvolutionGradientState) Convolution() CNNConvolution {
-	rv := objc.Call[CNNConvolution](c_, objc.Sel("convolution"))
+// [Full Topic]: https://developer.apple.com/documentation/metalperformanceshaders/mpscnnconvolutiongradientstate/2947887-gradientforbiases?language=objc
+func (c_ CNNConvolutionGradientState) GradientForBiases() metal.BufferObject {
+	rv := objc.Call[metal.BufferObject](c_, objc.Sel("gradientForBiases"))
 	return rv
 }

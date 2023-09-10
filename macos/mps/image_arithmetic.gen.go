@@ -190,6 +190,21 @@ func (i_ ImageArithmetic) SetMaximumValue(value float32) {
 
 //	[Full Topic]
 //
+// [Full Topic]: https://developer.apple.com/documentation/metalperformanceshaders/mpsimagearithmetic/2866602-primaryscale?language=objc
+func (i_ ImageArithmetic) PrimaryScale() float64 {
+	rv := objc.Call[float64](i_, objc.Sel("primaryScale"))
+	return rv
+}
+
+//	[Full Topic]
+//
+// [Full Topic]: https://developer.apple.com/documentation/metalperformanceshaders/mpsimagearithmetic/2866602-primaryscale?language=objc
+func (i_ ImageArithmetic) SetPrimaryScale(value float64) {
+	objc.Call[objc.Void](i_, objc.Sel("setPrimaryScale:"), value)
+}
+
+//	[Full Topic]
+//
 // [Full Topic]: https://developer.apple.com/documentation/metalperformanceshaders/mpsimagearithmetic/2942357-minimumvalue?language=objc
 func (i_ ImageArithmetic) MinimumValue() float32 {
 	rv := objc.Call[float32](i_, objc.Sel("minimumValue"))
@@ -201,4 +216,19 @@ func (i_ ImageArithmetic) MinimumValue() float32 {
 // [Full Topic]: https://developer.apple.com/documentation/metalperformanceshaders/mpsimagearithmetic/2942357-minimumvalue?language=objc
 func (i_ ImageArithmetic) SetMinimumValue(value float32) {
 	objc.Call[objc.Void](i_, objc.Sel("setMinimumValue:"), value)
+}
+
+//	[Full Topic]
+//
+// [Full Topic]: https://developer.apple.com/documentation/metalperformanceshaders/mpsimagearithmetic/2866609-bias?language=objc
+func (i_ ImageArithmetic) Bias() float64 {
+	rv := objc.Call[float64](i_, objc.Sel("bias"))
+	return rv
+}
+
+//	[Full Topic]
+//
+// [Full Topic]: https://developer.apple.com/documentation/metalperformanceshaders/mpsimagearithmetic/2866609-bias?language=objc
+func (i_ ImageArithmetic) SetBias(value float64) {
+	objc.Call[objc.Void](i_, objc.Sel("setBias:"), value)
 }

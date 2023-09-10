@@ -59,6 +59,18 @@ func NewCNNLogSoftMaxGradientNodeWithSourceGradientSourceImageGradientState(sour
 	return instance
 }
 
+func (cc _CNNLogSoftMaxGradientNodeClass) NodeWithSourceGradientSourceImageGradientState(sourceGradient INNImageNode, sourceImage INNImageNode, gradientState INNGradientStateNode) CNNLogSoftMaxGradientNode {
+	rv := objc.Call[CNNLogSoftMaxGradientNode](cc, objc.Sel("nodeWithSourceGradient:sourceImage:gradientState:"), objc.Ptr(sourceGradient), objc.Ptr(sourceImage), objc.Ptr(gradientState))
+	return rv
+}
+
+//	[Full Topic]
+//
+// [Full Topic]: https://developer.apple.com/documentation/metalperformanceshaders/mpscnnlogsoftmaxgradientnode/2947974-nodewithsourcegradient?language=objc
+func CNNLogSoftMaxGradientNode_NodeWithSourceGradientSourceImageGradientState(sourceGradient INNImageNode, sourceImage INNImageNode, gradientState INNGradientStateNode) CNNLogSoftMaxGradientNode {
+	return CNNLogSoftMaxGradientNodeClass.NodeWithSourceGradientSourceImageGradientState(sourceGradient, sourceImage, gradientState)
+}
+
 func (cc _CNNLogSoftMaxGradientNodeClass) Alloc() CNNLogSoftMaxGradientNode {
 	rv := objc.Call[CNNLogSoftMaxGradientNode](cc, objc.Sel("alloc"))
 	return rv

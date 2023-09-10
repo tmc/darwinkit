@@ -204,14 +204,6 @@ func (n_ NNForwardLoss) SetWeight(value float32) {
 
 //	[Full Topic]
 //
-// [Full Topic]: https://developer.apple.com/documentation/metalperformanceshaders/mpsnnforwardloss/3131806-reductiontype?language=objc
-func (n_ NNForwardLoss) ReductionType() CNNReductionType {
-	rv := objc.Call[CNNReductionType](n_, objc.Sel("reductionType"))
-	return rv
-}
-
-//	[Full Topic]
-//
 // [Full Topic]: https://developer.apple.com/documentation/metalperformanceshaders/mpsnnforwardloss/3131800-epsilon?language=objc
 func (n_ NNForwardLoss) Epsilon() float32 {
 	rv := objc.Call[float32](n_, objc.Sel("epsilon"))
@@ -238,4 +230,43 @@ func (n_ NNForwardLoss) Delta() float32 {
 // [Full Topic]: https://developer.apple.com/documentation/metalperformanceshaders/mpsnnforwardloss/3131797-delta?language=objc
 func (n_ NNForwardLoss) SetDelta(value float32) {
 	objc.Call[objc.Void](n_, objc.Sel("setDelta:"), value)
+}
+
+//	[Full Topic]
+//
+// [Full Topic]: https://developer.apple.com/documentation/metalperformanceshaders/mpsnnforwardloss/3131806-reductiontype?language=objc
+func (n_ NNForwardLoss) ReductionType() CNNReductionType {
+	rv := objc.Call[CNNReductionType](n_, objc.Sel("reductionType"))
+	return rv
+}
+
+//	[Full Topic]
+//
+// [Full Topic]: https://developer.apple.com/documentation/metalperformanceshaders/mpsnnforwardloss/3547985-reduceacrossbatch?language=objc
+func (n_ NNForwardLoss) ReduceAcrossBatch() bool {
+	rv := objc.Call[bool](n_, objc.Sel("reduceAcrossBatch"))
+	return rv
+}
+
+//	[Full Topic]
+//
+// [Full Topic]: https://developer.apple.com/documentation/metalperformanceshaders/mpsnnforwardloss/3131804-losstype?language=objc
+func (n_ NNForwardLoss) LossType() CNNLossType {
+	rv := objc.Call[CNNLossType](n_, objc.Sel("lossType"))
+	return rv
+}
+
+//	[Full Topic]
+//
+// [Full Topic]: https://developer.apple.com/documentation/metalperformanceshaders/mpsnnforwardloss/3131803-labelsmoothing?language=objc
+func (n_ NNForwardLoss) LabelSmoothing() float64 {
+	rv := objc.Call[float64](n_, objc.Sel("labelSmoothing"))
+	return rv
+}
+
+//	[Full Topic]
+//
+// [Full Topic]: https://developer.apple.com/documentation/metalperformanceshaders/mpsnnforwardloss/3131803-labelsmoothing?language=objc
+func (n_ NNForwardLoss) SetLabelSmoothing(value float64) {
+	objc.Call[objc.Void](n_, objc.Sel("setLabelSmoothing:"), value)
 }

@@ -25,6 +25,8 @@ type INNPad interface {
 	SetPaddingSizeBefore(value ImageCoordinate)
 	PaddingSizeAfter() ImageCoordinate
 	SetPaddingSizeAfter(value ImageCoordinate)
+	FillValue() float64
+	SetFillValue(value float64)
 }
 
 //	[Full Topic]
@@ -40,21 +42,6 @@ func NNPadFrom(ptr unsafe.Pointer) NNPad {
 	}
 }
 
-func (n_ NNPad) InitWithDevicePaddingSizeBeforePaddingSizeAfterFillValueArray(device metal.PDevice, paddingSizeBefore ImageCoordinate, paddingSizeAfter ImageCoordinate, fillValueArray []byte) NNPad {
-	po0 := objc.WrapAsProtocol("MTLDevice", device)
-	rv := objc.Call[NNPad](n_, objc.Sel("initWithDevice:paddingSizeBefore:paddingSizeAfter:fillValueArray:"), po0, paddingSizeBefore, paddingSizeAfter, fillValueArray)
-	return rv
-}
-
-//	[Full Topic]
-//
-// [Full Topic]: https://developer.apple.com/documentation/metalperformanceshaders/mpsnnpad/3037431-initwithdevice?language=objc
-func NewNNPadWithDevicePaddingSizeBeforePaddingSizeAfterFillValueArray(device metal.PDevice, paddingSizeBefore ImageCoordinate, paddingSizeAfter ImageCoordinate, fillValueArray []byte) NNPad {
-	instance := NNPadClass.Alloc().InitWithDevicePaddingSizeBeforePaddingSizeAfterFillValueArray(device, paddingSizeBefore, paddingSizeAfter, fillValueArray)
-	instance.Autorelease()
-	return instance
-}
-
 func (n_ NNPad) InitWithDevice(device metal.PDevice) NNPad {
 	po0 := objc.WrapAsProtocol("MTLDevice", device)
 	rv := objc.Call[NNPad](n_, objc.Sel("initWithDevice:"), po0)
@@ -66,21 +53,6 @@ func (n_ NNPad) InitWithDevice(device metal.PDevice) NNPad {
 // [Full Topic]: https://developer.apple.com/documentation/metalperformanceshaders/mpsnnpad/3037429-initwithdevice?language=objc
 func NewNNPadWithDevice(device metal.PDevice) NNPad {
 	instance := NNPadClass.Alloc().InitWithDevice(device)
-	instance.Autorelease()
-	return instance
-}
-
-func (n_ NNPad) InitWithDevicePaddingSizeBeforePaddingSizeAfter(device metal.PDevice, paddingSizeBefore ImageCoordinate, paddingSizeAfter ImageCoordinate) NNPad {
-	po0 := objc.WrapAsProtocol("MTLDevice", device)
-	rv := objc.Call[NNPad](n_, objc.Sel("initWithDevice:paddingSizeBefore:paddingSizeAfter:"), po0, paddingSizeBefore, paddingSizeAfter)
-	return rv
-}
-
-//	[Full Topic]
-//
-// [Full Topic]: https://developer.apple.com/documentation/metalperformanceshaders/mpsnnpad/3037430-initwithdevice?language=objc
-func NewNNPadWithDevicePaddingSizeBeforePaddingSizeAfter(device metal.PDevice, paddingSizeBefore ImageCoordinate, paddingSizeAfter ImageCoordinate) NNPad {
-	instance := NNPadClass.Alloc().InitWithDevicePaddingSizeBeforePaddingSizeAfter(device, paddingSizeBefore, paddingSizeAfter)
 	instance.Autorelease()
 	return instance
 }
@@ -163,4 +135,19 @@ func (n_ NNPad) PaddingSizeAfter() ImageCoordinate {
 // [Full Topic]: https://developer.apple.com/documentation/metalperformanceshaders/mpsnnpad/3037432-paddingsizeafter?language=objc
 func (n_ NNPad) SetPaddingSizeAfter(value ImageCoordinate) {
 	objc.Call[objc.Void](n_, objc.Sel("setPaddingSizeAfter:"), value)
+}
+
+//	[Full Topic]
+//
+// [Full Topic]: https://developer.apple.com/documentation/metalperformanceshaders/mpsnnpad/3037427-fillvalue?language=objc
+func (n_ NNPad) FillValue() float64 {
+	rv := objc.Call[float64](n_, objc.Sel("fillValue"))
+	return rv
+}
+
+//	[Full Topic]
+//
+// [Full Topic]: https://developer.apple.com/documentation/metalperformanceshaders/mpsnnpad/3037427-fillvalue?language=objc
+func (n_ NNPad) SetFillValue(value float64) {
+	objc.Call[objc.Void](n_, objc.Sel("setFillValue:"), value)
 }

@@ -105,6 +105,21 @@ func CNNSpatialNormalization_CopyWithZoneDevice(zone unsafe.Pointer, device meta
 	return instance
 }
 
+// The "beta" variable of the kernel function. [Full Topic]
+//
+// [Full Topic]: https://developer.apple.com/documentation/metalperformanceshaders/mpscnnspatialnormalization/1648936-beta?language=objc
+func (c_ CNNSpatialNormalization) Beta() float64 {
+	rv := objc.Call[float64](c_, objc.Sel("beta"))
+	return rv
+}
+
+// The "beta" variable of the kernel function. [Full Topic]
+//
+// [Full Topic]: https://developer.apple.com/documentation/metalperformanceshaders/mpscnnspatialnormalization/1648936-beta?language=objc
+func (c_ CNNSpatialNormalization) SetBeta(value float64) {
+	objc.Call[objc.Void](c_, objc.Sel("setBeta:"), value)
+}
+
 // The "delta" variable of the kernel function. [Full Topic]
 //
 // [Full Topic]: https://developer.apple.com/documentation/metalperformanceshaders/mpscnnspatialnormalization/1648933-delta?language=objc

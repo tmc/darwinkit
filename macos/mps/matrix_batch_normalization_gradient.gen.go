@@ -99,6 +99,22 @@ func (m_ MatrixBatchNormalizationGradient) Init() MatrixBatchNormalizationGradie
 
 //	[Full Topic]
 //
+// [Full Topic]: https://developer.apple.com/documentation/metalperformanceshaders/mpsmatrixbatchnormalizationgradient/2980749-neuronparametera?language=objc
+func (m_ MatrixBatchNormalizationGradient) NeuronParameterA() float64 {
+	rv := objc.Call[float64](m_, objc.Sel("neuronParameterA"))
+	return rv
+}
+
+//	[Full Topic]
+//
+// [Full Topic]: https://developer.apple.com/documentation/metalperformanceshaders/mpsmatrixbatchnormalizationgradient/2980752-neurontype?language=objc
+func (m_ MatrixBatchNormalizationGradient) NeuronType() CNNNeuronType {
+	rv := objc.Call[CNNNeuronType](m_, objc.Sel("neuronType"))
+	return rv
+}
+
+//	[Full Topic]
+//
 // [Full Topic]: https://developer.apple.com/documentation/metalperformanceshaders/mpsmatrixbatchnormalizationgradient/2980753-setneurontype?language=objc
 func (m_ MatrixBatchNormalizationGradient) SetNeuronTypeParameterAParameterBParameterC(neuronType CNNNeuronType, parameterA float32, parameterB float32, parameterC float32) {
 	objc.Call[objc.Void](m_, objc.Sel("setNeuronType:parameterA:parameterB:parameterC:"), neuronType, parameterA, parameterB, parameterC)
@@ -153,17 +169,10 @@ func (m_ MatrixBatchNormalizationGradient) EncodeToCommandBufferObjectGradientMa
 
 //	[Full Topic]
 //
-// [Full Topic]: https://developer.apple.com/documentation/metalperformanceshaders/mpsmatrixbatchnormalizationgradient/2980755-sourcenumberoffeaturevectors?language=objc
-func (m_ MatrixBatchNormalizationGradient) SourceNumberOfFeatureVectors() uint {
-	rv := objc.Call[uint](m_, objc.Sel("sourceNumberOfFeatureVectors"))
+// [Full Topic]: https://developer.apple.com/documentation/metalperformanceshaders/mpsmatrixbatchnormalizationgradient/2980751-neuronparameterc?language=objc
+func (m_ MatrixBatchNormalizationGradient) NeuronParameterC() float64 {
+	rv := objc.Call[float64](m_, objc.Sel("neuronParameterC"))
 	return rv
-}
-
-//	[Full Topic]
-//
-// [Full Topic]: https://developer.apple.com/documentation/metalperformanceshaders/mpsmatrixbatchnormalizationgradient/2980755-sourcenumberoffeaturevectors?language=objc
-func (m_ MatrixBatchNormalizationGradient) SetSourceNumberOfFeatureVectors(value uint) {
-	objc.Call[objc.Void](m_, objc.Sel("setSourceNumberOfFeatureVectors:"), value)
 }
 
 //	[Full Topic]
@@ -179,6 +188,21 @@ func (m_ MatrixBatchNormalizationGradient) Epsilon() float32 {
 // [Full Topic]: https://developer.apple.com/documentation/metalperformanceshaders/mpsmatrixbatchnormalizationgradient/2980746-epsilon?language=objc
 func (m_ MatrixBatchNormalizationGradient) SetEpsilon(value float32) {
 	objc.Call[objc.Void](m_, objc.Sel("setEpsilon:"), value)
+}
+
+//	[Full Topic]
+//
+// [Full Topic]: https://developer.apple.com/documentation/metalperformanceshaders/mpsmatrixbatchnormalizationgradient/2980755-sourcenumberoffeaturevectors?language=objc
+func (m_ MatrixBatchNormalizationGradient) SourceNumberOfFeatureVectors() uint {
+	rv := objc.Call[uint](m_, objc.Sel("sourceNumberOfFeatureVectors"))
+	return rv
+}
+
+//	[Full Topic]
+//
+// [Full Topic]: https://developer.apple.com/documentation/metalperformanceshaders/mpsmatrixbatchnormalizationgradient/2980755-sourcenumberoffeaturevectors?language=objc
+func (m_ MatrixBatchNormalizationGradient) SetSourceNumberOfFeatureVectors(value uint) {
+	objc.Call[objc.Void](m_, objc.Sel("setSourceNumberOfFeatureVectors:"), value)
 }
 
 //	[Full Topic]

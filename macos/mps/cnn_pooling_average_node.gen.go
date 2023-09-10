@@ -53,6 +53,18 @@ func (c_ CNNPoolingAverageNode) Init() CNNPoolingAverageNode {
 	return rv
 }
 
+func (cc _CNNPoolingAverageNodeClass) NodeWithSourceFilterSize(sourceNode INNImageNode, size uint) CNNPoolingAverageNode {
+	rv := objc.Call[CNNPoolingAverageNode](cc, objc.Sel("nodeWithSource:filterSize:"), objc.Ptr(sourceNode), size)
+	return rv
+}
+
+//	[Full Topic]
+//
+// [Full Topic]: https://developer.apple.com/documentation/metalperformanceshaders/mpscnnpoolingnode/2866508-nodewithsource?language=objc
+func CNNPoolingAverageNode_NodeWithSourceFilterSize(sourceNode INNImageNode, size uint) CNNPoolingAverageNode {
+	return CNNPoolingAverageNodeClass.NodeWithSourceFilterSize(sourceNode, size)
+}
+
 func (c_ CNNPoolingAverageNode) InitWithSourceFilterSize(sourceNode INNImageNode, size uint) CNNPoolingAverageNode {
 	rv := objc.Call[CNNPoolingAverageNode](c_, objc.Sel("initWithSource:filterSize:"), sourceNode, size)
 	return rv

@@ -22,6 +22,7 @@ type INNGramMatrixCalculationNode interface {
 	PropertyCallBack() NNGramMatrixCallbackObject
 	SetPropertyCallBack(value PNNGramMatrixCallback)
 	SetPropertyCallBackObject(valueObject objc.IObject)
+	Alpha() float64
 }
 
 //	[Full Topic]
@@ -138,4 +139,12 @@ func (n_ NNGramMatrixCalculationNode) SetPropertyCallBack(value PNNGramMatrixCal
 // [Full Topic]: https://developer.apple.com/documentation/metalperformanceshaders/mpsnngrammatrixcalculationnode/3131844-propertycallback?language=objc
 func (n_ NNGramMatrixCalculationNode) SetPropertyCallBackObject(valueObject objc.IObject) {
 	objc.Call[objc.Void](n_, objc.Sel("setPropertyCallBack:"), valueObject)
+}
+
+//	[Full Topic]
+//
+// [Full Topic]: https://developer.apple.com/documentation/metalperformanceshaders/mpsnngrammatrixcalculationnode/3114094-alpha?language=objc
+func (n_ NNGramMatrixCalculationNode) Alpha() float64 {
+	rv := objc.Call[float64](n_, objc.Sel("alpha"))
+	return rv
 }

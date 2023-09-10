@@ -24,6 +24,8 @@ type ICNNNeuron interface {
 	Data() []byte
 	C() float32
 	NeuronType() CNNNeuronType
+	C() float64
+	B() float64
 }
 
 // A filter that applies a neuron activation function. [Full Topic]
@@ -122,9 +124,9 @@ func (c_ CNNNeuron) B() float32 {
 
 //	[Full Topic]
 //
-// [Full Topic]: https://developer.apple.com/documentation/metalperformanceshaders/mpscnnneuron/2942308-data?language=objc
-func (c_ CNNNeuron) Data() []byte {
-	rv := objc.Call[[]byte](c_, objc.Sel("data"))
+// [Full Topic]: https://developer.apple.com/documentation/metalperformanceshaders/mpscnnneuron/2942309-neurontype?language=objc
+func (c_ CNNNeuron) NeuronType() CNNNeuronType {
+	rv := objc.Call[CNNNeuronType](c_, objc.Sel("neuronType"))
 	return rv
 }
 
@@ -138,8 +140,8 @@ func (c_ CNNNeuron) C() float32 {
 
 //	[Full Topic]
 //
-// [Full Topic]: https://developer.apple.com/documentation/metalperformanceshaders/mpscnnneuron/2942309-neurontype?language=objc
-func (c_ CNNNeuron) NeuronType() CNNNeuronType {
-	rv := objc.Call[CNNNeuronType](c_, objc.Sel("neuronType"))
+// [Full Topic]: https://developer.apple.com/documentation/metalperformanceshaders/mpscnnneuron/2942306-b?language=objc
+func (c_ CNNNeuron) B() float64 {
+	rv := objc.Call[float64](c_, objc.Sel("b"))
 	return rv
 }

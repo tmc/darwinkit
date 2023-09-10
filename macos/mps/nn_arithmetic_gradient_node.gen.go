@@ -202,10 +202,17 @@ func (n_ NNArithmeticGradientNode) SetMinimumValue(value float32) {
 
 //	[Full Topic]
 //
-// [Full Topic]: https://developer.apple.com/documentation/metalperformanceshaders/mpsnnarithmeticgradientnode/2952987-issecondarysourcefilter?language=objc
-func (n_ NNArithmeticGradientNode) IsSecondarySourceFilter() bool {
-	rv := objc.Call[bool](n_, objc.Sel("isSecondarySourceFilter"))
+// [Full Topic]: https://developer.apple.com/documentation/metalperformanceshaders/mpsnnarithmeticgradientnode/2952988-bias?language=objc
+func (n_ NNArithmeticGradientNode) Bias() float64 {
+	rv := objc.Call[float64](n_, objc.Sel("bias"))
 	return rv
+}
+
+//	[Full Topic]
+//
+// [Full Topic]: https://developer.apple.com/documentation/metalperformanceshaders/mpsnnarithmeticgradientnode/2952988-bias?language=objc
+func (n_ NNArithmeticGradientNode) SetBias(value float64) {
+	objc.Call[objc.Void](n_, objc.Sel("setBias:"), value)
 }
 
 //	[Full Topic]

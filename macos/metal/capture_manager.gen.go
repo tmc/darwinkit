@@ -6,6 +6,7 @@ import (
 	"unsafe"
 
 	"github.com/progrium/darwinkit/objc"
+	"github.com/progrium/macdriver/macos/foundation"
 )
 
 // The class instance for the [CaptureManager] class.
@@ -18,17 +19,18 @@ type _CaptureManagerClass struct {
 // An interface definition for the [CaptureManager] class.
 type ICaptureManager interface {
 	objc.IObject
-	StopCapture()
 	NewCaptureScopeWithDevice(device PDevice) CaptureScopeObject
 	NewCaptureScopeWithDeviceObject(deviceObject objc.IObject) CaptureScopeObject
+	StopCapture()
+	StartCaptureWithDescriptorError(descriptor ICaptureDescriptor, error foundation.IError) bool
 	NewCaptureScopeWithCommandQueue(commandQueue PCommandQueue) CaptureScopeObject
 	NewCaptureScopeWithCommandQueueObject(commandQueueObject objc.IObject) CaptureScopeObject
 	StartCaptureWithDescriptorError(descriptor ICaptureDescriptor, error unsafe.Pointer) bool
 	SupportsDestination(destination CaptureDestination) bool
-	IsCapturing() bool
 	DefaultCaptureScope() CaptureScopeObject
 	SetDefaultCaptureScope(value PCaptureScope)
 	SetDefaultCaptureScopeObject(valueObject objc.IObject)
+	IsCapturing() bool
 }
 
 // An instance you use to capture Metal command data in your app. [Full Topic]
@@ -64,13 +66,6 @@ func (c_ CaptureManager) Init() CaptureManager {
 	return rv
 }
 
-// Stops capturing Metal commands. [Full Topic]
-//
-// [Full Topic]: https://developer.apple.com/documentation/metal/mtlcapturemanager/2869736-stopcapture?language=objc
-func (c_ CaptureManager) StopCapture() {
-	objc.Call[objc.Void](c_, objc.Sel("stopCapture"))
-}
-
 // Creates a capture scope for commands submitted to a specific device object. [Full Topic]
 //
 // [Full Topic]: https://developer.apple.com/documentation/metal/mtlcapturemanager/2869719-newcapturescopewithdevice?language=objc
@@ -101,6 +96,21 @@ func (cc _CaptureManagerClass) SharedCaptureManager() CaptureManager {
 // [Full Topic]: https://developer.apple.com/documentation/metal/mtlcapturemanager/2869720-sharedcapturemanager?language=objc
 func CaptureManager_SharedCaptureManager() CaptureManager {
 	return CaptureManagerClass.SharedCaptureManager()
+}
+
+// Stops capturing Metal commands. [Full Topic]
+//
+// [Full Topic]: https://developer.apple.com/documentation/metal/mtlcapturemanager/2869736-stopcapture?language=objc
+func (c_ CaptureManager) StopCapture() {
+	objc.Call[objc.Void](c_, objc.Sel("stopCapture"))
+}
+
+// Starts capturing any of your app’s Metal commands, with the capture session defined by a descriptor object. [Full Topic]
+//
+// [Full Topic]: https://developer.apple.com/documentation/metal/mtlcapturemanager/3237259-startcapturewithdescriptor?language=objc
+func (c_ CaptureManager) StartCaptureWithDescriptorError(descriptor ICaptureDescriptor, error foundation.IError) bool {
+	rv := objc.Call[bool](c_, objc.Sel("startCaptureWithDescriptor:error:"), objc.Ptr(descriptor), objc.Ptr(error))
+	return rv
 }
 
 // Creates a capture scope for commands submitted to a specific command queue. [Full Topic]
@@ -136,14 +146,6 @@ func (c_ CaptureManager) SupportsDestination(destination CaptureDestination) boo
 	return rv
 }
 
-// A Boolean value that indicates whether Metal commands are being captured. [Full Topic]
-//
-// [Full Topic]: https://developer.apple.com/documentation/metal/mtlcapturemanager/2869727-iscapturing?language=objc
-func (c_ CaptureManager) IsCapturing() bool {
-	rv := objc.Call[bool](c_, objc.Sel("isCapturing"))
-	return rv
-}
-
 // The capture scope to use when a capture is initiated in Xcode. [Full Topic]
 //
 // [Full Topic]: https://developer.apple.com/documentation/metal/mtlcapturemanager/2887120-defaultcapturescope?language=objc
@@ -165,4 +167,12 @@ func (c_ CaptureManager) SetDefaultCaptureScope(value PCaptureScope) {
 // [Full Topic]: https://developer.apple.com/documentation/metal/mtlcapturemanager/2887120-defaultcapturescope?language=objc
 func (c_ CaptureManager) SetDefaultCaptureScopeObject(valueObject objc.IObject) {
 	objc.Call[objc.Void](c_, objc.Sel("setDefaultCaptureScope:"), valueObject)
+}
+
+// A Boolean value that indicates whether Metal commands are being captured. [Full Topic]
+//
+// [Full Topic]: https://developer.apple.com/documentation/metal/mtlcapturemanager/2869727-iscapturing?language=objc
+func (c_ CaptureManager) IsCapturing() bool {
+	rv := objc.Call[bool](c_, objc.Sel("isCapturing"))
+	return rv
 }

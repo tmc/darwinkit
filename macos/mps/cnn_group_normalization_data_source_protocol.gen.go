@@ -3,8 +3,6 @@
 package mps
 
 import (
-	"unsafe"
-
 	"github.com/progrium/darwinkit/macos/foundation"
 	"github.com/progrium/darwinkit/macos/metal"
 	"github.com/progrium/darwinkit/objc"
@@ -23,8 +21,8 @@ type PCNNGroupNormalizationDataSource interface {
 	HasBeta() bool
 
 	// optional
-	CopyWithZoneDevice(zone unsafe.Pointer, device metal.DeviceObject) objc.Object
-	HasCopyWithZoneDevice() bool
+	Epsilon() float64
+	HasEpsilon() bool
 
 	// optional
 	Gamma() *float32
@@ -47,20 +45,16 @@ type PCNNGroupNormalizationDataSource interface {
 	HasLabel() bool
 
 	// optional
-	EncodeWithCoder(aCoder foundation.Coder)
-	HasEncodeWithCoder() bool
-
-	// optional
-	NumberOfFeatureChannels() uint
-	HasNumberOfFeatureChannels() bool
-
-	// optional
 	SetNumberOfGroups(value uint)
 	HasSetNumberOfGroups() bool
 
 	// optional
 	NumberOfGroups() uint
 	HasNumberOfGroups() bool
+
+	// optional
+	NumberOfFeatureChannels() uint
+	HasNumberOfFeatureChannels() bool
 }
 
 // ensure impl type implements protocol interface
@@ -96,21 +90,20 @@ func (c_ CNNGroupNormalizationDataSourceObject) Beta() *float32 {
 	return rv
 }
 
-func (c_ CNNGroupNormalizationDataSourceObject) HasCopyWithZoneDevice() bool {
-	return c_.RespondsToSelector(objc.Sel("copyWithZone:device:"))
+func (c_ CNNGroupNormalizationDataSourceObject) HasEpsilon() bool {
+	return c_.RespondsToSelector(objc.Sel("epsilon"))
 }
 
 //	[Full Topic]
 //
-// [Full Topic]: https://developer.apple.com/documentation/metalperformanceshaders/mpscnngroupnormalizationdatasource/3152544-copywithzone?language=objc
-func (c_ CNNGroupNormalizationDataSourceObject) CopyWithZoneDevice(zone unsafe.Pointer, device metal.DeviceObject) objc.Object {
-	po1 := objc.WrapAsProtocol("MTLDevice", device)
-	rv := objc.Call[objc.Object](c_, objc.Sel("copyWithZone:device:"), zone, po1)
+// [Full Topic]: https://developer.apple.com/documentation/metalperformanceshaders/mpscnngroupnormalizationdatasource/3152546-epsilon?language=objc
+func (c_ CNNGroupNormalizationDataSourceObject) Epsilon() float64 {
+	rv := objc.Call[float64](c_, objc.Sel("epsilon"))
 	return rv
 }
 
-func (c_ CNNGroupNormalizationDataSourceObject) HasGamma() bool {
-	return c_.RespondsToSelector(objc.Sel("gamma"))
+func (c_ CNNGroupNormalizationDataSourceObject) HasEncodeWithCoder() bool {
+	return c_.RespondsToSelector(objc.Sel("encodeWithCoder:"))
 }
 
 //	[Full Topic]
@@ -145,8 +138,8 @@ func (c_ CNNGroupNormalizationDataSourceObject) InitWithCoder(aDecoder foundatio
 	return rv
 }
 
-func (c_ CNNGroupNormalizationDataSourceObject) HasEpsilon() bool {
-	return c_.RespondsToSelector(objc.Sel("epsilon"))
+func (c_ CNNGroupNormalizationDataSourceObject) HasGamma() bool {
+	return c_.RespondsToSelector(objc.Sel("gamma"))
 }
 
 //	[Full Topic]
@@ -212,5 +205,17 @@ func (c_ CNNGroupNormalizationDataSourceObject) HasNumberOfGroups() bool {
 // [Full Topic]: https://developer.apple.com/documentation/metalperformanceshaders/mpscnngroupnormalizationdatasource/3152551-numberofgroups?language=objc
 func (c_ CNNGroupNormalizationDataSourceObject) NumberOfGroups() uint {
 	rv := objc.Call[uint](c_, objc.Sel("numberOfGroups"))
+	return rv
+}
+
+func (c_ CNNGroupNormalizationDataSourceObject) HasNumberOfFeatureChannels() bool {
+	return c_.RespondsToSelector(objc.Sel("numberOfFeatureChannels"))
+}
+
+//	[Full Topic]
+//
+// [Full Topic]: https://developer.apple.com/documentation/metalperformanceshaders/mpscnngroupnormalizationdatasource/3152550-numberoffeaturechannels?language=objc
+func (c_ CNNGroupNormalizationDataSourceObject) NumberOfFeatureChannels() uint {
+	rv := objc.Call[uint](c_, objc.Sel("numberOfFeatureChannels"))
 	return rv
 }

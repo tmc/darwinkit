@@ -19,10 +19,10 @@ type _CNNConvolutionWeightsAndBiasesStateClass struct {
 // An interface definition for the [CNNConvolutionWeightsAndBiasesState] class.
 type ICNNConvolutionWeightsAndBiasesState interface {
 	IState
-	BiasesOffset() uint
 	WeightsOffset() uint
-	Biases() metal.BufferObject
 	Weights() metal.BufferObject
+	BiasesOffset() uint
+	Biases() metal.BufferObject
 }
 
 // A class that stores weights and biases. [Full Topic]
@@ -36,6 +36,21 @@ func CNNConvolutionWeightsAndBiasesStateFrom(ptr unsafe.Pointer) CNNConvolutionW
 	return CNNConvolutionWeightsAndBiasesState{
 		State: StateFrom(ptr),
 	}
+}
+
+func (c_ CNNConvolutionWeightsAndBiasesState) InitWithDeviceCnnConvolutionDescriptor(device metal.PDevice, descriptor ICNNConvolutionDescriptor) CNNConvolutionWeightsAndBiasesState {
+	po0 := objc.WrapAsProtocol("MTLDevice", device)
+	rv := objc.Call[CNNConvolutionWeightsAndBiasesState](c_, objc.Sel("initWithDevice:cnnConvolutionDescriptor:"), po0, objc.Ptr(descriptor))
+	return rv
+}
+
+//	[Full Topic]
+//
+// [Full Topic]: https://developer.apple.com/documentation/metalperformanceshaders/mpscnnconvolutionweightsandbiasesstate/2953004-initwithdevice?language=objc
+func NewCNNConvolutionWeightsAndBiasesStateWithDeviceCnnConvolutionDescriptor(device metal.PDevice, descriptor ICNNConvolutionDescriptor) CNNConvolutionWeightsAndBiasesState {
+	instance := CNNConvolutionWeightsAndBiasesStateClass.Alloc().InitWithDeviceCnnConvolutionDescriptor(device, descriptor)
+	instance.Autorelease()
+	return instance
 }
 
 func (c_ CNNConvolutionWeightsAndBiasesState) InitWithWeightsBiases(weights metal.PBuffer, biases metal.PBuffer) CNNConvolutionWeightsAndBiasesState {
@@ -176,23 +191,24 @@ func NewCNNConvolutionWeightsAndBiasesStateWithDeviceBufferSize(device metal.PDe
 	return instance
 }
 
-func (c_ CNNConvolutionWeightsAndBiasesState) InitWithResources(resources []metal.PResource) CNNConvolutionWeightsAndBiasesState {
-	rv := objc.Call[CNNConvolutionWeightsAndBiasesState](c_, objc.Sel("initWithResources:"), resources)
+func (c_ CNNConvolutionWeightsAndBiasesState) InitWithResource(resource metal.PResource) CNNConvolutionWeightsAndBiasesState {
+	po0 := objc.WrapAsProtocol("MTLResource", resource)
+	rv := objc.Call[CNNConvolutionWeightsAndBiasesState](c_, objc.Sel("initWithResource:"), po0)
 	return rv
 }
 
 //	[Full Topic]
 //
-// [Full Topic]: https://developer.apple.com/documentation/metalperformanceshaders/mpsstate/2947895-initwithresources?language=objc
-func NewCNNConvolutionWeightsAndBiasesStateWithResources(resources []metal.PResource) CNNConvolutionWeightsAndBiasesState {
-	instance := CNNConvolutionWeightsAndBiasesStateClass.Alloc().InitWithResources(resources)
+// [Full Topic]: https://developer.apple.com/documentation/metalperformanceshaders/mpsstate/2942390-initwithresource?language=objc
+func NewCNNConvolutionWeightsAndBiasesStateWithResource(resource metal.PResource) CNNConvolutionWeightsAndBiasesState {
+	instance := CNNConvolutionWeightsAndBiasesStateClass.Alloc().InitWithResource(resource)
 	instance.Autorelease()
 	return instance
 }
 
-func (cc _CNNConvolutionWeightsAndBiasesStateClass) TemporaryStateWithCommandBufferBufferSize(cmdBuf metal.PCommandBuffer, bufferSize uint) CNNConvolutionWeightsAndBiasesState {
-	po0 := objc.WrapAsProtocol("MTLCommandBuffer", cmdBuf)
-	rv := objc.Call[CNNConvolutionWeightsAndBiasesState](cc, objc.Sel("temporaryStateWithCommandBuffer:bufferSize:"), po0, bufferSize)
+func (cc _CNNConvolutionWeightsAndBiasesStateClass) TemporaryStateWithCommandBufferResourceList(commandBuffer metal.PCommandBuffer, resourceList IStateResourceList) CNNConvolutionWeightsAndBiasesState {
+	po0 := objc.WrapAsProtocol("MTLCommandBuffer", commandBuffer)
+	rv := objc.Call[CNNConvolutionWeightsAndBiasesState](cc, objc.Sel("temporaryStateWithCommandBuffer:resourceList:"), po0, objc.Ptr(resourceList))
 	return rv
 }
 
@@ -262,16 +278,24 @@ func (c_ CNNConvolutionWeightsAndBiasesState) WeightsOffset() uint {
 
 //	[Full Topic]
 //
-// [Full Topic]: https://developer.apple.com/documentation/metalperformanceshaders/mpscnnconvolutionweightsandbiasesstate/2953002-biases?language=objc
-func (c_ CNNConvolutionWeightsAndBiasesState) Biases() metal.BufferObject {
-	rv := objc.Call[metal.BufferObject](c_, objc.Sel("biases"))
+// [Full Topic]: https://developer.apple.com/documentation/metalperformanceshaders/mpscnnconvolutionweightsandbiasesstate/2953006-weights?language=objc
+func (c_ CNNConvolutionWeightsAndBiasesState) Weights() metal.BufferObject {
+	rv := objc.Call[metal.BufferObject](c_, objc.Sel("weights"))
 	return rv
 }
 
 //	[Full Topic]
 //
-// [Full Topic]: https://developer.apple.com/documentation/metalperformanceshaders/mpscnnconvolutionweightsandbiasesstate/2953006-weights?language=objc
-func (c_ CNNConvolutionWeightsAndBiasesState) Weights() metal.BufferObject {
-	rv := objc.Call[metal.BufferObject](c_, objc.Sel("weights"))
+// [Full Topic]: https://developer.apple.com/documentation/metalperformanceshaders/mpscnnconvolutionweightsandbiasesstate/3325842-biasesoffset?language=objc
+func (c_ CNNConvolutionWeightsAndBiasesState) BiasesOffset() uint {
+	rv := objc.Call[uint](c_, objc.Sel("biasesOffset"))
+	return rv
+}
+
+//	[Full Topic]
+//
+// [Full Topic]: https://developer.apple.com/documentation/metalperformanceshaders/mpscnnconvolutionweightsandbiasesstate/2953002-biases?language=objc
+func (c_ CNNConvolutionWeightsAndBiasesState) Biases() metal.BufferObject {
+	rv := objc.Call[metal.BufferObject](c_, objc.Sel("biases"))
 	return rv
 }

@@ -19,8 +19,8 @@ type _CNNNormalizationMeanAndVarianceStateClass struct {
 // An interface definition for the [CNNNormalizationMeanAndVarianceState] class.
 type ICNNNormalizationMeanAndVarianceState interface {
 	IState
-	Mean() metal.BufferObject
 	Variance() metal.BufferObject
+	Mean() metal.BufferObject
 }
 
 // An object that stores mean and variance terms used to execute batch normalization. [Full Topic]
@@ -34,19 +34,6 @@ func CNNNormalizationMeanAndVarianceStateFrom(ptr unsafe.Pointer) CNNNormalizati
 	return CNNNormalizationMeanAndVarianceState{
 		State: StateFrom(ptr),
 	}
-}
-
-func (cc _CNNNormalizationMeanAndVarianceStateClass) TemporaryStateWithCommandBufferNumberOfFeatureChannels(commandBuffer metal.PCommandBuffer, numberOfFeatureChannels uint) CNNNormalizationMeanAndVarianceState {
-	po0 := objc.WrapAsProtocol("MTLCommandBuffer", commandBuffer)
-	rv := objc.Call[CNNNormalizationMeanAndVarianceState](cc, objc.Sel("temporaryStateWithCommandBuffer:numberOfFeatureChannels:"), po0, numberOfFeatureChannels)
-	return rv
-}
-
-//	[Full Topic]
-//
-// [Full Topic]: https://developer.apple.com/documentation/metalperformanceshaders/mpscnnnormalizationmeanandvariancestate/3002365-temporarystatewithcommandbuffer?language=objc
-func CNNNormalizationMeanAndVarianceState_TemporaryStateWithCommandBufferNumberOfFeatureChannels(commandBuffer metal.PCommandBuffer, numberOfFeatureChannels uint) CNNNormalizationMeanAndVarianceState {
-	return CNNNormalizationMeanAndVarianceStateClass.TemporaryStateWithCommandBufferNumberOfFeatureChannels(commandBuffer, numberOfFeatureChannels)
 }
 
 func (c_ CNNNormalizationMeanAndVarianceState) InitWithMeanVariance(mean metal.PBuffer, variance metal.PBuffer) CNNNormalizationMeanAndVarianceState {
@@ -63,6 +50,19 @@ func NewCNNNormalizationMeanAndVarianceStateWithMeanVariance(mean metal.PBuffer,
 	instance := CNNNormalizationMeanAndVarianceStateClass.Alloc().InitWithMeanVariance(mean, variance)
 	instance.Autorelease()
 	return instance
+}
+
+func (cc _CNNNormalizationMeanAndVarianceStateClass) TemporaryStateWithCommandBufferNumberOfFeatureChannels(commandBuffer metal.PCommandBuffer, numberOfFeatureChannels uint) CNNNormalizationMeanAndVarianceState {
+	po0 := objc.WrapAsProtocol("MTLCommandBuffer", commandBuffer)
+	rv := objc.Call[CNNNormalizationMeanAndVarianceState](cc, objc.Sel("temporaryStateWithCommandBuffer:numberOfFeatureChannels:"), po0, numberOfFeatureChannels)
+	return rv
+}
+
+//	[Full Topic]
+//
+// [Full Topic]: https://developer.apple.com/documentation/metalperformanceshaders/mpscnnnormalizationmeanandvariancestate/3002365-temporarystatewithcommandbuffer?language=objc
+func CNNNormalizationMeanAndVarianceState_TemporaryStateWithCommandBufferNumberOfFeatureChannels(commandBuffer metal.PCommandBuffer, numberOfFeatureChannels uint) CNNNormalizationMeanAndVarianceState {
+	return CNNNormalizationMeanAndVarianceStateClass.TemporaryStateWithCommandBufferNumberOfFeatureChannels(commandBuffer, numberOfFeatureChannels)
 }
 
 func (cc _CNNNormalizationMeanAndVarianceStateClass) Alloc() CNNNormalizationMeanAndVarianceState {
@@ -143,23 +143,24 @@ func NewCNNNormalizationMeanAndVarianceStateWithDeviceBufferSize(device metal.PD
 	return instance
 }
 
-func (c_ CNNNormalizationMeanAndVarianceState) InitWithResources(resources []metal.PResource) CNNNormalizationMeanAndVarianceState {
-	rv := objc.Call[CNNNormalizationMeanAndVarianceState](c_, objc.Sel("initWithResources:"), resources)
+func (c_ CNNNormalizationMeanAndVarianceState) InitWithResource(resource metal.PResource) CNNNormalizationMeanAndVarianceState {
+	po0 := objc.WrapAsProtocol("MTLResource", resource)
+	rv := objc.Call[CNNNormalizationMeanAndVarianceState](c_, objc.Sel("initWithResource:"), po0)
 	return rv
 }
 
 //	[Full Topic]
 //
-// [Full Topic]: https://developer.apple.com/documentation/metalperformanceshaders/mpsstate/2947895-initwithresources?language=objc
-func NewCNNNormalizationMeanAndVarianceStateWithResources(resources []metal.PResource) CNNNormalizationMeanAndVarianceState {
-	instance := CNNNormalizationMeanAndVarianceStateClass.Alloc().InitWithResources(resources)
+// [Full Topic]: https://developer.apple.com/documentation/metalperformanceshaders/mpsstate/2942390-initwithresource?language=objc
+func NewCNNNormalizationMeanAndVarianceStateWithResource(resource metal.PResource) CNNNormalizationMeanAndVarianceState {
+	instance := CNNNormalizationMeanAndVarianceStateClass.Alloc().InitWithResource(resource)
 	instance.Autorelease()
 	return instance
 }
 
-func (cc _CNNNormalizationMeanAndVarianceStateClass) TemporaryStateWithCommandBufferBufferSize(cmdBuf metal.PCommandBuffer, bufferSize uint) CNNNormalizationMeanAndVarianceState {
-	po0 := objc.WrapAsProtocol("MTLCommandBuffer", cmdBuf)
-	rv := objc.Call[CNNNormalizationMeanAndVarianceState](cc, objc.Sel("temporaryStateWithCommandBuffer:bufferSize:"), po0, bufferSize)
+func (cc _CNNNormalizationMeanAndVarianceStateClass) TemporaryStateWithCommandBufferResourceList(commandBuffer metal.PCommandBuffer, resourceList IStateResourceList) CNNNormalizationMeanAndVarianceState {
+	po0 := objc.WrapAsProtocol("MTLCommandBuffer", commandBuffer)
+	rv := objc.Call[CNNNormalizationMeanAndVarianceState](cc, objc.Sel("temporaryStateWithCommandBuffer:resourceList:"), po0, objc.Ptr(resourceList))
 	return rv
 }
 
@@ -224,5 +225,13 @@ func (c_ CNNNormalizationMeanAndVarianceState) Mean() metal.BufferObject {
 // [Full Topic]: https://developer.apple.com/documentation/metalperformanceshaders/mpscnnnormalizationmeanandvariancestate/3002366-variance?language=objc
 func (c_ CNNNormalizationMeanAndVarianceState) Variance() metal.BufferObject {
 	rv := objc.Call[metal.BufferObject](c_, objc.Sel("variance"))
+	return rv
+}
+
+//	[Full Topic]
+//
+// [Full Topic]: https://developer.apple.com/documentation/metalperformanceshaders/mpscnnnormalizationmeanandvariancestate/3002364-mean?language=objc
+func (c_ CNNNormalizationMeanAndVarianceState) Mean() metal.BufferObject {
+	rv := objc.Call[metal.BufferObject](c_, objc.Sel("mean"))
 	return rv
 }

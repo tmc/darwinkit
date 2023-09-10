@@ -20,30 +20,26 @@ type _RNNMatrixTrainingLayerClass struct {
 // An interface definition for the [RNNMatrixTrainingLayer] class.
 type IRNNMatrixTrainingLayer interface {
 	IKernel
-	CreateWeightMatrices(matricesOut foundation.IMutableArray)
-	EncodeForwardSequenceToCommandBufferSourceMatricesSourceOffsetsDestinationMatricesDestinationOffsetsTrainingStatesRecurrentInputStateRecurrentOutputStatesWeights(commandBuffer metal.PCommandBuffer, sourceMatrices []IMatrix, sourceOffsets *uint, destinationMatrices []IMatrix, destinationOffsets *uint, trainingStates foundation.IMutableArray, recurrentInputState IRNNRecurrentMatrixState, recurrentOutputStates foundation.IMutableArray, weights []IMatrix)
-	EncodeForwardSequenceToCommandBufferObjectSourceMatricesSourceOffsetsDestinationMatricesDestinationOffsetsTrainingStatesRecurrentInputStateRecurrentOutputStatesWeights(commandBufferObject objc.IObject, sourceMatrices []IMatrix, sourceOffsets *uint, destinationMatrices []IMatrix, destinationOffsets *uint, trainingStates foundation.IMutableArray, recurrentInputState IRNNRecurrentMatrixState, recurrentOutputStates foundation.IMutableArray, weights []IMatrix)
-	EncodeForwardSequenceToCommandBufferSourceMatricesDestinationMatricesTrainingStatesWeights(commandBuffer metal.PCommandBuffer, sourceMatrices []IMatrix, destinationMatrices []IMatrix, trainingStates foundation.IMutableArray, weights []IMatrix)
-	EncodeForwardSequenceToCommandBufferObjectSourceMatricesDestinationMatricesTrainingStatesWeights(commandBufferObject objc.IObject, sourceMatrices []IMatrix, destinationMatrices []IMatrix, trainingStates foundation.IMutableArray, weights []IMatrix)
-	EncodeCopyWeightsToCommandBufferWeightsMatrixIdMatrixCopyFromWeightsToMatrixMatrixOffset(commandBuffer metal.PCommandBuffer, weights []IMatrix, matrixId RNNMatrixId, matrix IMatrix, copyFromWeightsToMatrix bool, matrixOffset metal.Origin)
-	EncodeCopyWeightsToCommandBufferObjectWeightsMatrixIdMatrixCopyFromWeightsToMatrixMatrixOffset(commandBufferObject objc.IObject, weights []IMatrix, matrixId RNNMatrixId, matrix IMatrix, copyFromWeightsToMatrix bool, matrixOffset metal.Origin)
 	CreateTemporaryWeightGradientMatricesDataTypeCommandBuffer(matricesOut foundation.IMutableArray, dataType DataType, commandBuffer metal.PCommandBuffer)
 	CreateTemporaryWeightGradientMatricesDataTypeCommandBufferObject(matricesOut foundation.IMutableArray, dataType DataType, commandBufferObject objc.IObject)
-	EncodeGradientSequenceToCommandBufferForwardSourcesForwardSourceOffsetsSourceGradientsSourceGradientOffsetsDestinationGradientsDestinationOffsetsWeightGradientsTrainingStatesRecurrentInputStateRecurrentOutputStatesWeights(commandBuffer metal.PCommandBuffer, forwardSources []IMatrix, forwardSourceOffsets *uint, sourceGradients []IMatrix, sourceGradientOffsets *uint, destinationGradients []IMatrix, destinationOffsets *uint, weightGradients []IMatrix, trainingStates []IRNNMatrixTrainingState, recurrentInputState IRNNRecurrentMatrixState, recurrentOutputStates foundation.IMutableArray, weights []IMatrix)
-	EncodeGradientSequenceToCommandBufferObjectForwardSourcesForwardSourceOffsetsSourceGradientsSourceGradientOffsetsDestinationGradientsDestinationOffsetsWeightGradientsTrainingStatesRecurrentInputStateRecurrentOutputStatesWeights(commandBufferObject objc.IObject, forwardSources []IMatrix, forwardSourceOffsets *uint, sourceGradients []IMatrix, sourceGradientOffsets *uint, destinationGradients []IMatrix, destinationOffsets *uint, weightGradients []IMatrix, trainingStates []IRNNMatrixTrainingState, recurrentInputState IRNNRecurrentMatrixState, recurrentOutputStates foundation.IMutableArray, weights []IMatrix)
-	CreateWeightGradientMatricesDataType(matricesOut foundation.IMutableArray, dataType DataType)
+	EncodeCopyWeightsToCommandBufferWeightsMatrixIdMatrixCopyFromWeightsToMatrixMatrixOffset(commandBuffer metal.PCommandBuffer, weights []IMatrix, matrixId RNNMatrixId, matrix IMatrix, copyFromWeightsToMatrix bool, matrixOffset metal.Origin)
+	EncodeCopyWeightsToCommandBufferObjectWeightsMatrixIdMatrixCopyFromWeightsToMatrixMatrixOffset(commandBufferObject objc.IObject, weights []IMatrix, matrixId RNNMatrixId, matrix IMatrix, copyFromWeightsToMatrix bool, matrixOffset metal.Origin)
+	EncodeForwardSequenceToCommandBufferSourceMatricesDestinationMatricesTrainingStatesWeights(commandBuffer metal.PCommandBuffer, sourceMatrices []IMatrix, destinationMatrices []IMatrix, trainingStates foundation.IMutableArray, weights []IMatrix)
+	EncodeForwardSequenceToCommandBufferObjectSourceMatricesDestinationMatricesTrainingStatesWeights(commandBufferObject objc.IObject, sourceMatrices []IMatrix, destinationMatrices []IMatrix, trainingStates foundation.IMutableArray, weights []IMatrix)
 	EncodeGradientSequenceToCommandBufferForwardSourcesSourceGradientsDestinationGradientsWeightGradientsTrainingStatesWeights(commandBuffer metal.PCommandBuffer, forwardSources []IMatrix, sourceGradients []IMatrix, destinationGradients []IMatrix, weightGradients []IMatrix, trainingStates []IRNNMatrixTrainingState, weights []IMatrix)
 	EncodeGradientSequenceToCommandBufferObjectForwardSourcesSourceGradientsDestinationGradientsWeightGradientsTrainingStatesWeights(commandBufferObject objc.IObject, forwardSources []IMatrix, sourceGradients []IMatrix, destinationGradients []IMatrix, weightGradients []IMatrix, trainingStates []IRNNMatrixTrainingState, weights []IMatrix)
-	AccumulateWeightGradients() bool
-	SetAccumulateWeightGradients(value bool)
+	CreateWeightMatrices(matricesOut foundation.IMutableArray)
+	CreateWeightGradientMatricesDataType(matricesOut foundation.IMutableArray, dataType DataType)
 	RecurrentOutputIsTemporary() bool
 	SetRecurrentOutputIsTemporary(value bool)
-	StoreAllIntermediateStates() bool
-	SetStoreAllIntermediateStates(value bool)
-	InputFeatureChannels() uint
+	AccumulateWeightGradients() bool
+	SetAccumulateWeightGradients(value bool)
 	OutputFeatureChannels() uint
+	InputFeatureChannels() uint
 	TrainingStateIsTemporary() bool
 	SetTrainingStateIsTemporary(value bool)
+	StoreAllIntermediateStates() bool
+	SetStoreAllIntermediateStates(value bool)
 }
 
 // A layer for training recurrent neural networks on Metal Performance Shaders matrices. [Full Topic]
@@ -230,17 +226,16 @@ func (r_ RNNMatrixTrainingLayer) EncodeGradientSequenceToCommandBufferObjectForw
 
 //	[Full Topic]
 //
-// [Full Topic]: https://developer.apple.com/documentation/metalperformanceshaders/mpsrnnmatrixtraininglayer/2966783-accumulateweightgradients?language=objc
-func (r_ RNNMatrixTrainingLayer) AccumulateWeightGradients() bool {
-	rv := objc.Call[bool](r_, objc.Sel("accumulateWeightGradients"))
-	return rv
+// [Full Topic]: https://developer.apple.com/documentation/metalperformanceshaders/mpsrnnmatrixtraininglayer/2966787-createweightmatrices?language=objc
+func (r_ RNNMatrixTrainingLayer) CreateWeightMatrices(matricesOut foundation.IMutableArray) {
+	objc.Call[objc.Void](r_, objc.Sel("createWeightMatrices:"), objc.Ptr(matricesOut))
 }
 
 //	[Full Topic]
 //
-// [Full Topic]: https://developer.apple.com/documentation/metalperformanceshaders/mpsrnnmatrixtraininglayer/2966783-accumulateweightgradients?language=objc
-func (r_ RNNMatrixTrainingLayer) SetAccumulateWeightGradients(value bool) {
-	objc.Call[objc.Void](r_, objc.Sel("setAccumulateWeightGradients:"), value)
+// [Full Topic]: https://developer.apple.com/documentation/metalperformanceshaders/mpsrnnmatrixtraininglayer/2966786-createweightgradientmatrices?language=objc
+func (r_ RNNMatrixTrainingLayer) CreateWeightGradientMatricesDataType(matricesOut foundation.IMutableArray, dataType DataType) {
+	objc.Call[objc.Void](r_, objc.Sel("createWeightGradientMatrices:dataType:"), objc.Ptr(matricesOut), dataType)
 }
 
 //	[Full Topic]
@@ -260,25 +255,17 @@ func (r_ RNNMatrixTrainingLayer) SetRecurrentOutputIsTemporary(value bool) {
 
 //	[Full Topic]
 //
-// [Full Topic]: https://developer.apple.com/documentation/metalperformanceshaders/mpsrnnmatrixtraininglayer/2966798-storeallintermediatestates?language=objc
-func (r_ RNNMatrixTrainingLayer) StoreAllIntermediateStates() bool {
-	rv := objc.Call[bool](r_, objc.Sel("storeAllIntermediateStates"))
+// [Full Topic]: https://developer.apple.com/documentation/metalperformanceshaders/mpsrnnmatrixtraininglayer/2966783-accumulateweightgradients?language=objc
+func (r_ RNNMatrixTrainingLayer) AccumulateWeightGradients() bool {
+	rv := objc.Call[bool](r_, objc.Sel("accumulateWeightGradients"))
 	return rv
 }
 
 //	[Full Topic]
 //
-// [Full Topic]: https://developer.apple.com/documentation/metalperformanceshaders/mpsrnnmatrixtraininglayer/2966798-storeallintermediatestates?language=objc
-func (r_ RNNMatrixTrainingLayer) SetStoreAllIntermediateStates(value bool) {
-	objc.Call[objc.Void](r_, objc.Sel("setStoreAllIntermediateStates:"), value)
-}
-
-//	[Full Topic]
-//
-// [Full Topic]: https://developer.apple.com/documentation/metalperformanceshaders/mpsrnnmatrixtraininglayer/2966795-inputfeaturechannels?language=objc
-func (r_ RNNMatrixTrainingLayer) InputFeatureChannels() uint {
-	rv := objc.Call[uint](r_, objc.Sel("inputFeatureChannels"))
-	return rv
+// [Full Topic]: https://developer.apple.com/documentation/metalperformanceshaders/mpsrnnmatrixtraininglayer/2966783-accumulateweightgradients?language=objc
+func (r_ RNNMatrixTrainingLayer) SetAccumulateWeightGradients(value bool) {
+	objc.Call[objc.Void](r_, objc.Sel("setAccumulateWeightGradients:"), value)
 }
 
 //	[Full Topic]
@@ -286,6 +273,14 @@ func (r_ RNNMatrixTrainingLayer) InputFeatureChannels() uint {
 // [Full Topic]: https://developer.apple.com/documentation/metalperformanceshaders/mpsrnnmatrixtraininglayer/2966796-outputfeaturechannels?language=objc
 func (r_ RNNMatrixTrainingLayer) OutputFeatureChannels() uint {
 	rv := objc.Call[uint](r_, objc.Sel("outputFeatureChannels"))
+	return rv
+}
+
+//	[Full Topic]
+//
+// [Full Topic]: https://developer.apple.com/documentation/metalperformanceshaders/mpsrnnmatrixtraininglayer/2966795-inputfeaturechannels?language=objc
+func (r_ RNNMatrixTrainingLayer) InputFeatureChannels() uint {
+	rv := objc.Call[uint](r_, objc.Sel("inputFeatureChannels"))
 	return rv
 }
 
@@ -302,4 +297,19 @@ func (r_ RNNMatrixTrainingLayer) TrainingStateIsTemporary() bool {
 // [Full Topic]: https://developer.apple.com/documentation/metalperformanceshaders/mpsrnnmatrixtraininglayer/2966799-trainingstateistemporary?language=objc
 func (r_ RNNMatrixTrainingLayer) SetTrainingStateIsTemporary(value bool) {
 	objc.Call[objc.Void](r_, objc.Sel("setTrainingStateIsTemporary:"), value)
+}
+
+//	[Full Topic]
+//
+// [Full Topic]: https://developer.apple.com/documentation/metalperformanceshaders/mpsrnnmatrixtraininglayer/2966798-storeallintermediatestates?language=objc
+func (r_ RNNMatrixTrainingLayer) StoreAllIntermediateStates() bool {
+	rv := objc.Call[bool](r_, objc.Sel("storeAllIntermediateStates"))
+	return rv
+}
+
+//	[Full Topic]
+//
+// [Full Topic]: https://developer.apple.com/documentation/metalperformanceshaders/mpsrnnmatrixtraininglayer/2966798-storeallintermediatestates?language=objc
+func (r_ RNNMatrixTrainingLayer) SetStoreAllIntermediateStates(value bool) {
+	objc.Call[objc.Void](r_, objc.Sel("setStoreAllIntermediateStates:"), value)
 }

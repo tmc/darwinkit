@@ -63,21 +63,6 @@ func (n_ NNOptimizer) Init() NNOptimizer {
 	return rv
 }
 
-func (n_ NNOptimizer) CopyWithZoneDevice(zone unsafe.Pointer, device metal.PDevice) NNOptimizer {
-	po1 := objc.WrapAsProtocol("MTLDevice", device)
-	rv := objc.Call[NNOptimizer](n_, objc.Sel("copyWithZone:device:"), zone, po1)
-	return rv
-}
-
-// Makes a copy of this kernel object for a new device. [Full Topic]
-//
-// [Full Topic]: https://developer.apple.com/documentation/metalperformanceshaders/mpskernel/1618912-copywithzone?language=objc
-func NNOptimizer_CopyWithZoneDevice(zone unsafe.Pointer, device metal.PDevice) NNOptimizer {
-	instance := NNOptimizerClass.Alloc().CopyWithZoneDevice(zone, device)
-	instance.Autorelease()
-	return instance
-}
-
 func (n_ NNOptimizer) InitWithDevice(device metal.PDevice) NNOptimizer {
 	po0 := objc.WrapAsProtocol("MTLDevice", device)
 	rv := objc.Call[NNOptimizer](n_, objc.Sel("initWithDevice:"), po0)
@@ -89,6 +74,21 @@ func (n_ NNOptimizer) InitWithDevice(device metal.PDevice) NNOptimizer {
 // [Full Topic]: https://developer.apple.com/documentation/metalperformanceshaders/mpskernel/1618763-initwithdevice?language=objc
 func NewNNOptimizerWithDevice(device metal.PDevice) NNOptimizer {
 	instance := NNOptimizerClass.Alloc().InitWithDevice(device)
+	instance.Autorelease()
+	return instance
+}
+
+func (n_ NNOptimizer) CopyWithZoneDevice(zone unsafe.Pointer, device metal.PDevice) NNOptimizer {
+	po1 := objc.WrapAsProtocol("MTLDevice", device)
+	rv := objc.Call[NNOptimizer](n_, objc.Sel("copyWithZone:device:"), zone, po1)
+	return rv
+}
+
+// Makes a copy of this kernel object for a new device. [Full Topic]
+//
+// [Full Topic]: https://developer.apple.com/documentation/metalperformanceshaders/mpskernel/1618912-copywithzone?language=objc
+func NNOptimizer_CopyWithZoneDevice(zone unsafe.Pointer, device metal.PDevice) NNOptimizer {
+	instance := NNOptimizerClass.Alloc().CopyWithZoneDevice(zone, device)
 	instance.Autorelease()
 	return instance
 }

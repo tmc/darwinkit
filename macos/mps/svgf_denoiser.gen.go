@@ -19,8 +19,6 @@ type _SVGFDenoiserClass struct {
 // An interface definition for the [SVGFDenoiser] class.
 type ISVGFDenoiser interface {
 	objc.IObject
-	EncodeToCommandBufferSourceTextureMotionVectorTextureDepthNormalTexturePreviousDepthNormalTexture(commandBuffer metal.PCommandBuffer, sourceTexture metal.PTexture, motionVectorTexture metal.PTexture, depthNormalTexture metal.PTexture, previousDepthNormalTexture metal.PTexture) metal.TextureObject
-	EncodeToCommandBufferObjectSourceTextureObjectMotionVectorTextureObjectDepthNormalTextureObjectPreviousDepthNormalTextureObject(commandBufferObject objc.IObject, sourceTextureObject objc.IObject, motionVectorTextureObject objc.IObject, depthNormalTextureObject objc.IObject, previousDepthNormalTextureObject objc.IObject) metal.TextureObject
 	ClearTemporalHistory()
 	ReleaseTemporaryTextures()
 	EncodeToCommandBufferSourceTextureDestinationTextureSourceTexture2DestinationTexture2MotionVectorTextureDepthNormalTexturePreviousDepthNormalTexture(commandBuffer metal.PCommandBuffer, sourceTexture metal.PTexture, destinationTexture unsafe.Pointer, sourceTexture2 metal.PTexture, destinationTexture2 unsafe.Pointer, motionVectorTexture metal.PTexture, depthNormalTexture metal.PTexture, previousDepthNormalTexture metal.PTexture)
@@ -28,7 +26,6 @@ type ISVGFDenoiser interface {
 	Svgf() SVGF
 	BilateralFilterIterations() uint
 	SetBilateralFilterIterations(value uint)
-	TextureAllocator() SVGFTextureAllocatorObject
 }
 
 //	[Full Topic]
@@ -92,6 +89,20 @@ func NewSVGFDenoiser() SVGFDenoiser {
 func (s_ SVGFDenoiser) Init() SVGFDenoiser {
 	rv := objc.Call[SVGFDenoiser](s_, objc.Sel("init"))
 	return rv
+}
+
+//	[Full Topic]
+//
+// [Full Topic]: https://developer.apple.com/documentation/metalperformanceshaders/mpssvgfdenoiser/3242903-cleartemporalhistory?language=objc
+func (s_ SVGFDenoiser) ClearTemporalHistory() {
+	objc.Call[objc.Void](s_, objc.Sel("clearTemporalHistory"))
+}
+
+//	[Full Topic]
+//
+// [Full Topic]: https://developer.apple.com/documentation/metalperformanceshaders/mpssvgfdenoiser/3242911-releasetemporarytextures?language=objc
+func (s_ SVGFDenoiser) ReleaseTemporaryTextures() {
+	objc.Call[objc.Void](s_, objc.Sel("releaseTemporaryTextures"))
 }
 
 //	[Full Topic]
@@ -172,12 +183,4 @@ func (s_ SVGFDenoiser) BilateralFilterIterations() uint {
 // [Full Topic]: https://developer.apple.com/documentation/metalperformanceshaders/mpssvgfdenoiser/3242902-bilateralfilteriterations?language=objc
 func (s_ SVGFDenoiser) SetBilateralFilterIterations(value uint) {
 	objc.Call[objc.Void](s_, objc.Sel("setBilateralFilterIterations:"), value)
-}
-
-//	[Full Topic]
-//
-// [Full Topic]: https://developer.apple.com/documentation/metalperformanceshaders/mpssvgfdenoiser/3242915-textureallocator?language=objc
-func (s_ SVGFDenoiser) TextureAllocator() SVGFTextureAllocatorObject {
-	rv := objc.Call[SVGFTextureAllocatorObject](s_, objc.Sel("textureAllocator"))
-	return rv
 }

@@ -61,6 +61,19 @@ func NewCNNConvolutionGradientNodeWithSourceGradientSourceImageConvolutionGradie
 	return instance
 }
 
+func (cc _CNNConvolutionGradientNodeClass) NodeWithSourceGradientSourceImageConvolutionGradientStateWeights(sourceGradient INNImageNode, sourceImage INNImageNode, gradientState ICNNConvolutionGradientStateNode, weights PCNNConvolutionDataSource) CNNConvolutionGradientNode {
+	po3 := objc.WrapAsProtocol("MPSCNNConvolutionDataSource", weights)
+	rv := objc.Call[CNNConvolutionGradientNode](cc, objc.Sel("nodeWithSourceGradient:sourceImage:convolutionGradientState:weights:"), objc.Ptr(sourceGradient), objc.Ptr(sourceImage), objc.Ptr(gradientState), po3)
+	return rv
+}
+
+//	[Full Topic]
+//
+// [Full Topic]: https://developer.apple.com/documentation/metalperformanceshaders/mpscnnconvolutiongradientnode/2947984-nodewithsourcegradient?language=objc
+func CNNConvolutionGradientNode_NodeWithSourceGradientSourceImageConvolutionGradientStateWeights(sourceGradient INNImageNode, sourceImage INNImageNode, gradientState ICNNConvolutionGradientStateNode, weights PCNNConvolutionDataSource) CNNConvolutionGradientNode {
+	return CNNConvolutionGradientNodeClass.NodeWithSourceGradientSourceImageConvolutionGradientStateWeights(sourceGradient, sourceImage, gradientState, weights)
+}
+
 func (cc _CNNConvolutionGradientNodeClass) Alloc() CNNConvolutionGradientNode {
 	rv := objc.Call[CNNConvolutionGradientNode](cc, objc.Sel("alloc"))
 	return rv

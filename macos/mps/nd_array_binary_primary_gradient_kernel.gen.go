@@ -21,8 +21,6 @@ type INDArrayBinaryPrimaryGradientKernel interface {
 	INDArrayMultiaryGradientKernel
 	EncodeToCommandBufferPrimarySourceArraySecondarySourceArraySourceGradientGradientState(cmdBuf metal.PCommandBuffer, primarySourceArray INDArray, secondarySourceArray INDArray, gradient INDArray, state IState) NDArray
 	EncodeToCommandBufferObjectPrimarySourceArraySecondarySourceArraySourceGradientGradientState(cmdBufObject objc.IObject, primarySourceArray INDArray, secondarySourceArray INDArray, gradient INDArray, state IState) NDArray
-	EncodeToCommandBufferPrimarySourceArraySecondarySourceArraySourceGradientGradientStateDestinationArray(cmdBuf metal.PCommandBuffer, primarySourceArray INDArray, secondarySourceArray INDArray, gradient INDArray, state IState, destination INDArray)
-	EncodeToCommandBufferObjectPrimarySourceArraySecondarySourceArraySourceGradientGradientStateDestinationArray(cmdBufObject objc.IObject, primarySourceArray INDArray, secondarySourceArray INDArray, gradient INDArray, state IState, destination INDArray)
 }
 
 //	[Full Topic]

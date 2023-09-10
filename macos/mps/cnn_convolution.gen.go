@@ -24,15 +24,15 @@ type ICNNConvolution interface {
 	ReloadWeightsAndBiasesWithCommandBufferObjectState(commandBufferObject objc.IObject, state ICNNConvolutionWeightsAndBiasesState)
 	ExportWeightsAndBiasesWithCommandBufferResultStateCanBeTemporary(commandBuffer metal.PCommandBuffer, resultStateCanBeTemporary bool) CNNConvolutionWeightsAndBiasesState
 	ExportWeightsAndBiasesWithCommandBufferObjectResultStateCanBeTemporary(commandBufferObject objc.IObject, resultStateCanBeTemporary bool) CNNConvolutionWeightsAndBiasesState
-	Neuron() CNNNeuron
-	Groups() uint
+	DataSource() CNNConvolutionDataSourceObject
 	ChannelMultiplier() uint
 	OutputFeatureChannels() uint
+	InputFeatureChannels() uint
+	Neuron() CNNNeuron
+	Groups() uint
+	SubPixelScaleFactor() uint
 	AccumulatorPrecisionOption() NNConvolutionAccumulatorPrecisionOption
 	SetAccumulatorPrecisionOption(value NNConvolutionAccumulatorPrecisionOption)
-	SubPixelScaleFactor() uint
-	InputFeatureChannels() uint
-	DataSource() CNNConvolutionDataSourceObject
 	FusedNeuronDescriptor() NNNeuronDescriptor
 }
 
@@ -169,19 +169,11 @@ func (c_ CNNConvolution) ExportWeightsAndBiasesWithCommandBufferObjectResultStat
 	return rv
 }
 
-// The neuron filter to be applied as part of the convolution operation. [Full Topic]
+//	[Full Topic]
 //
-// [Full Topic]: https://developer.apple.com/documentation/metalperformanceshaders/mpscnnconvolution/1845274-neuron?language=objc
-func (c_ CNNConvolution) Neuron() CNNNeuron {
-	rv := objc.Call[CNNNeuron](c_, objc.Sel("neuron"))
-	return rv
-}
-
-// The number of groups that the input and output channels are divided into. [Full Topic]
-//
-// [Full Topic]: https://developer.apple.com/documentation/metalperformanceshaders/mpscnnconvolution/1845269-groups?language=objc
-func (c_ CNNConvolution) Groups() uint {
-	rv := objc.Call[uint](c_, objc.Sel("groups"))
+// [Full Topic]: https://developer.apple.com/documentation/metalperformanceshaders/mpscnnconvolution/2953961-datasource?language=objc
+func (c_ CNNConvolution) DataSource() CNNConvolutionDataSourceObject {
+	rv := objc.Call[CNNConvolutionDataSourceObject](c_, objc.Sel("dataSource"))
 	return rv
 }
 
@@ -201,6 +193,38 @@ func (c_ CNNConvolution) OutputFeatureChannels() uint {
 	return rv
 }
 
+// The number of feature channels per pixel in the input image. [Full Topic]
+//
+// [Full Topic]: https://developer.apple.com/documentation/metalperformanceshaders/mpscnnconvolution/1845268-inputfeaturechannels?language=objc
+func (c_ CNNConvolution) InputFeatureChannels() uint {
+	rv := objc.Call[uint](c_, objc.Sel("inputFeatureChannels"))
+	return rv
+}
+
+// The neuron filter to be applied as part of the convolution operation. [Full Topic]
+//
+// [Full Topic]: https://developer.apple.com/documentation/metalperformanceshaders/mpscnnconvolution/1845274-neuron?language=objc
+func (c_ CNNConvolution) Neuron() CNNNeuron {
+	rv := objc.Call[CNNNeuron](c_, objc.Sel("neuron"))
+	return rv
+}
+
+// The number of groups that the input and output channels are divided into. [Full Topic]
+//
+// [Full Topic]: https://developer.apple.com/documentation/metalperformanceshaders/mpscnnconvolution/1845269-groups?language=objc
+func (c_ CNNConvolution) Groups() uint {
+	rv := objc.Call[uint](c_, objc.Sel("groups"))
+	return rv
+}
+
+//	[Full Topic]
+//
+// [Full Topic]: https://developer.apple.com/documentation/metalperformanceshaders/mpscnnconvolution/2873341-subpixelscalefactor?language=objc
+func (c_ CNNConvolution) SubPixelScaleFactor() uint {
+	rv := objc.Call[uint](c_, objc.Sel("subPixelScaleFactor"))
+	return rv
+}
+
 //	[Full Topic]
 //
 // [Full Topic]: https://developer.apple.com/documentation/metalperformanceshaders/mpscnnconvolution/2942410-accumulatorprecisionoption?language=objc
@@ -214,30 +238,6 @@ func (c_ CNNConvolution) AccumulatorPrecisionOption() NNConvolutionAccumulatorPr
 // [Full Topic]: https://developer.apple.com/documentation/metalperformanceshaders/mpscnnconvolution/2942410-accumulatorprecisionoption?language=objc
 func (c_ CNNConvolution) SetAccumulatorPrecisionOption(value NNConvolutionAccumulatorPrecisionOption) {
 	objc.Call[objc.Void](c_, objc.Sel("setAccumulatorPrecisionOption:"), value)
-}
-
-//	[Full Topic]
-//
-// [Full Topic]: https://developer.apple.com/documentation/metalperformanceshaders/mpscnnconvolution/2873341-subpixelscalefactor?language=objc
-func (c_ CNNConvolution) SubPixelScaleFactor() uint {
-	rv := objc.Call[uint](c_, objc.Sel("subPixelScaleFactor"))
-	return rv
-}
-
-// The number of feature channels per pixel in the input image. [Full Topic]
-//
-// [Full Topic]: https://developer.apple.com/documentation/metalperformanceshaders/mpscnnconvolution/1845268-inputfeaturechannels?language=objc
-func (c_ CNNConvolution) InputFeatureChannels() uint {
-	rv := objc.Call[uint](c_, objc.Sel("inputFeatureChannels"))
-	return rv
-}
-
-//	[Full Topic]
-//
-// [Full Topic]: https://developer.apple.com/documentation/metalperformanceshaders/mpscnnconvolution/2953961-datasource?language=objc
-func (c_ CNNConvolution) DataSource() CNNConvolutionDataSourceObject {
-	rv := objc.Call[CNNConvolutionDataSourceObject](c_, objc.Sel("dataSource"))
-	return rv
 }
 
 //	[Full Topic]

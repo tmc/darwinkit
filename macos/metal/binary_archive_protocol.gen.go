@@ -54,11 +54,11 @@ type BinaryArchiveObject struct {
 	objc.Object
 }
 
-func (b_ BinaryArchiveObject) HasSerializeToURLError() bool {
-	return b_.RespondsToSelector(objc.Sel("serializeToURL:error:"))
+func (b_ BinaryArchiveObject) HasAddFunctionWithDescriptorLibraryError() bool {
+	return b_.RespondsToSelector(objc.Sel("addFunctionWithDescriptor:library:error:"))
 }
 
-// Writes the contents of the archive to a file. [Full Topic]
+// Adds a description of a function to the archive. [Full Topic]
 //
 // [Full Topic]: https://developer.apple.com/documentation/metal/mtlbinaryarchive/3553928-serializetourl?language=objc
 func (b_ BinaryArchiveObject) SerializeToURLError(url foundation.URL, error unsafe.Pointer) bool {
@@ -102,11 +102,11 @@ func (b_ BinaryArchiveObject) AddRenderPipelineFunctionsWithDescriptorError(desc
 	return rv
 }
 
-func (b_ BinaryArchiveObject) HasAddFunctionWithDescriptorLibraryError() bool {
-	return b_.RespondsToSelector(objc.Sel("addFunctionWithDescriptor:library:error:"))
+func (b_ BinaryArchiveObject) HasAddTileRenderPipelineFunctionsWithDescriptorError() bool {
+	return b_.RespondsToSelector(objc.Sel("addTileRenderPipelineFunctionsWithDescriptor:error:"))
 }
 
-// Adds a description of a function to the archive. [Full Topic]
+// Adds a description of a tile renderer pipeline to the archive. [Full Topic]
 //
 // [Full Topic]: https://developer.apple.com/documentation/metal/mtlbinaryarchive/3750523-addfunctionwithdescriptor?language=objc
 func (b_ BinaryArchiveObject) AddFunctionWithDescriptorLibraryError(descriptor FunctionDescriptor, library LibraryObject, error unsafe.Pointer) bool {

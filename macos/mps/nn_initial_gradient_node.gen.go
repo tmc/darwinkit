@@ -33,6 +33,18 @@ func NNInitialGradientNodeFrom(ptr unsafe.Pointer) NNInitialGradientNode {
 	}
 }
 
+func (nc _NNInitialGradientNodeClass) NodeWithSource(source INNImageNode) NNInitialGradientNode {
+	rv := objc.Call[NNInitialGradientNode](nc, objc.Sel("nodeWithSource:"), objc.Ptr(source))
+	return rv
+}
+
+//	[Full Topic]
+//
+// [Full Topic]: https://developer.apple.com/documentation/metalperformanceshaders/mpsnninitialgradientnode/3131849-nodewithsource?language=objc
+func NNInitialGradientNode_NodeWithSource(source INNImageNode) NNInitialGradientNode {
+	return NNInitialGradientNodeClass.NodeWithSource(source)
+}
+
 func (n_ NNInitialGradientNode) InitWithSource(source INNImageNode) NNInitialGradientNode {
 	rv := objc.Call[NNInitialGradientNode](n_, objc.Sel("initWithSource:"), source)
 	return rv

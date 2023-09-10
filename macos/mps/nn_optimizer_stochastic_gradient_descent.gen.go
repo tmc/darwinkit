@@ -19,8 +19,6 @@ type _NNOptimizerStochasticGradientDescentClass struct {
 // An interface definition for the [NNOptimizerStochasticGradientDescent] class.
 type INNOptimizerStochasticGradientDescent interface {
 	INNOptimizer
-	EncodeToCommandBufferBatchNormalizationGradientStateBatchNormalizationSourceStateInputMomentumVectorsResultState(commandBuffer metal.PCommandBuffer, batchNormalizationGradientState ICNNBatchNormalizationState, batchNormalizationSourceState ICNNBatchNormalizationState, inputMomentumVectors []IVector, resultState ICNNNormalizationGammaAndBetaState)
-	EncodeToCommandBufferObjectBatchNormalizationGradientStateBatchNormalizationSourceStateInputMomentumVectorsResultState(commandBufferObject objc.IObject, batchNormalizationGradientState ICNNBatchNormalizationState, batchNormalizationSourceState ICNNBatchNormalizationState, inputMomentumVectors []IVector, resultState ICNNNormalizationGammaAndBetaState)
 	EncodeToCommandBufferInputGradientMatrixInputValuesMatrixInputMomentumMatrixResultValuesMatrix(commandBuffer metal.PCommandBuffer, inputGradientMatrix IMatrix, inputValuesMatrix IMatrix, inputMomentumMatrix IMatrix, resultValuesMatrix IMatrix)
 	EncodeToCommandBufferObjectInputGradientMatrixInputValuesMatrixInputMomentumMatrixResultValuesMatrix(commandBufferObject objc.IObject, inputGradientMatrix IMatrix, inputValuesMatrix IMatrix, inputMomentumMatrix IMatrix, resultValuesMatrix IMatrix)
 	EncodeToCommandBufferBatchNormalizationStateInputMomentumVectorsResultState(commandBuffer metal.PCommandBuffer, batchNormalizationState ICNNBatchNormalizationState, inputMomentumVectors []IVector, resultState ICNNNormalizationGammaAndBetaState)
@@ -31,7 +29,6 @@ type INNOptimizerStochasticGradientDescent interface {
 	EncodeToCommandBufferObjectInputGradientVectorInputValuesVectorInputMomentumVectorResultValuesVector(commandBufferObject objc.IObject, inputGradientVector IVector, inputValuesVector IVector, inputMomentumVector IVector, resultValuesVector IVector)
 	MomentumScale() float32
 	UseNestrovMomentum() bool
-	UseNesterovMomentum() bool
 }
 
 // An optimization layer that performs a gradient descent with an optional momentum update. [Full Topic]
@@ -112,21 +109,6 @@ func (n_ NNOptimizerStochasticGradientDescent) Init() NNOptimizerStochasticGradi
 	return rv
 }
 
-func (n_ NNOptimizerStochasticGradientDescent) CopyWithZoneDevice(zone unsafe.Pointer, device metal.PDevice) NNOptimizerStochasticGradientDescent {
-	po1 := objc.WrapAsProtocol("MTLDevice", device)
-	rv := objc.Call[NNOptimizerStochasticGradientDescent](n_, objc.Sel("copyWithZone:device:"), zone, po1)
-	return rv
-}
-
-// Makes a copy of this kernel object for a new device. [Full Topic]
-//
-// [Full Topic]: https://developer.apple.com/documentation/metalperformanceshaders/mpskernel/1618912-copywithzone?language=objc
-func NNOptimizerStochasticGradientDescent_CopyWithZoneDevice(zone unsafe.Pointer, device metal.PDevice) NNOptimizerStochasticGradientDescent {
-	instance := NNOptimizerStochasticGradientDescentClass.Alloc().CopyWithZoneDevice(zone, device)
-	instance.Autorelease()
-	return instance
-}
-
 func (n_ NNOptimizerStochasticGradientDescent) InitWithDevice(device metal.PDevice) NNOptimizerStochasticGradientDescent {
 	po0 := objc.WrapAsProtocol("MTLDevice", device)
 	rv := objc.Call[NNOptimizerStochasticGradientDescent](n_, objc.Sel("initWithDevice:"), po0)
@@ -150,7 +132,7 @@ func (n_ NNOptimizerStochasticGradientDescent) EncodeToCommandBufferBatchNormali
 	objc.Call[objc.Void](n_, objc.Sel("encodeToCommandBuffer:batchNormalizationGradientState:batchNormalizationSourceState:inputMomentumVectors:resultState:"), po0, batchNormalizationGradientState, batchNormalizationSourceState, inputMomentumVectors, resultState)
 }
 
-//	[Full Topic]
+// Makes a copy of this kernel object for a new device. [Full Topic]
 //
 // [Full Topic]: https://developer.apple.com/documentation/metalperformanceshaders/mpsnnoptimizerstochasticgradientdescent/3013785-encodetocommandbuffer?language=objc
 func (n_ NNOptimizerStochasticGradientDescent) EncodeToCommandBufferObjectBatchNormalizationGradientStateBatchNormalizationSourceStateInputMomentumVectorsResultState(commandBufferObject objc.IObject, batchNormalizationGradientState ICNNBatchNormalizationState, batchNormalizationSourceState ICNNBatchNormalizationState, inputMomentumVectors []IVector, resultState ICNNNormalizationGammaAndBetaState) {
@@ -230,13 +212,5 @@ func (n_ NNOptimizerStochasticGradientDescent) MomentumScale() float32 {
 // [Full Topic]: https://developer.apple.com/documentation/metalperformanceshaders/mpsnnoptimizerstochasticgradientdescent/2966744-usenestrovmomentum?language=objc
 func (n_ NNOptimizerStochasticGradientDescent) UseNestrovMomentum() bool {
 	rv := objc.Call[bool](n_, objc.Sel("useNestrovMomentum"))
-	return rv
-}
-
-//	[Full Topic]
-//
-// [Full Topic]: https://developer.apple.com/documentation/metalperformanceshaders/mpsnnoptimizerstochasticgradientdescent/3675592-usenesterovmomentum?language=objc
-func (n_ NNOptimizerStochasticGradientDescent) UseNesterovMomentum() bool {
-	rv := objc.Call[bool](n_, objc.Sel("useNesterovMomentum"))
 	return rv
 }

@@ -19,9 +19,9 @@ type _CNNLossLabelsClass struct {
 // An interface definition for the [CNNLossLabels] class.
 type ICNNLossLabels interface {
 	IState
-	LabelsImage() Image
 	WeightsImage() Image
 	LossImage() Image
+	LabelsImage() Image
 }
 
 // A class that stores the per-element weight buffer used by loss and gradient loss kernels. [Full Topic]
@@ -160,23 +160,24 @@ func NewCNNLossLabelsWithDeviceBufferSize(device metal.PDevice, bufferSize uint)
 	return instance
 }
 
-func (c_ CNNLossLabels) InitWithResources(resources []metal.PResource) CNNLossLabels {
-	rv := objc.Call[CNNLossLabels](c_, objc.Sel("initWithResources:"), resources)
+func (c_ CNNLossLabels) InitWithResource(resource metal.PResource) CNNLossLabels {
+	po0 := objc.WrapAsProtocol("MTLResource", resource)
+	rv := objc.Call[CNNLossLabels](c_, objc.Sel("initWithResource:"), po0)
 	return rv
 }
 
 //	[Full Topic]
 //
-// [Full Topic]: https://developer.apple.com/documentation/metalperformanceshaders/mpsstate/2947895-initwithresources?language=objc
-func NewCNNLossLabelsWithResources(resources []metal.PResource) CNNLossLabels {
-	instance := CNNLossLabelsClass.Alloc().InitWithResources(resources)
+// [Full Topic]: https://developer.apple.com/documentation/metalperformanceshaders/mpsstate/2942390-initwithresource?language=objc
+func NewCNNLossLabelsWithResource(resource metal.PResource) CNNLossLabels {
+	instance := CNNLossLabelsClass.Alloc().InitWithResource(resource)
 	instance.Autorelease()
 	return instance
 }
 
-func (cc _CNNLossLabelsClass) TemporaryStateWithCommandBufferBufferSize(cmdBuf metal.PCommandBuffer, bufferSize uint) CNNLossLabels {
-	po0 := objc.WrapAsProtocol("MTLCommandBuffer", cmdBuf)
-	rv := objc.Call[CNNLossLabels](cc, objc.Sel("temporaryStateWithCommandBuffer:bufferSize:"), po0, bufferSize)
+func (cc _CNNLossLabelsClass) TemporaryStateWithCommandBufferResourceList(commandBuffer metal.PCommandBuffer, resourceList IStateResourceList) CNNLossLabels {
+	po0 := objc.WrapAsProtocol("MTLCommandBuffer", commandBuffer)
+	rv := objc.Call[CNNLossLabels](cc, objc.Sel("temporaryStateWithCommandBuffer:resourceList:"), po0, objc.Ptr(resourceList))
 	return rv
 }
 
@@ -249,5 +250,13 @@ func (c_ CNNLossLabels) WeightsImage() Image {
 // [Full Topic]: https://developer.apple.com/documentation/metalperformanceshaders/mpscnnlosslabels/2951845-lossimage?language=objc
 func (c_ CNNLossLabels) LossImage() Image {
 	rv := objc.Call[Image](c_, objc.Sel("lossImage"))
+	return rv
+}
+
+//	[Full Topic]
+//
+// [Full Topic]: https://developer.apple.com/documentation/metalperformanceshaders/mpscnnlosslabels/2976472-labelsimage?language=objc
+func (c_ CNNLossLabels) LabelsImage() Image {
+	rv := objc.Call[Image](c_, objc.Sel("labelsImage"))
 	return rv
 }

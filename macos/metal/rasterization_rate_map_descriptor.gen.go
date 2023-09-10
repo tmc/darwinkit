@@ -22,10 +22,10 @@ type IRasterizationRateMapDescriptor interface {
 	SetLayerAtIndex(layer IRasterizationRateLayerDescriptor, layerIndex uint)
 	ScreenSize() Size
 	SetScreenSize(value Size)
-	Layers() RasterizationRateLayerArray
 	Label() string
 	SetLabel(value string)
 	LayerCount() uint
+	Layers() RasterizationRateLayerArray
 }
 
 // An object that you use to configure new rasterization rate maps. [Full Topic]
@@ -69,7 +69,7 @@ func (r_ RasterizationRateMapDescriptor) LayerAtIndex(layerIndex uint) Rasteriza
 	return rv
 }
 
-// Creates a rate map descriptor with a given size and identifier. [Full Topic]
+// Sets a configuration for a layer rate map. [Full Topic]
 //
 // [Full Topic]: https://developer.apple.com/documentation/metal/mtlrasterizationratemapdescriptor/3131708-rasterizationratemapdescriptorwi?language=objc
 func (rc _RasterizationRateMapDescriptorClass) RasterizationRateMapDescriptorWithScreenSize(screenSize Size) RasterizationRateMapDescriptor {
@@ -136,14 +136,6 @@ func (r_ RasterizationRateMapDescriptor) SetScreenSize(value Size) {
 	objc.Call[objc.Void](r_, objc.Sel("setScreenSize:"), value)
 }
 
-// The rasterization rates for one or more layers in the rate map. [Full Topic]
-//
-// [Full Topic]: https://developer.apple.com/documentation/metal/mtlrasterizationratemapdescriptor/3131707-layers?language=objc
-func (r_ RasterizationRateMapDescriptor) Layers() RasterizationRateLayerArray {
-	rv := objc.Call[RasterizationRateLayerArray](r_, objc.Sel("layers"))
-	return rv
-}
-
 // A string used to identify the rate map you create with the descriptor. [Full Topic]
 //
 // [Full Topic]: https://developer.apple.com/documentation/metal/mtlrasterizationratemapdescriptor/3131704-label?language=objc
@@ -164,5 +156,13 @@ func (r_ RasterizationRateMapDescriptor) SetLabel(value string) {
 // [Full Topic]: https://developer.apple.com/documentation/metal/mtlrasterizationratemapdescriptor/3131706-layercount?language=objc
 func (r_ RasterizationRateMapDescriptor) LayerCount() uint {
 	rv := objc.Call[uint](r_, objc.Sel("layerCount"))
+	return rv
+}
+
+// The rasterization rates for one or more layers in the rate map. [Full Topic]
+//
+// [Full Topic]: https://developer.apple.com/documentation/metal/mtlrasterizationratemapdescriptor/3131707-layers?language=objc
+func (r_ RasterizationRateMapDescriptor) Layers() RasterizationRateLayerArray {
+	rv := objc.Call[RasterizationRateLayerArray](r_, objc.Sel("layers"))
 	return rv
 }

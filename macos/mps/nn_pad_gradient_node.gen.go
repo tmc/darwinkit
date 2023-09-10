@@ -59,6 +59,18 @@ func NewNNPadGradientNodeWithSourceGradientSourceImageGradientState(sourceGradie
 	return instance
 }
 
+func (nc _NNPadGradientNodeClass) NodeWithSourceGradientSourceImageGradientState(sourceGradient INNImageNode, sourceImage INNImageNode, gradientState INNGradientStateNode) NNPadGradientNode {
+	rv := objc.Call[NNPadGradientNode](nc, objc.Sel("nodeWithSourceGradient:sourceImage:gradientState:"), objc.Ptr(sourceGradient), objc.Ptr(sourceImage), objc.Ptr(gradientState))
+	return rv
+}
+
+//	[Full Topic]
+//
+// [Full Topic]: https://developer.apple.com/documentation/metalperformanceshaders/mpsnnpadgradientnode/3037392-nodewithsourcegradient?language=objc
+func NNPadGradientNode_NodeWithSourceGradientSourceImageGradientState(sourceGradient INNImageNode, sourceImage INNImageNode, gradientState INNGradientStateNode) NNPadGradientNode {
+	return NNPadGradientNodeClass.NodeWithSourceGradientSourceImageGradientState(sourceGradient, sourceImage, gradientState)
+}
+
 func (nc _NNPadGradientNodeClass) Alloc() NNPadGradientNode {
 	rv := objc.Call[NNPadGradientNode](nc, objc.Sel("alloc"))
 	return rv

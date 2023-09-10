@@ -112,23 +112,24 @@ func NewCNNArithmeticGradientStateWithDeviceBufferSize(device metal.PDevice, buf
 	return instance
 }
 
-func (c_ CNNArithmeticGradientState) InitWithResources(resources []metal.PResource) CNNArithmeticGradientState {
-	rv := objc.Call[CNNArithmeticGradientState](c_, objc.Sel("initWithResources:"), resources)
+func (c_ CNNArithmeticGradientState) InitWithResource(resource metal.PResource) CNNArithmeticGradientState {
+	po0 := objc.WrapAsProtocol("MTLResource", resource)
+	rv := objc.Call[CNNArithmeticGradientState](c_, objc.Sel("initWithResource:"), po0)
 	return rv
 }
 
 //	[Full Topic]
 //
-// [Full Topic]: https://developer.apple.com/documentation/metalperformanceshaders/mpsstate/2947895-initwithresources?language=objc
-func NewCNNArithmeticGradientStateWithResources(resources []metal.PResource) CNNArithmeticGradientState {
-	instance := CNNArithmeticGradientStateClass.Alloc().InitWithResources(resources)
+// [Full Topic]: https://developer.apple.com/documentation/metalperformanceshaders/mpsstate/2942390-initwithresource?language=objc
+func NewCNNArithmeticGradientStateWithResource(resource metal.PResource) CNNArithmeticGradientState {
+	instance := CNNArithmeticGradientStateClass.Alloc().InitWithResource(resource)
 	instance.Autorelease()
 	return instance
 }
 
-func (cc _CNNArithmeticGradientStateClass) TemporaryStateWithCommandBufferBufferSize(cmdBuf metal.PCommandBuffer, bufferSize uint) CNNArithmeticGradientState {
-	po0 := objc.WrapAsProtocol("MTLCommandBuffer", cmdBuf)
-	rv := objc.Call[CNNArithmeticGradientState](cc, objc.Sel("temporaryStateWithCommandBuffer:bufferSize:"), po0, bufferSize)
+func (cc _CNNArithmeticGradientStateClass) TemporaryStateWithCommandBufferResourceList(commandBuffer metal.PCommandBuffer, resourceList IStateResourceList) CNNArithmeticGradientState {
+	po0 := objc.WrapAsProtocol("MTLCommandBuffer", commandBuffer)
+	rv := objc.Call[CNNArithmeticGradientState](cc, objc.Sel("temporaryStateWithCommandBuffer:resourceList:"), po0, objc.Ptr(resourceList))
 	return rv
 }
 

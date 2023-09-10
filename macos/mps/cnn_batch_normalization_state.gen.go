@@ -19,13 +19,13 @@ type _CNNBatchNormalizationStateClass struct {
 // An interface definition for the [CNNBatchNormalizationState] class.
 type ICNNBatchNormalizationState interface {
 	INNGradientState
-	Mean() metal.BufferObject
 	GradientForGamma() metal.BufferObject
-	Reset()
 	Beta() metal.BufferObject
-	GradientForBeta() metal.BufferObject
 	Gamma() metal.BufferObject
+	GradientForBeta() metal.BufferObject
 	Variance() metal.BufferObject
+	Reset()
+	Mean() metal.BufferObject
 	BatchNormalization() CNNBatchNormalization
 }
 
@@ -120,23 +120,24 @@ func NewCNNBatchNormalizationStateWithDeviceBufferSize(device metal.PDevice, buf
 	return instance
 }
 
-func (c_ CNNBatchNormalizationState) InitWithResources(resources []metal.PResource) CNNBatchNormalizationState {
-	rv := objc.Call[CNNBatchNormalizationState](c_, objc.Sel("initWithResources:"), resources)
+func (c_ CNNBatchNormalizationState) InitWithResource(resource metal.PResource) CNNBatchNormalizationState {
+	po0 := objc.WrapAsProtocol("MTLResource", resource)
+	rv := objc.Call[CNNBatchNormalizationState](c_, objc.Sel("initWithResource:"), po0)
 	return rv
 }
 
 //	[Full Topic]
 //
-// [Full Topic]: https://developer.apple.com/documentation/metalperformanceshaders/mpsstate/2947895-initwithresources?language=objc
-func NewCNNBatchNormalizationStateWithResources(resources []metal.PResource) CNNBatchNormalizationState {
-	instance := CNNBatchNormalizationStateClass.Alloc().InitWithResources(resources)
+// [Full Topic]: https://developer.apple.com/documentation/metalperformanceshaders/mpsstate/2942390-initwithresource?language=objc
+func NewCNNBatchNormalizationStateWithResource(resource metal.PResource) CNNBatchNormalizationState {
+	instance := CNNBatchNormalizationStateClass.Alloc().InitWithResource(resource)
 	instance.Autorelease()
 	return instance
 }
 
-func (cc _CNNBatchNormalizationStateClass) TemporaryStateWithCommandBufferBufferSize(cmdBuf metal.PCommandBuffer, bufferSize uint) CNNBatchNormalizationState {
-	po0 := objc.WrapAsProtocol("MTLCommandBuffer", cmdBuf)
-	rv := objc.Call[CNNBatchNormalizationState](cc, objc.Sel("temporaryStateWithCommandBuffer:bufferSize:"), po0, bufferSize)
+func (cc _CNNBatchNormalizationStateClass) TemporaryStateWithCommandBufferResourceList(commandBuffer metal.PCommandBuffer, resourceList IStateResourceList) CNNBatchNormalizationState {
+	po0 := objc.WrapAsProtocol("MTLCommandBuffer", commandBuffer)
+	rv := objc.Call[CNNBatchNormalizationState](cc, objc.Sel("temporaryStateWithCommandBuffer:resourceList:"), po0, objc.Ptr(resourceList))
 	return rv
 }
 
@@ -206,24 +207,9 @@ func (c_ CNNBatchNormalizationState) GradientForGamma() metal.BufferObject {
 
 //	[Full Topic]
 //
-// [Full Topic]: https://developer.apple.com/documentation/metalperformanceshaders/mpscnnbatchnormalizationstate/2942587-reset?language=objc
-func (c_ CNNBatchNormalizationState) Reset() {
-	objc.Call[objc.Void](c_, objc.Sel("reset"))
-}
-
-//	[Full Topic]
-//
 // [Full Topic]: https://developer.apple.com/documentation/metalperformanceshaders/mpscnnbatchnormalizationstate/2951888-beta?language=objc
 func (c_ CNNBatchNormalizationState) Beta() metal.BufferObject {
 	rv := objc.Call[metal.BufferObject](c_, objc.Sel("beta"))
-	return rv
-}
-
-//	[Full Topic]
-//
-// [Full Topic]: https://developer.apple.com/documentation/metalperformanceshaders/mpscnnbatchnormalizationstate/2951890-gradientforbeta?language=objc
-func (c_ CNNBatchNormalizationState) GradientForBeta() metal.BufferObject {
-	rv := objc.Call[metal.BufferObject](c_, objc.Sel("gradientForBeta"))
 	return rv
 }
 
@@ -237,9 +223,32 @@ func (c_ CNNBatchNormalizationState) Gamma() metal.BufferObject {
 
 //	[Full Topic]
 //
+// [Full Topic]: https://developer.apple.com/documentation/metalperformanceshaders/mpscnnbatchnormalizationstate/2951890-gradientforbeta?language=objc
+func (c_ CNNBatchNormalizationState) GradientForBeta() metal.BufferObject {
+	rv := objc.Call[metal.BufferObject](c_, objc.Sel("gradientForBeta"))
+	return rv
+}
+
+//	[Full Topic]
+//
 // [Full Topic]: https://developer.apple.com/documentation/metalperformanceshaders/mpscnnbatchnormalizationstate/2942603-variance?language=objc
 func (c_ CNNBatchNormalizationState) Variance() metal.BufferObject {
 	rv := objc.Call[metal.BufferObject](c_, objc.Sel("variance"))
+	return rv
+}
+
+//	[Full Topic]
+//
+// [Full Topic]: https://developer.apple.com/documentation/metalperformanceshaders/mpscnnbatchnormalizationstate/2942587-reset?language=objc
+func (c_ CNNBatchNormalizationState) Reset() {
+	objc.Call[objc.Void](c_, objc.Sel("reset"))
+}
+
+//	[Full Topic]
+//
+// [Full Topic]: https://developer.apple.com/documentation/metalperformanceshaders/mpscnnbatchnormalizationstate/2942612-mean?language=objc
+func (c_ CNNBatchNormalizationState) Mean() metal.BufferObject {
+	rv := objc.Call[metal.BufferObject](c_, objc.Sel("mean"))
 	return rv
 }
 

@@ -23,6 +23,8 @@ type INNCompare interface {
 	SetThreshold(value float32)
 	ComparisonType() NNComparisonType
 	SetComparisonType(value NNComparisonType)
+	Threshold() float64
+	SetThreshold(value float64)
 }
 
 //	[Full Topic]
@@ -116,4 +118,19 @@ func (n_ NNCompare) ComparisonType() NNComparisonType {
 // [Full Topic]: https://developer.apple.com/documentation/metalperformanceshaders/mpsnncompare/3037374-comparisontype?language=objc
 func (n_ NNCompare) SetComparisonType(value NNComparisonType) {
 	objc.Call[objc.Void](n_, objc.Sel("setComparisonType:"), value)
+}
+
+//	[Full Topic]
+//
+// [Full Topic]: https://developer.apple.com/documentation/metalperformanceshaders/mpsnncompare/3037376-threshold?language=objc
+func (n_ NNCompare) Threshold() float64 {
+	rv := objc.Call[float64](n_, objc.Sel("threshold"))
+	return rv
+}
+
+//	[Full Topic]
+//
+// [Full Topic]: https://developer.apple.com/documentation/metalperformanceshaders/mpsnncompare/3037376-threshold?language=objc
+func (n_ NNCompare) SetThreshold(value float64) {
+	objc.Call[objc.Void](n_, objc.Sel("setThreshold:"), value)
 }

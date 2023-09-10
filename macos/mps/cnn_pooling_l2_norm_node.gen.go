@@ -53,6 +53,18 @@ func (c_ CNNPoolingL2NormNode) Init() CNNPoolingL2NormNode {
 	return rv
 }
 
+func (cc _CNNPoolingL2NormNodeClass) NodeWithSourceFilterSize(sourceNode INNImageNode, size uint) CNNPoolingL2NormNode {
+	rv := objc.Call[CNNPoolingL2NormNode](cc, objc.Sel("nodeWithSource:filterSize:"), objc.Ptr(sourceNode), size)
+	return rv
+}
+
+//	[Full Topic]
+//
+// [Full Topic]: https://developer.apple.com/documentation/metalperformanceshaders/mpscnnpoolingnode/2866508-nodewithsource?language=objc
+func CNNPoolingL2NormNode_NodeWithSourceFilterSize(sourceNode INNImageNode, size uint) CNNPoolingL2NormNode {
+	return CNNPoolingL2NormNodeClass.NodeWithSourceFilterSize(sourceNode, size)
+}
+
 func (c_ CNNPoolingL2NormNode) InitWithSourceFilterSize(sourceNode INNImageNode, size uint) CNNPoolingL2NormNode {
 	rv := objc.Call[CNNPoolingL2NormNode](c_, objc.Sel("initWithSource:filterSize:"), sourceNode, size)
 	return rv

@@ -20,14 +20,10 @@ type _CNNGradientKernelClass struct {
 // An interface definition for the [CNNGradientKernel] class.
 type ICNNGradientKernel interface {
 	ICNNBinaryKernel
-	EncodeToCommandBufferSourceGradientSourceImageGradientState(commandBuffer metal.PCommandBuffer, sourceGradient IImage, sourceImage IImage, gradientState IState) Image
-	EncodeToCommandBufferObjectSourceGradientSourceImageGradientState(commandBufferObject objc.IObject, sourceGradient IImage, sourceImage IImage, gradientState IState) Image
-	EncodeToCommandBufferSourceGradientSourceImageGradientStateDestinationGradient(commandBuffer metal.PCommandBuffer, sourceGradient IImage, sourceImage IImage, gradientState IState, destinationGradient IImage)
-	EncodeToCommandBufferObjectSourceGradientSourceImageGradientStateDestinationGradient(commandBufferObject objc.IObject, sourceGradient IImage, sourceImage IImage, gradientState IState, destinationGradient IImage)
-	EncodeBatchToCommandBufferSourceGradientsSourceImagesGradientStatesDestinationGradients(commandBuffer metal.PCommandBuffer, sourceGradients *foundation.Array, sourceImages *foundation.Array, gradientStates *foundation.Array, destinationGradients *foundation.Array)
-	EncodeBatchToCommandBufferObjectSourceGradientsSourceImagesGradientStatesDestinationGradients(commandBufferObject objc.IObject, sourceGradients *foundation.Array, sourceImages *foundation.Array, gradientStates *foundation.Array, destinationGradients *foundation.Array)
 	EncodeBatchToCommandBufferSourceGradientsSourceImagesGradientStates(commandBuffer metal.PCommandBuffer, sourceGradients *foundation.Array, sourceImages *foundation.Array, gradientStates *foundation.Array) *foundation.Array
 	EncodeBatchToCommandBufferObjectSourceGradientsSourceImagesGradientStates(commandBufferObject objc.IObject, sourceGradients *foundation.Array, sourceImages *foundation.Array, gradientStates *foundation.Array) *foundation.Array
+	EncodeToCommandBufferSourceGradientSourceImageGradientState(commandBuffer metal.PCommandBuffer, sourceGradient IImage, sourceImage IImage, gradientState IState) Image
+	EncodeToCommandBufferObjectSourceGradientSourceImageGradientState(commandBufferObject objc.IObject, sourceGradient IImage, sourceImage IImage, gradientState IState) Image
 	KernelOffsetX() int
 	SetKernelOffsetX(value int)
 	KernelOffsetY() int
@@ -158,6 +154,23 @@ func (c_ CNNGradientKernel) EncodeBatchToCommandBufferSourceGradientsSourceImage
 // [Full Topic]: https://developer.apple.com/documentation/metalperformanceshaders/mpscnngradientkernel/2942668-encodebatchtocommandbuffer?language=objc
 func (c_ CNNGradientKernel) EncodeBatchToCommandBufferObjectSourceGradientsSourceImagesGradientStates(commandBufferObject objc.IObject, sourceGradients *foundation.Array, sourceImages *foundation.Array, gradientStates *foundation.Array) *foundation.Array {
 	rv := objc.Call[*foundation.Array](c_, objc.Sel("encodeBatchToCommandBuffer:sourceGradients:sourceImages:gradientStates:"), commandBufferObject, sourceGradients, sourceImages, gradientStates)
+	return rv
+}
+
+//	[Full Topic]
+//
+// [Full Topic]: https://developer.apple.com/documentation/metalperformanceshaders/mpscnngradientkernel/2942663-encodetocommandbuffer?language=objc
+func (c_ CNNGradientKernel) EncodeToCommandBufferSourceGradientSourceImageGradientState(commandBuffer metal.PCommandBuffer, sourceGradient IImage, sourceImage IImage, gradientState IState) Image {
+	po0 := objc.WrapAsProtocol("MTLCommandBuffer", commandBuffer)
+	rv := objc.Call[Image](c_, objc.Sel("encodeToCommandBuffer:sourceGradient:sourceImage:gradientState:"), po0, objc.Ptr(sourceGradient), objc.Ptr(sourceImage), objc.Ptr(gradientState))
+	return rv
+}
+
+//	[Full Topic]
+//
+// [Full Topic]: https://developer.apple.com/documentation/metalperformanceshaders/mpscnngradientkernel/2942663-encodetocommandbuffer?language=objc
+func (c_ CNNGradientKernel) EncodeToCommandBufferObjectSourceGradientSourceImageGradientState(commandBufferObject objc.IObject, sourceGradient IImage, sourceImage IImage, gradientState IState) Image {
+	rv := objc.Call[Image](c_, objc.Sel("encodeToCommandBuffer:sourceGradient:sourceImage:gradientState:"), objc.Ptr(commandBufferObject), objc.Ptr(sourceGradient), objc.Ptr(sourceImage), objc.Ptr(gradientState))
 	return rv
 }
 

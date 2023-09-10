@@ -29,6 +29,7 @@ type INNForwardLossNode interface {
 	ReduceAcrossBatch() bool
 	Weight() float32
 	LossType() CNNLossType
+	LabelSmoothing() float64
 }
 
 //	[Full Topic]
@@ -42,6 +43,18 @@ func NNForwardLossNodeFrom(ptr unsafe.Pointer) NNForwardLossNode {
 	return NNForwardLossNode{
 		NNFilterNode: NNFilterNodeFrom(ptr),
 	}
+}
+
+func (nc _NNForwardLossNodeClass) NodeWithSourcesLossDescriptor(sourceNodes []INNImageNode, descriptor ICNNLossDescriptor) NNForwardLossNode {
+	rv := objc.Call[NNForwardLossNode](nc, objc.Sel("nodeWithSources:lossDescriptor:"), sourceNodes, objc.Ptr(descriptor))
+	return rv
+}
+
+//	[Full Topic]
+//
+// [Full Topic]: https://developer.apple.com/documentation/metalperformanceshaders/mpsnnforwardlossnode/3131839-nodewithsources?language=objc
+func NNForwardLossNode_NodeWithSourcesLossDescriptor(sourceNodes []INNImageNode, descriptor ICNNLossDescriptor) NNForwardLossNode {
+	return NNForwardLossNodeClass.NodeWithSourcesLossDescriptor(sourceNodes, descriptor)
 }
 
 func (nc _NNForwardLossNodeClass) NodeWithSourceLabelsLossDescriptor(source INNImageNode, labels INNImageNode, descriptor ICNNLossDescriptor) NNForwardLossNode {
@@ -175,9 +188,9 @@ func (n_ NNForwardLossNode) SetPropertyCallBackObject(valueObject objc.IObject) 
 
 //	[Full Topic]
 //
-// [Full Topic]: https://developer.apple.com/documentation/metalperformanceshaders/mpsnnforwardlossnode/3131840-numberofclasses?language=objc
-func (n_ NNForwardLossNode) NumberOfClasses() uint {
-	rv := objc.Call[uint](n_, objc.Sel("numberOfClasses"))
+// [Full Topic]: https://developer.apple.com/documentation/metalperformanceshaders/mpsnnforwardlossnode/3131827-epsilon?language=objc
+func (n_ NNForwardLossNode) Epsilon() float64 {
+	rv := objc.Call[float64](n_, objc.Sel("epsilon"))
 	return rv
 }
 
@@ -226,5 +239,13 @@ func (n_ NNForwardLossNode) Weight() float32 {
 // [Full Topic]: https://developer.apple.com/documentation/metalperformanceshaders/mpsnnforwardlossnode/3131836-losstype?language=objc
 func (n_ NNForwardLossNode) LossType() CNNLossType {
 	rv := objc.Call[CNNLossType](n_, objc.Sel("lossType"))
+	return rv
+}
+
+//	[Full Topic]
+//
+// [Full Topic]: https://developer.apple.com/documentation/metalperformanceshaders/mpsnnforwardlossnode/3131835-labelsmoothing?language=objc
+func (n_ NNForwardLossNode) LabelSmoothing() float64 {
+	rv := objc.Call[float64](n_, objc.Sel("labelSmoothing"))
 	return rv
 }

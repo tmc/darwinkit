@@ -113,23 +113,24 @@ func NewCNNDropoutGradientStateWithDeviceBufferSize(device metal.PDevice, buffer
 	return instance
 }
 
-func (c_ CNNDropoutGradientState) InitWithResources(resources []metal.PResource) CNNDropoutGradientState {
-	rv := objc.Call[CNNDropoutGradientState](c_, objc.Sel("initWithResources:"), resources)
+func (c_ CNNDropoutGradientState) InitWithResource(resource metal.PResource) CNNDropoutGradientState {
+	po0 := objc.WrapAsProtocol("MTLResource", resource)
+	rv := objc.Call[CNNDropoutGradientState](c_, objc.Sel("initWithResource:"), po0)
 	return rv
 }
 
 //	[Full Topic]
 //
-// [Full Topic]: https://developer.apple.com/documentation/metalperformanceshaders/mpsstate/2947895-initwithresources?language=objc
-func NewCNNDropoutGradientStateWithResources(resources []metal.PResource) CNNDropoutGradientState {
-	instance := CNNDropoutGradientStateClass.Alloc().InitWithResources(resources)
+// [Full Topic]: https://developer.apple.com/documentation/metalperformanceshaders/mpsstate/2942390-initwithresource?language=objc
+func NewCNNDropoutGradientStateWithResource(resource metal.PResource) CNNDropoutGradientState {
+	instance := CNNDropoutGradientStateClass.Alloc().InitWithResource(resource)
 	instance.Autorelease()
 	return instance
 }
 
-func (cc _CNNDropoutGradientStateClass) TemporaryStateWithCommandBufferBufferSize(cmdBuf metal.PCommandBuffer, bufferSize uint) CNNDropoutGradientState {
-	po0 := objc.WrapAsProtocol("MTLCommandBuffer", cmdBuf)
-	rv := objc.Call[CNNDropoutGradientState](cc, objc.Sel("temporaryStateWithCommandBuffer:bufferSize:"), po0, bufferSize)
+func (cc _CNNDropoutGradientStateClass) TemporaryStateWithCommandBufferResourceList(commandBuffer metal.PCommandBuffer, resourceList IStateResourceList) CNNDropoutGradientState {
+	po0 := objc.WrapAsProtocol("MTLCommandBuffer", commandBuffer)
+	rv := objc.Call[CNNDropoutGradientState](cc, objc.Sel("temporaryStateWithCommandBuffer:resourceList:"), po0, objc.Ptr(resourceList))
 	return rv
 }
 

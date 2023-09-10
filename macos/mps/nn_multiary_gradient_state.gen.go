@@ -112,23 +112,24 @@ func NewNNMultiaryGradientStateWithDeviceBufferSize(device metal.PDevice, buffer
 	return instance
 }
 
-func (n_ NNMultiaryGradientState) InitWithResources(resources []metal.PResource) NNMultiaryGradientState {
-	rv := objc.Call[NNMultiaryGradientState](n_, objc.Sel("initWithResources:"), resources)
+func (n_ NNMultiaryGradientState) InitWithResource(resource metal.PResource) NNMultiaryGradientState {
+	po0 := objc.WrapAsProtocol("MTLResource", resource)
+	rv := objc.Call[NNMultiaryGradientState](n_, objc.Sel("initWithResource:"), po0)
 	return rv
 }
 
 //	[Full Topic]
 //
-// [Full Topic]: https://developer.apple.com/documentation/metalperformanceshaders/mpsstate/2947895-initwithresources?language=objc
-func NewNNMultiaryGradientStateWithResources(resources []metal.PResource) NNMultiaryGradientState {
-	instance := NNMultiaryGradientStateClass.Alloc().InitWithResources(resources)
+// [Full Topic]: https://developer.apple.com/documentation/metalperformanceshaders/mpsstate/2942390-initwithresource?language=objc
+func NewNNMultiaryGradientStateWithResource(resource metal.PResource) NNMultiaryGradientState {
+	instance := NNMultiaryGradientStateClass.Alloc().InitWithResource(resource)
 	instance.Autorelease()
 	return instance
 }
 
-func (nc _NNMultiaryGradientStateClass) TemporaryStateWithCommandBufferBufferSize(cmdBuf metal.PCommandBuffer, bufferSize uint) NNMultiaryGradientState {
-	po0 := objc.WrapAsProtocol("MTLCommandBuffer", cmdBuf)
-	rv := objc.Call[NNMultiaryGradientState](nc, objc.Sel("temporaryStateWithCommandBuffer:bufferSize:"), po0, bufferSize)
+func (nc _NNMultiaryGradientStateClass) TemporaryStateWithCommandBufferResourceList(commandBuffer metal.PCommandBuffer, resourceList IStateResourceList) NNMultiaryGradientState {
+	po0 := objc.WrapAsProtocol("MTLCommandBuffer", commandBuffer)
+	rv := objc.Call[NNMultiaryGradientState](nc, objc.Sel("temporaryStateWithCommandBuffer:resourceList:"), po0, objc.Ptr(resourceList))
 	return rv
 }
 

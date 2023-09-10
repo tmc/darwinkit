@@ -54,6 +54,18 @@ func (n_ NNLanczosScaleNode) Init() NNLanczosScaleNode {
 	return rv
 }
 
+func (nc _NNLanczosScaleNodeClass) NodeWithSourceOutputSize(sourceNode INNImageNode, size metal.Size) NNLanczosScaleNode {
+	rv := objc.Call[NNLanczosScaleNode](nc, objc.Sel("nodeWithSource:outputSize:"), objc.Ptr(sourceNode), size)
+	return rv
+}
+
+//	[Full Topic]
+//
+// [Full Topic]: https://developer.apple.com/documentation/metalperformanceshaders/mpsnnscalenode/2915280-nodewithsource?language=objc
+func NNLanczosScaleNode_NodeWithSourceOutputSize(sourceNode INNImageNode, size metal.Size) NNLanczosScaleNode {
+	return NNLanczosScaleNodeClass.NodeWithSourceOutputSize(sourceNode, size)
+}
+
 func (n_ NNLanczosScaleNode) InitWithSourceOutputSize(sourceNode INNImageNode, size metal.Size) NNLanczosScaleNode {
 	rv := objc.Call[NNLanczosScaleNode](n_, objc.Sel("initWithSource:outputSize:"), sourceNode, size)
 	return rv

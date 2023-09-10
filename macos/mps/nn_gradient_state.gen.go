@@ -112,23 +112,24 @@ func NewNNGradientStateWithDeviceBufferSize(device metal.PDevice, bufferSize uin
 	return instance
 }
 
-func (n_ NNGradientState) InitWithResources(resources []metal.PResource) NNGradientState {
-	rv := objc.Call[NNGradientState](n_, objc.Sel("initWithResources:"), resources)
+func (n_ NNGradientState) InitWithResource(resource metal.PResource) NNGradientState {
+	po0 := objc.WrapAsProtocol("MTLResource", resource)
+	rv := objc.Call[NNGradientState](n_, objc.Sel("initWithResource:"), po0)
 	return rv
 }
 
 //	[Full Topic]
 //
-// [Full Topic]: https://developer.apple.com/documentation/metalperformanceshaders/mpsstate/2947895-initwithresources?language=objc
-func NewNNGradientStateWithResources(resources []metal.PResource) NNGradientState {
-	instance := NNGradientStateClass.Alloc().InitWithResources(resources)
+// [Full Topic]: https://developer.apple.com/documentation/metalperformanceshaders/mpsstate/2942390-initwithresource?language=objc
+func NewNNGradientStateWithResource(resource metal.PResource) NNGradientState {
+	instance := NNGradientStateClass.Alloc().InitWithResource(resource)
 	instance.Autorelease()
 	return instance
 }
 
-func (nc _NNGradientStateClass) TemporaryStateWithCommandBufferBufferSize(cmdBuf metal.PCommandBuffer, bufferSize uint) NNGradientState {
-	po0 := objc.WrapAsProtocol("MTLCommandBuffer", cmdBuf)
-	rv := objc.Call[NNGradientState](nc, objc.Sel("temporaryStateWithCommandBuffer:bufferSize:"), po0, bufferSize)
+func (nc _NNGradientStateClass) TemporaryStateWithCommandBufferResourceList(commandBuffer metal.PCommandBuffer, resourceList IStateResourceList) NNGradientState {
+	po0 := objc.WrapAsProtocol("MTLCommandBuffer", commandBuffer)
+	rv := objc.Call[NNGradientState](nc, objc.Sel("temporaryStateWithCommandBuffer:resourceList:"), po0, objc.Ptr(resourceList))
 	return rv
 }
 

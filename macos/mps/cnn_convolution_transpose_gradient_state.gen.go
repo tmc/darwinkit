@@ -113,23 +113,24 @@ func NewCNNConvolutionTransposeGradientStateWithDeviceBufferSize(device metal.PD
 	return instance
 }
 
-func (c_ CNNConvolutionTransposeGradientState) InitWithResources(resources []metal.PResource) CNNConvolutionTransposeGradientState {
-	rv := objc.Call[CNNConvolutionTransposeGradientState](c_, objc.Sel("initWithResources:"), resources)
+func (c_ CNNConvolutionTransposeGradientState) InitWithResource(resource metal.PResource) CNNConvolutionTransposeGradientState {
+	po0 := objc.WrapAsProtocol("MTLResource", resource)
+	rv := objc.Call[CNNConvolutionTransposeGradientState](c_, objc.Sel("initWithResource:"), po0)
 	return rv
 }
 
 //	[Full Topic]
 //
-// [Full Topic]: https://developer.apple.com/documentation/metalperformanceshaders/mpsstate/2947895-initwithresources?language=objc
-func NewCNNConvolutionTransposeGradientStateWithResources(resources []metal.PResource) CNNConvolutionTransposeGradientState {
-	instance := CNNConvolutionTransposeGradientStateClass.Alloc().InitWithResources(resources)
+// [Full Topic]: https://developer.apple.com/documentation/metalperformanceshaders/mpsstate/2942390-initwithresource?language=objc
+func NewCNNConvolutionTransposeGradientStateWithResource(resource metal.PResource) CNNConvolutionTransposeGradientState {
+	instance := CNNConvolutionTransposeGradientStateClass.Alloc().InitWithResource(resource)
 	instance.Autorelease()
 	return instance
 }
 
-func (cc _CNNConvolutionTransposeGradientStateClass) TemporaryStateWithCommandBufferBufferSize(cmdBuf metal.PCommandBuffer, bufferSize uint) CNNConvolutionTransposeGradientState {
-	po0 := objc.WrapAsProtocol("MTLCommandBuffer", cmdBuf)
-	rv := objc.Call[CNNConvolutionTransposeGradientState](cc, objc.Sel("temporaryStateWithCommandBuffer:bufferSize:"), po0, bufferSize)
+func (cc _CNNConvolutionTransposeGradientStateClass) TemporaryStateWithCommandBufferResourceList(commandBuffer metal.PCommandBuffer, resourceList IStateResourceList) CNNConvolutionTransposeGradientState {
+	po0 := objc.WrapAsProtocol("MTLCommandBuffer", commandBuffer)
+	rv := objc.Call[CNNConvolutionTransposeGradientState](cc, objc.Sel("temporaryStateWithCommandBuffer:resourceList:"), po0, objc.Ptr(resourceList))
 	return rv
 }
 

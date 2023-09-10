@@ -167,6 +167,14 @@ func (c_ CNNArithmeticGradient) SetSecondaryScale(value float32) {
 
 //	[Full Topic]
 //
+// [Full Topic]: https://developer.apple.com/documentation/metalperformanceshaders/mpscnnarithmeticgradient/2951852-issecondarysourcefilter?language=objc
+func (c_ CNNArithmeticGradient) IsSecondarySourceFilter() bool {
+	rv := objc.Call[bool](c_, objc.Sel("isSecondarySourceFilter"))
+	return rv
+}
+
+//	[Full Topic]
+//
 // [Full Topic]: https://developer.apple.com/documentation/metalperformanceshaders/mpscnnarithmeticgradient/2951854-maximumvalue?language=objc
 func (c_ CNNArithmeticGradient) MaximumValue() float32 {
 	rv := objc.Call[float32](c_, objc.Sel("maximumValue"))
@@ -193,4 +201,49 @@ func (c_ CNNArithmeticGradient) PrimaryScale() float32 {
 // [Full Topic]: https://developer.apple.com/documentation/metalperformanceshaders/mpscnnarithmeticgradient/2951861-primaryscale?language=objc
 func (c_ CNNArithmeticGradient) SetPrimaryScale(value float32) {
 	objc.Call[objc.Void](c_, objc.Sel("setPrimaryScale:"), value)
+}
+
+//	[Full Topic]
+//
+// [Full Topic]: https://developer.apple.com/documentation/metalperformanceshaders/mpscnnarithmeticgradient/2951858-minimumvalue?language=objc
+func (c_ CNNArithmeticGradient) MinimumValue() float64 {
+	rv := objc.Call[float64](c_, objc.Sel("minimumValue"))
+	return rv
+}
+
+//	[Full Topic]
+//
+// [Full Topic]: https://developer.apple.com/documentation/metalperformanceshaders/mpscnnarithmeticgradient/2951858-minimumvalue?language=objc
+func (c_ CNNArithmeticGradient) SetMinimumValue(value float64) {
+	objc.Call[objc.Void](c_, objc.Sel("setMinimumValue:"), value)
+}
+
+//	[Full Topic]
+//
+// [Full Topic]: https://developer.apple.com/documentation/metalperformanceshaders/mpscnnarithmeticgradient/2951855-bias?language=objc
+func (c_ CNNArithmeticGradient) Bias() float64 {
+	rv := objc.Call[float64](c_, objc.Sel("bias"))
+	return rv
+}
+
+//	[Full Topic]
+//
+// [Full Topic]: https://developer.apple.com/documentation/metalperformanceshaders/mpscnnarithmeticgradient/2951855-bias?language=objc
+func (c_ CNNArithmeticGradient) SetBias(value float64) {
+	objc.Call[objc.Void](c_, objc.Sel("setBias:"), value)
+}
+
+//	[Full Topic]
+//
+// [Full Topic]: https://developer.apple.com/documentation/metalperformanceshaders/mpscnnarithmeticgradient/2951853-secondarystrideinfeaturechannels?language=objc
+func (c_ CNNArithmeticGradient) SecondaryStrideInFeatureChannels() uint {
+	rv := objc.Call[uint](c_, objc.Sel("secondaryStrideInFeatureChannels"))
+	return rv
+}
+
+//	[Full Topic]
+//
+// [Full Topic]: https://developer.apple.com/documentation/metalperformanceshaders/mpscnnarithmeticgradient/2951853-secondarystrideinfeaturechannels?language=objc
+func (c_ CNNArithmeticGradient) SetSecondaryStrideInFeatureChannels(value uint) {
+	objc.Call[objc.Void](c_, objc.Sel("setSecondaryStrideInFeatureChannels:"), value)
 }

@@ -149,3 +149,18 @@ func (c_ CNNSpatialNormalizationGradient) Delta() float32 {
 func (c_ CNNSpatialNormalizationGradient) SetDelta(value float32) {
 	objc.Call[objc.Void](c_, objc.Sel("setDelta:"), value)
 }
+
+//	[Full Topic]
+//
+// [Full Topic]: https://developer.apple.com/documentation/metalperformanceshaders/mpscnnspatialnormalizationgradient/2942478-alpha?language=objc
+func (c_ CNNSpatialNormalizationGradient) Alpha() float64 {
+	rv := objc.Call[float64](c_, objc.Sel("alpha"))
+	return rv
+}
+
+//	[Full Topic]
+//
+// [Full Topic]: https://developer.apple.com/documentation/metalperformanceshaders/mpscnnspatialnormalizationgradient/2942478-alpha?language=objc
+func (c_ CNNSpatialNormalizationGradient) SetAlpha(value float64) {
+	objc.Call[objc.Void](c_, objc.Sel("setAlpha:"), value)
+}

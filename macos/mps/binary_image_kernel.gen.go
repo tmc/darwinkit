@@ -19,6 +19,7 @@ type _BinaryImageKernelClass struct {
 // An interface definition for the [BinaryImageKernel] class.
 type IBinaryImageKernel interface {
 	IKernel
+	SecondarySourceRegionForDestinationSize(destinationSize metal.Size) Region
 	EncodeToCommandBufferPrimaryImageSecondaryImageDestinationImage(commandBuffer metal.PCommandBuffer, primaryImage IImage, secondaryImage IImage, destinationImage IImage)
 	EncodeToCommandBufferObjectPrimaryImageSecondaryImageDestinationImage(commandBufferObject objc.IObject, primaryImage IImage, secondaryImage IImage, destinationImage IImage)
 	SecondarySourceRegionForDestinationSize(destinationSize metal.Size) Region
@@ -29,16 +30,16 @@ type IBinaryImageKernel interface {
 	EncodeToCommandBufferInPlacePrimaryTextureSecondaryTextureFallbackCopyAllocator(commandBuffer metal.PCommandBuffer, inPlacePrimaryTexture unsafe.Pointer, secondaryTexture metal.PTexture, copyAllocator CopyAllocator) bool
 	EncodeToCommandBufferObjectInPlacePrimaryTextureObjectSecondaryTextureObjectFallbackCopyAllocator(commandBufferObject objc.IObject, inPlacePrimaryTextureObject objc.IObject, secondaryTextureObject objc.IObject, copyAllocator CopyAllocator) bool
 	PrimarySourceRegionForDestinationSize(destinationSize metal.Size) Region
-	PrimaryEdgeMode() ImageEdgeMode
-	SetPrimaryEdgeMode(value ImageEdgeMode)
-	ClipRect() metal.Region
-	SetClipRect(value metal.Region)
 	SecondaryEdgeMode() ImageEdgeMode
 	SetSecondaryEdgeMode(value ImageEdgeMode)
+	PrimaryEdgeMode() ImageEdgeMode
+	SetPrimaryEdgeMode(value ImageEdgeMode)
 	PrimaryOffset() Offset
 	SetPrimaryOffset(value Offset)
 	SecondaryOffset() Offset
 	SetSecondaryOffset(value Offset)
+	ClipRect() metal.Region
+	SetClipRect(value metal.Region)
 }
 
 // A kernel that consumes two textures and produces one texture. [Full Topic]
@@ -102,6 +103,14 @@ func BinaryImageKernel_CopyWithZoneDevice(zone unsafe.Pointer, device metal.PDev
 	instance := BinaryImageKernelClass.Alloc().CopyWithZoneDevice(zone, device)
 	instance.Autorelease()
 	return instance
+}
+
+// Determines the region of the secondary source texture that will be read for an encode operation. [Full Topic]
+//
+// [Full Topic]: https://developer.apple.com/documentation/metalperformanceshaders/mpsbinaryimagekernel/1618838-secondarysourceregionfordestinat?language=objc
+func (b_ BinaryImageKernel) SecondarySourceRegionForDestinationSize(destinationSize metal.Size) Region {
+	rv := objc.Call[Region](b_, objc.Sel("secondarySourceRegionForDestinationSize:"), destinationSize)
+	return rv
 }
 
 //	[Full Topic]
@@ -191,36 +200,6 @@ func (b_ BinaryImageKernel) PrimarySourceRegionForDestinationSize(destinationSiz
 	return rv
 }
 
-// The edge mode to use when texture reads stray off the edge of the primary source image. [Full Topic]
-//
-// [Full Topic]: https://developer.apple.com/documentation/metalperformanceshaders/mpsbinaryimagekernel/1618782-primaryedgemode?language=objc
-func (b_ BinaryImageKernel) PrimaryEdgeMode() ImageEdgeMode {
-	rv := objc.Call[ImageEdgeMode](b_, objc.Sel("primaryEdgeMode"))
-	return rv
-}
-
-// The edge mode to use when texture reads stray off the edge of the primary source image. [Full Topic]
-//
-// [Full Topic]: https://developer.apple.com/documentation/metalperformanceshaders/mpsbinaryimagekernel/1618782-primaryedgemode?language=objc
-func (b_ BinaryImageKernel) SetPrimaryEdgeMode(value ImageEdgeMode) {
-	objc.Call[objc.Void](b_, objc.Sel("setPrimaryEdgeMode:"), value)
-}
-
-// An optional clip rectangle to use when writing data. Only the pixels in the rectangle will be overwritten. [Full Topic]
-//
-// [Full Topic]: https://developer.apple.com/documentation/metalperformanceshaders/mpsbinaryimagekernel/1618879-cliprect?language=objc
-func (b_ BinaryImageKernel) ClipRect() metal.Region {
-	rv := objc.Call[metal.Region](b_, objc.Sel("clipRect"))
-	return rv
-}
-
-// An optional clip rectangle to use when writing data. Only the pixels in the rectangle will be overwritten. [Full Topic]
-//
-// [Full Topic]: https://developer.apple.com/documentation/metalperformanceshaders/mpsbinaryimagekernel/1618879-cliprect?language=objc
-func (b_ BinaryImageKernel) SetClipRect(value metal.Region) {
-	objc.Call[objc.Void](b_, objc.Sel("setClipRect:"), value)
-}
-
 // The edge mode to use when texture reads stray off the edge of the secondary source image. [Full Topic]
 //
 // [Full Topic]: https://developer.apple.com/documentation/metalperformanceshaders/mpsbinaryimagekernel/1618848-secondaryedgemode?language=objc
@@ -234,6 +213,21 @@ func (b_ BinaryImageKernel) SecondaryEdgeMode() ImageEdgeMode {
 // [Full Topic]: https://developer.apple.com/documentation/metalperformanceshaders/mpsbinaryimagekernel/1618848-secondaryedgemode?language=objc
 func (b_ BinaryImageKernel) SetSecondaryEdgeMode(value ImageEdgeMode) {
 	objc.Call[objc.Void](b_, objc.Sel("setSecondaryEdgeMode:"), value)
+}
+
+// The edge mode to use when texture reads stray off the edge of the primary source image. [Full Topic]
+//
+// [Full Topic]: https://developer.apple.com/documentation/metalperformanceshaders/mpsbinaryimagekernel/1618782-primaryedgemode?language=objc
+func (b_ BinaryImageKernel) PrimaryEdgeMode() ImageEdgeMode {
+	rv := objc.Call[ImageEdgeMode](b_, objc.Sel("primaryEdgeMode"))
+	return rv
+}
+
+// The edge mode to use when texture reads stray off the edge of the primary source image. [Full Topic]
+//
+// [Full Topic]: https://developer.apple.com/documentation/metalperformanceshaders/mpsbinaryimagekernel/1618782-primaryedgemode?language=objc
+func (b_ BinaryImageKernel) SetPrimaryEdgeMode(value ImageEdgeMode) {
+	objc.Call[objc.Void](b_, objc.Sel("setPrimaryEdgeMode:"), value)
 }
 
 // The position of the destination clip rectangle origin relative to the primary source buffer. [Full Topic]
@@ -264,4 +258,19 @@ func (b_ BinaryImageKernel) SecondaryOffset() Offset {
 // [Full Topic]: https://developer.apple.com/documentation/metalperformanceshaders/mpsbinaryimagekernel/1618755-secondaryoffset?language=objc
 func (b_ BinaryImageKernel) SetSecondaryOffset(value Offset) {
 	objc.Call[objc.Void](b_, objc.Sel("setSecondaryOffset:"), value)
+}
+
+// An optional clip rectangle to use when writing data. Only the pixels in the rectangle will be overwritten. [Full Topic]
+//
+// [Full Topic]: https://developer.apple.com/documentation/metalperformanceshaders/mpsbinaryimagekernel/1618879-cliprect?language=objc
+func (b_ BinaryImageKernel) ClipRect() metal.Region {
+	rv := objc.Call[metal.Region](b_, objc.Sel("clipRect"))
+	return rv
+}
+
+// An optional clip rectangle to use when writing data. Only the pixels in the rectangle will be overwritten. [Full Topic]
+//
+// [Full Topic]: https://developer.apple.com/documentation/metalperformanceshaders/mpsbinaryimagekernel/1618879-cliprect?language=objc
+func (b_ BinaryImageKernel) SetClipRect(value metal.Region) {
+	objc.Call[objc.Void](b_, objc.Sel("setClipRect:"), value)
 }

@@ -61,6 +61,19 @@ func NewCNNFullyConnectedGradientNodeWithSourceGradientSourceImageConvolutionGra
 	return instance
 }
 
+func (cc _CNNFullyConnectedGradientNodeClass) NodeWithSourceGradientSourceImageConvolutionGradientStateWeights(sourceGradient INNImageNode, sourceImage INNImageNode, gradientState ICNNConvolutionGradientStateNode, weights PCNNConvolutionDataSource) CNNFullyConnectedGradientNode {
+	po3 := objc.WrapAsProtocol("MPSCNNConvolutionDataSource", weights)
+	rv := objc.Call[CNNFullyConnectedGradientNode](cc, objc.Sel("nodeWithSourceGradient:sourceImage:convolutionGradientState:weights:"), objc.Ptr(sourceGradient), objc.Ptr(sourceImage), objc.Ptr(gradientState), po3)
+	return rv
+}
+
+//	[Full Topic]
+//
+// [Full Topic]: https://developer.apple.com/documentation/metalperformanceshaders/mpscnnfullyconnectedgradientnode/3152567-nodewithsourcegradient?language=objc
+func CNNFullyConnectedGradientNode_NodeWithSourceGradientSourceImageConvolutionGradientStateWeights(sourceGradient INNImageNode, sourceImage INNImageNode, gradientState ICNNConvolutionGradientStateNode, weights PCNNConvolutionDataSource) CNNFullyConnectedGradientNode {
+	return CNNFullyConnectedGradientNodeClass.NodeWithSourceGradientSourceImageConvolutionGradientStateWeights(sourceGradient, sourceImage, gradientState, weights)
+}
+
 func (cc _CNNFullyConnectedGradientNodeClass) Alloc() CNNFullyConnectedGradientNode {
 	rv := objc.Call[CNNFullyConnectedGradientNode](cc, objc.Sel("alloc"))
 	return rv

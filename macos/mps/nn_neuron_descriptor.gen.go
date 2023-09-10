@@ -170,6 +170,21 @@ func (n_ NNNeuronDescriptor) SetA(value float32) {
 
 //	[Full Topic]
 //
+// [Full Topic]: https://developer.apple.com/documentation/metalperformanceshaders/mpsnnneurondescriptor/2942299-data?language=objc
+func (n_ NNNeuronDescriptor) Data() []byte {
+	rv := objc.Call[[]byte](n_, objc.Sel("data"))
+	return rv
+}
+
+//	[Full Topic]
+//
+// [Full Topic]: https://developer.apple.com/documentation/metalperformanceshaders/mpsnnneurondescriptor/2942299-data?language=objc
+func (n_ NNNeuronDescriptor) SetData(value []byte) {
+	objc.Call[objc.Void](n_, objc.Sel("setData:"), value)
+}
+
+//	[Full Topic]
+//
 // [Full Topic]: https://developer.apple.com/documentation/metalperformanceshaders/mpsnnneurondescriptor/2942292-neurontype?language=objc
 func (n_ NNNeuronDescriptor) NeuronType() CNNNeuronType {
 	rv := objc.Call[CNNNeuronType](n_, objc.Sel("neuronType"))
@@ -200,15 +215,15 @@ func (n_ NNNeuronDescriptor) SetC(value float32) {
 
 //	[Full Topic]
 //
-// [Full Topic]: https://developer.apple.com/documentation/metalperformanceshaders/mpsnnneurondescriptor/2942299-data?language=objc
-func (n_ NNNeuronDescriptor) Data() []byte {
-	rv := objc.Call[[]byte](n_, objc.Sel("data"))
+// [Full Topic]: https://developer.apple.com/documentation/metalperformanceshaders/mpsnnneurondescriptor/2942302-b?language=objc
+func (n_ NNNeuronDescriptor) B() float64 {
+	rv := objc.Call[float64](n_, objc.Sel("b"))
 	return rv
 }
 
 //	[Full Topic]
 //
-// [Full Topic]: https://developer.apple.com/documentation/metalperformanceshaders/mpsnnneurondescriptor/2942299-data?language=objc
-func (n_ NNNeuronDescriptor) SetData(value []byte) {
-	objc.Call[objc.Void](n_, objc.Sel("setData:"), value)
+// [Full Topic]: https://developer.apple.com/documentation/metalperformanceshaders/mpsnnneurondescriptor/2942302-b?language=objc
+func (n_ NNNeuronDescriptor) SetB(value float64) {
+	objc.Call[objc.Void](n_, objc.Sel("setB:"), value)
 }

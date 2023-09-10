@@ -104,9 +104,9 @@ func CNNDropoutGradient_CopyWithZoneDevice(zone unsafe.Pointer, device metal.PDe
 
 //	[Full Topic]
 //
-// [Full Topic]: https://developer.apple.com/documentation/metalperformanceshaders/mpscnndropoutgradient/2942515-maskstrideinpixels?language=objc
-func (c_ CNNDropoutGradient) MaskStrideInPixels() metal.Size {
-	rv := objc.Call[metal.Size](c_, objc.Sel("maskStrideInPixels"))
+// [Full Topic]: https://developer.apple.com/documentation/metalperformanceshaders/mpscnndropoutgradient/2942520-keepprobability?language=objc
+func (c_ CNNDropoutGradient) KeepProbability() float64 {
+	rv := objc.Call[float64](c_, objc.Sel("keepProbability"))
 	return rv
 }
 

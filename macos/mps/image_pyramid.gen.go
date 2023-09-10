@@ -19,8 +19,8 @@ type _ImagePyramidClass struct {
 // An interface definition for the [ImagePyramid] class.
 type IImagePyramid interface {
 	IUnaryImageKernel
-	KernelWidth() uint
 	KernelHeight() uint
+	KernelWidth() uint
 }
 
 // A base class for creating different kinds of pyramid images. [Full Topic]
@@ -116,18 +116,18 @@ func ImagePyramid_CopyWithZoneDevice(zone unsafe.Pointer, device metal.PDevice) 
 	return instance
 }
 
-// The width of the filter window. Must be an odd number. [Full Topic]
-//
-// [Full Topic]: https://developer.apple.com/documentation/metalperformanceshaders/mpsimagepyramid/1648842-kernelwidth?language=objc
-func (i_ ImagePyramid) KernelWidth() uint {
-	rv := objc.Call[uint](i_, objc.Sel("kernelWidth"))
-	return rv
-}
-
 // The height of the filter window. Must be an odd number. [Full Topic]
 //
 // [Full Topic]: https://developer.apple.com/documentation/metalperformanceshaders/mpsimagepyramid/1648863-kernelheight?language=objc
 func (i_ ImagePyramid) KernelHeight() uint {
 	rv := objc.Call[uint](i_, objc.Sel("kernelHeight"))
+	return rv
+}
+
+// The width of the filter window. Must be an odd number. [Full Topic]
+//
+// [Full Topic]: https://developer.apple.com/documentation/metalperformanceshaders/mpsimagepyramid/1648842-kernelwidth?language=objc
+func (i_ ImagePyramid) KernelWidth() uint {
+	rv := objc.Call[uint](i_, objc.Sel("kernelWidth"))
 	return rv
 }

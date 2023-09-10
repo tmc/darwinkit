@@ -107,6 +107,20 @@ func NewNNComparisonNodeWithSources(sourceNodes []INNImageNode) NNComparisonNode
 	return instance
 }
 
+func (n_ NNComparisonNode) InitWithLeftSourceRightSource(left INNImageNode, right INNImageNode) NNComparisonNode {
+	rv := objc.Call[NNComparisonNode](n_, objc.Sel("initWithLeftSource:rightSource:"), objc.Ptr(left), objc.Ptr(right))
+	return rv
+}
+
+//	[Full Topic]
+//
+// [Full Topic]: https://developer.apple.com/documentation/metalperformanceshaders/mpsnnbinaryarithmeticnode/2890825-initwithleftsource?language=objc
+func NewNNComparisonNodeWithLeftSourceRightSource(left INNImageNode, right INNImageNode) NNComparisonNode {
+	instance := NNComparisonNodeClass.Alloc().InitWithLeftSourceRightSource(left, right)
+	instance.Autorelease()
+	return instance
+}
+
 //	[Full Topic]
 //
 // [Full Topic]: https://developer.apple.com/documentation/metalperformanceshaders/mpsnncomparisonnode/3037389-comparisontype?language=objc

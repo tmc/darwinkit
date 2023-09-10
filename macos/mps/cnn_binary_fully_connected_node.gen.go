@@ -109,6 +109,21 @@ func (c_ CNNBinaryFullyConnectedNode) Init() CNNBinaryFullyConnectedNode {
 	return rv
 }
 
+func (c_ CNNBinaryFullyConnectedNode) InitWithSourceWeightsScaleValueTypeFlags(sourceNode INNImageNode, weights PCNNConvolutionDataSource, scaleValue float64, type_ CNNBinaryConvolutionType, flags CNNBinaryConvolutionFlags) CNNBinaryFullyConnectedNode {
+	po1 := objc.WrapAsProtocol("MPSCNNConvolutionDataSource", weights)
+	rv := objc.Call[CNNBinaryFullyConnectedNode](c_, objc.Sel("initWithSource:weights:scaleValue:type:flags:"), objc.Ptr(sourceNode), po1, scaleValue, type_, flags)
+	return rv
+}
+
+//	[Full Topic]
+//
+// [Full Topic]: https://developer.apple.com/documentation/metalperformanceshaders/mpscnnbinaryconvolutionnode/2866509-initwithsource?language=objc
+func NewCNNBinaryFullyConnectedNodeWithSourceWeightsScaleValueTypeFlags(sourceNode INNImageNode, weights PCNNConvolutionDataSource, scaleValue float64, type_ CNNBinaryConvolutionType, flags CNNBinaryConvolutionFlags) CNNBinaryFullyConnectedNode {
+	instance := CNNBinaryFullyConnectedNodeClass.Alloc().InitWithSourceWeightsScaleValueTypeFlags(sourceNode, weights, scaleValue, type_, flags)
+	instance.Autorelease()
+	return instance
+}
+
 func (cc _CNNBinaryFullyConnectedNodeClass) NodeWithSourceWeights(sourceNode INNImageNode, weights PCNNConvolutionDataSource) CNNBinaryFullyConnectedNode {
 	po1 := objc.WrapAsProtocol("MPSCNNConvolutionDataSource", weights)
 	rv := objc.Call[CNNBinaryFullyConnectedNode](cc, objc.Sel("nodeWithSource:weights:"), sourceNode, po1)
