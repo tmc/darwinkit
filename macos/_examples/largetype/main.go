@@ -4,6 +4,7 @@ import (
 	"flag"
 	"fmt"
 	"strings"
+	"time"
 
 	"github.com/progrium/macdriver/macos"
 	"github.com/progrium/macdriver/macos/appkit"
@@ -85,6 +86,22 @@ func launched(app appkit.Application, delegate *appkit.ApplicationDelegate) {
 	})
 
 	app.SetActivationPolicy(appkit.ApplicationActivationPolicyRegular)
+	go func() {
+		time.Sleep(time.Second)
+		fmt.Println(":)")
+		t.SetString("Hi")
+		fmt.Println(" set")
+		time.Sleep(time.Second)
+		fmt.Println(":)")
+		t.SetString("There")
+		fmt.Println(" set")
+		time.Sleep(time.Second)
+		fmt.Println(":)")
+		t.SetString("There!")
+		fmt.Println(" set")
+	}()
+
+	//	t.SetString("Hi")
 	app.ActivateIgnoringOtherApps(true)
 }
 
