@@ -33,6 +33,8 @@ func launched(app appkit.Application, delegate *appkit.ApplicationDelegate) {
 
 	sc := screencapturekit.NewStreamConfiguration()
 	//cf := screencapturekit.NewContentFilter()
+	sc.SetWidth(uint(captureHandler.selectedDisplay.Width()))
+	sc.SetHeight(uint(captureHandler.selectedDisplay.Height()))
 
 	cf := captureHandler.GetContentFilter()
 	s := screencapturekit.NewStreamWithFilterConfigurationDelegate(cf, sc, captureHandler.streamDelegate)
