@@ -3,21 +3,31 @@ package main
 import (
 	"errors"
 	"fmt"
+	"os"
 
 	"github.com/progrium/macdriver/dispatch"
+	"github.com/progrium/macdriver/macos"
+	"github.com/progrium/macdriver/macos/appkit"
 	"github.com/progrium/macdriver/macos/coremedia"
 	"github.com/progrium/macdriver/macos/foundation"
 	"github.com/progrium/macdriver/macos/screencapturekit"
+	"github.com/progrium/macdriver/objc"
 )
 
 func main() {
+	macos.RunApp(launched)
+}
+
+func launched(app appkit.Application, delegate *appkit.ApplicationDelegate) {
+	app.SetActivationPolicy(appkit.ApplicationActivationPolicyRegular)
+	app.ActivateIgnoringOtherApps(true)
+
 	captureHandler := &screenCaptureHandler{}
 	captureHandler.refreshCapturableWindows()
 
 	sc := screencapturekit.NewStreamConfiguration()
 	//cf := screencapturekit.NewContentFilter()
 
-	dispatch.MainQueue().DispatchAsync(func() {
 	cf := captureHandler.GetContentFilter()
 	s := screencapturekit.NewStreamWithFilterConfigurationDelegate(cf, sc, captureHandler)
 
@@ -34,8 +44,6 @@ func main() {
 	s.StartCaptureWithCompletionHandler(func(err foundation.Error) {
 		fmt.Println("s.StartCaptureWithCompletionHandler", err)
 	})
-
-	dispatch.Main()
 }
 
 type CaptureType int
@@ -50,17 +58,40 @@ func (h *screenCaptureHandler) refreshCapturableWindows() {
 	ch := make(chan struct{})
 	screencapturekit.ShareableContentClass.GetShareableContentWithCompletionHandler(func(sc screencapturekit.ShareableContent, err foundation.Error) {
 		defer close(ch)
-		h.availabileDisplays = sc.Displays()
+		if !err.IsNil() {
+			fmt.Println("error listing sharable content:", err.LocalizedDescription())
+			os.Exit(1)
+		}
+		// h.availabileDisplays = sc.Displays()
+		for _, d := range sc.Displays() {
+			h.availabileDisplays = append(h.availabileDisplays, d)
+			objc.Retain(&d)
+		}
 		if h.selectedDisplay == nil && len(h.availabileDisplays) > 0 {
 			h.selectedDisplay = &h.availabileDisplays[0]
+			objc.Retain(h.selectedDisplay)
 		}
-		h.availbleWindows = sc.Windows()
-		if h.selectedWindow == nil && len(h.availbleWindows) > 0 {
-			h.selectedWindow = &h.availbleWindows[0]
+
+		ws := sc.Windows()
+		h.availableWindows = append(h.availableWindows, ws[0])
+		fmt.Println(len(ws), "windows")
+		for i, w := range sc.Windows() {
+			fmt.Println(i, w.IsOnScreen(), w.IsNil(), w.IsProxy(), w.Title(), w.OwningApplication().ApplicationName())
+			// 	h.availableWindows = append(h.availableWindows, w)
+			// 	fmt.Println("window", i, w.Description())
+			fmt.Println("a?", objc.Call[bool](w, objc.Sel("isActive")), w.RetainCount())
+			if w.IsOnScreen() && w.OwningApplication().ApplicationName() != "Finder" {
+				objc.Retain(&w)
+			}
+
 		}
-		for _, app := range sc.Applications() {
-			fmt.Println("app", app.ApplicationName())
+		if h.selectedWindow == nil && len(h.availableWindows) > 0 {
+			h.selectedWindow = &h.availableWindows[0]
 		}
+		objc.Retain(h.selectedWindow)
+		// for _, app := range sc.Applications() {
+		// 	fmt.Println("app", app.ApplicationName())
+		// }
 		fmt.Println("done listing sharable content")
 	})
 	<-ch
@@ -68,10 +99,12 @@ func (h *screenCaptureHandler) refreshCapturableWindows() {
 
 type screenCaptureHandler struct {
 	availabileDisplays []screencapturekit.Display
-	availbleWindows    []screencapturekit.Window
+	availableWindows   []screencapturekit.Window
 
 	selectedDisplay *screencapturekit.Display
 	selectedWindow  *screencapturekit.Window
+
+	capturedWindows []screencapturekit.IWindow
 
 	captureType CaptureType
 }
@@ -82,13 +115,14 @@ func (sh *screenCaptureHandler) GetContentFilter() screencapturekit.ContentFilte
 	switch sh.captureType {
 	case CaptureTypeDisplay:
 		display := sh.selectedDisplay
-		windows := []screencapturekit.IWindow{}
-		for _, w := range sh.availbleWindows {
-			windows = append(windows, w)
+		for _, w := range sh.availableWindows {
+			_ = w
+			// if len(sh.capturedWindows) < 3 {
+			// 	sh.capturedWindows = append(sh.capturedWindows, w)
+			// 	objc.Retain(&w)
+			// }
 		}
-		fmt.Println("display:", display)
-		fmt.Println("windows:", windows)
-		filter = screencapturekit.NewContentFilterWithDisplayIncludingWindows(display, windows)
+		filter = screencapturekit.NewContentFilterWithDisplayIncludingWindows(display, sh.capturedWindows)
 	case CaptureTypeWindow:
 	}
 	return filter
