@@ -81,7 +81,8 @@ func (h *screenCaptureHandler) refreshCapturableWindows() {
 			// 	fmt.Println("window", i, w.Description())
 			fmt.Println("a?", objc.Call[bool](w, objc.Sel("isActive")), w.RetainCount())
 			if w.IsOnScreen() && w.OwningApplication().ApplicationName() != "Finder" {
-				objc.Retain(&w)
+				h.capturedWindows = append(h.capturedWindows, w)
+				w.Retain()
 			}
 
 		}
