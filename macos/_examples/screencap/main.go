@@ -22,14 +22,20 @@ func launched(app appkit.Application, delegate *appkit.ApplicationDelegate) {
 	app.SetActivationPolicy(appkit.ApplicationActivationPolicyRegular)
 	app.ActivateIgnoringOtherApps(true)
 
-	captureHandler := &screenCaptureHandler{}
+	captureHandler := &screenCaptureHandler{
+		StreamOutputObject: &screencapturekit.StreamOutputObject{},
+		streamDelegate:     &screencapturekit.StreamDelegate{},
+	}
+	captureHandler.streamDelegate.SetStreamDidStopWithError(func(s screencapturekit.Stream, err foundation.Error) {
+		fmt.Println("stream stopped", err)
+	})
 	captureHandler.refreshCapturableWindows()
 
 	sc := screencapturekit.NewStreamConfiguration()
 	//cf := screencapturekit.NewContentFilter()
 
 	cf := captureHandler.GetContentFilter()
-	s := screencapturekit.NewStreamWithFilterConfigurationDelegate(cf, sc, captureHandler)
+	s := screencapturekit.NewStreamWithFilterConfigurationDelegate(cf, sc, captureHandler.streamDelegate)
 
 	var dispatchQueue dispatch.Queue
 	//dispatchQueue = dispatch.CreateQueue("com.example.queue", dispatch.QueueTypeSerial)
@@ -75,11 +81,10 @@ func (h *screenCaptureHandler) refreshCapturableWindows() {
 		ws := sc.Windows()
 		h.availableWindows = append(h.availableWindows, ws[0])
 		fmt.Println(len(ws), "windows")
-		for i, w := range sc.Windows() {
-			fmt.Println(i, w.IsOnScreen(), w.IsNil(), w.IsProxy(), w.Title(), w.OwningApplication().ApplicationName())
+		for _, w := range sc.Windows() {
+			//fmt.Println(i, w.IsOnScreen(), w.IsNil(), w.IsProxy(), w.Title(), w.OwningApplication().ApplicationName())
 			// 	h.availableWindows = append(h.availableWindows, w)
 			// 	fmt.Println("window", i, w.Description())
-			fmt.Println("a?", objc.Call[bool](w, objc.Sel("isActive")), w.RetainCount())
 			if w.IsOnScreen() && w.OwningApplication().ApplicationName() != "Finder" {
 				h.capturedWindows = append(h.capturedWindows, w)
 				w.Retain()
@@ -99,6 +104,9 @@ func (h *screenCaptureHandler) refreshCapturableWindows() {
 }
 
 type screenCaptureHandler struct {
+	*screencapturekit.StreamOutputObject
+
+	streamDelegate     *screencapturekit.StreamDelegate
 	availabileDisplays []screencapturekit.Display
 	availableWindows   []screencapturekit.Window
 
@@ -113,6 +121,7 @@ type screenCaptureHandler struct {
 func (sh *screenCaptureHandler) GetContentFilter() screencapturekit.ContentFilter {
 	filter := screencapturekit.NewContentFilter()
 
+	fmt.Println("GetContentFilter", sh.captureType)
 	switch sh.captureType {
 	case CaptureTypeDisplay:
 		display := sh.selectedDisplay
@@ -129,25 +138,15 @@ func (sh *screenCaptureHandler) GetContentFilter() screencapturekit.ContentFilte
 	return filter
 }
 
-var _ screencapturekit.PStreamOutput = (*screenCaptureHandler)(nil)
-var _ screencapturekit.PStreamDelegate = (*screenCaptureHandler)(nil)
+// var _ screencapturekit.PStreamOutput = (*screenCaptureHandler)(nil)
+// var _ screencapturekit.PStreamDelegate = (*screenCaptureHandler)(nil)
 
 // StreamOutput methods
 
-func (sh *screenCaptureHandler) HasStreamDidOutputSampleBufferOfType() bool {
-	panic(errors.New("*streamHandler.HasStreamDidOutputSampleBufferOfType not implemented"))
-}
+// func (sh *screenCaptureHandler) HasStreamDidOutputSampleBufferOfType() bool {
+// 	panic(errors.New("*streamHandler.HasStreamDidOutputSampleBufferOfType not implemented"))
+// }
 
 func (sh *screenCaptureHandler) StreamDidOutputSampleBufferOfType(s screencapturekit.Stream, buf coremedia.SampleBufferRef, out screencapturekit.StreamOutputType) {
 	panic(errors.New("*streamHandler.StreamDidOutputSampleBufferOfType not implemented"))
-}
-
-// StreamDelegate methods
-
-func (sh *screenCaptureHandler) StreamDidStopWithError(s screencapturekit.Stream, err foundation.Error) {
-	fmt.Println("StreamDidStopWithError", err)
-}
-func (sh *screenCaptureHandler) HasStreamDidStopWithError() bool {
-	fmt.Println("HasStreamDidStopWithError")
-	return true
 }
