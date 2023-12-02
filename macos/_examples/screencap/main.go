@@ -48,9 +48,8 @@ func launched(app appkit.Application, delegate *appkit.ApplicationDelegate) {
 		fmt.Println("s.AddStreamOutputTypeSampleHandlerQueueError", err)
 	}
 
-	fmt.Println("s.StartCaptureWithCompletionHandler")
 	s.StartCaptureWithCompletionHandler(func(err foundation.Error) {
-		fmt.Println("s.StartCaptureWithCompletionHandler", err)
+		fmt.Println("s.StartCaptureWithCompletionHandler start success", err.IsNil())
 	})
 }
 
