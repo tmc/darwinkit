@@ -3,8 +3,10 @@ package codegen
 import "C"
 import (
 	"fmt"
+	"os"
 	"strings"
 
+	"github.com/davecgh/go-spew/spew"
 	"github.com/progrium/macdriver/generate/typing"
 	"github.com/progrium/macdriver/internal/set"
 )
@@ -115,6 +117,10 @@ func (p *Protocol) WriteGoCode(w *CodeWriter) {
 	// Delegate Prototol impl struct
 	w.WriteLine("")
 
+	fmt.Fprintln(os.Stderr, p.Type.GName)
+	if p.Type.GName == "StreamOutput" {
+		spew.Dump(p.Type)
+	}
 	if strings.Contains(p.Type.GName, "Delegate") && !p.SkipDelegate {
 		p.writeDelegateStruct(w)
 	}
@@ -134,6 +140,7 @@ func (p *Protocol) writeProtocolInterface(w *CodeWriter) {
 	}
 	w.WriteLine("type " + p.Type.GoInterfaceName() + " interface {")
 	w.Indent()
+	w.WriteLine("objc.IObject")
 	for _, pp := range p.Supers {
 		if pp.Type.Name != "NSObject" {
 			w.WriteLine(pp.Type.GoName(p.Type.Module, false))

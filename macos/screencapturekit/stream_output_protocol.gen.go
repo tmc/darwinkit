@@ -11,6 +11,7 @@ import (
 //
 // [Full Topic]: https://developer.apple.com/documentation/screencapturekit/scstreamoutput?language=objc
 type PStreamOutput interface {
+	objc.IObject
 	// optional
 	StreamDidOutputSampleBufferOfType(stream Stream, sampleBuffer coremedia.SampleBufferRef, type_ StreamOutputType)
 	HasStreamDidOutputSampleBufferOfType() bool

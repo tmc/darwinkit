@@ -8,8 +8,11 @@ import (
 	"reflect"
 	"strconv"
 	"strings"
+
+	"github.com/davecgh/go-spew/spew"
 )
 
+// https://developer.apple.com/library/archive/documentation/Cocoa/Conceptual/ObjCRuntimeGuide/Articles/ocrtTypeEncodings.html
 func getTypeEncoding(t reflect.Type) string {
 	switch t.Kind() {
 	case reflect.Bool:
@@ -63,7 +66,10 @@ func getTypeEncoding(t reflect.Type) string {
 		} else {
 			return getStructTypeEncoding(t)
 		}
+	case reflect.Uintptr:
+		return "?"
 	default:
+		spew.Dump(t.Kind())
 		panic("unsupported type:" + t.Name())
 	}
 }

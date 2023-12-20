@@ -23,8 +23,8 @@ func launched(app appkit.Application, delegate *appkit.ApplicationDelegate) {
 	app.ActivateIgnoringOtherApps(true)
 
 	captureHandler := &screenCaptureHandler{
-		StreamOutputObject: &screencapturekit.StreamOutputObject{},
-		streamDelegate:     &screencapturekit.StreamDelegate{},
+		//StreamOutputObject: &screencapturekit.StreamOutputObject{},
+		streamDelegate: &screencapturekit.StreamDelegate{},
 	}
 	captureHandler.streamDelegate.SetStreamDidStopWithError(func(s screencapturekit.Stream, err foundation.Error) {
 		fmt.Println("stream stopped", err)
@@ -40,10 +40,17 @@ func launched(app appkit.Application, delegate *appkit.ApplicationDelegate) {
 	s := screencapturekit.NewStreamWithFilterConfigurationDelegate(cf, sc, captureHandler.streamDelegate)
 
 	var dispatchQueue dispatch.Queue
-	dispatchQueue = dispatch.CreateQueue("com.example.queue", dispatch.QueueTypeSerial)
-	//dispatchQueue = dispatch.MainQueue()
+	//dispatchQueue = dispatch.CreateQueue("com.example.queue", dispatch.QueueTypeSerial)
+	dispatchQueue = dispatch.MainQueue()
+
+	StreamOutputClass := objc.NewClass[StreamOutput](
+		objc.Sel("stream:didOutputSampleBuffer:ofType:"),
+	)
+	objc.RegisterClass(StreamOutputClass)
+	o := StreamOutputClass.New()
+
 	err := foundation.Error{}
-	ok := s.AddStreamOutputTypeSampleHandlerQueueError(captureHandler, screencapturekit.StreamOutputTypeScreen, dispatchQueue, err)
+	ok := s.AddStreamOutputTypeSampleHandlerQueueError(o, screencapturekit.StreamOutputTypeScreen, dispatchQueue, err)
 	if !ok {
 		fmt.Println("s.AddStreamOutputTypeSampleHandlerQueueError", err)
 	}
@@ -109,7 +116,7 @@ func (h *screenCaptureHandler) refreshCapturableWindows() {
 
 type screenCaptureHandler struct {
 	objc.Object
-	*screencapturekit.StreamOutputObject
+	//*screencapturekit.StreamOutputObject
 
 	streamDelegate     *screencapturekit.StreamDelegate
 	availabileDisplays []screencapturekit.Display
@@ -143,27 +150,43 @@ func (sh *screenCaptureHandler) GetContentFilter() screencapturekit.ContentFilte
 	return filter
 }
 
-var _ screencapturekit.PStreamOutput = (*screenCaptureHandler)(nil)
-var _ screencapturekit.PStreamDelegate = (*screenCaptureHandler)(nil)
+type StreamOutput struct {
+	objc.Object
+}
 
-// StreamOutput methods
+// HasStreamDidOutputSampleBufferOfType
 
-func (sh *screenCaptureHandler) HasStreamDidOutputSampleBufferOfType() bool {
+func (s StreamOutput) HasStreamDidOutputSampleBufferOfType() bool {
 	panic(errors.New("*streamHandler.HasStreamDidOutputSampleBufferOfType not implemented"))
+	return s.RespondsToSelector(objc.Sel("stream:didOutputSampleBuffer:ofType:"))
 }
 
-func (sh *screenCaptureHandler) StreamDidOutputSampleBufferOfType(s screencapturekit.Stream, buf coremedia.SampleBufferRef, out screencapturekit.StreamOutputType) {
+func (s StreamOutput) StreamDidOutputSampleBufferOfType(stream screencapturekit.Stream, sampleBuffer coremedia.SampleBufferRef, type_ screencapturekit.StreamOutputType) {
 	panic(errors.New("*streamHandler.StreamDidOutputSampleBufferOfType not implemented"))
+	fmt.Println("StreamDidOutputSampleBufferOfType", stream, sampleBuffer, type_)
 }
 
-// StreamDelegate methods
+// var _ screencapturekit.PStreamOutput = (*screenCaptureHandler)(nil)
+// var _ screencapturekit.PStreamDelegate = (*screenCaptureHandler)(nil)
 
-func (sh *screenCaptureHandler) HasStreamDidStopWithError() bool {
-	panic(errors.New("*streamHandler.HasStreamDidStopWithError not implemented"))
-	return true
-}
+// // StreamOutput methods
 
-func (sh *screenCaptureHandler) StreamDidStopWithError(s screencapturekit.Stream, err foundation.Error) {
-	fmt.Println("stream stopped", err)
-	panic(errors.New("*streamHandler.StreamDidStopWithError not implemented"))
-}
+// func (sh *screenCaptureHandler) HasStreamDidOutputSampleBufferOfType() bool {
+// 	panic(errors.New("*streamHandler.HasStreamDidOutputSampleBufferOfType not implemented"))
+// }
+
+// func (sh *screenCaptureHandler) StreamDidOutputSampleBufferOfType(s screencapturekit.Stream, buf coremedia.SampleBufferRef, out screencapturekit.StreamOutputType) {
+// 	panic(errors.New("*streamHandler.StreamDidOutputSampleBufferOfType not implemented"))
+// }
+
+// // StreamDelegate methods
+
+// func (sh *screenCaptureHandler) HasStreamDidStopWithError() bool {
+// 	panic(errors.New("*streamHandler.HasStreamDidStopWithError not implemented"))
+// 	return true
+// }
+
+// func (sh *screenCaptureHandler) StreamDidStopWithError(s screencapturekit.Stream, err foundation.Error) {
+// 	fmt.Println("stream stopped", err)
+// 	panic(errors.New("*streamHandler.StreamDidStopWithError not implemented"))
+// }
