@@ -1,7 +1,6 @@
 package main
 
 import (
-	"errors"
 	"fmt"
 	"os"
 
@@ -59,6 +58,7 @@ func launched(app appkit.Application, delegate *appkit.ApplicationDelegate) {
 	s.StartCaptureWithCompletionHandler(func(err foundation.Error) {
 		fmt.Println("s.StartCaptureWithCompletionHandler start success", err.IsNil())
 	})
+	dispatch.Main()
 }
 
 type CaptureType int
@@ -96,8 +96,7 @@ func (h *screenCaptureHandler) refreshCapturableWindows() {
 			// 	fmt.Println("window", i, w.Description())
 			if w.IsOnScreen() && w.OwningApplication().ApplicationName() != "Finder" {
 				h.capturedWindows = append(h.capturedWindows, w)
-				
-				fmt.Println("captured window", w.Title()
+				fmt.Println("captured window", w.Title())
 				w.Retain()
 			}
 
@@ -147,7 +146,8 @@ func (sh *screenCaptureHandler) GetContentFilter() screencapturekit.ContentFilte
 			// }
 		}
 		//filter = screencapturekit.NewContentFilterWithDisplayIncludingWindows(display, sh.capturedWindows)
-		filter = screencapturekit.NewContentFilterWithDesktopIndependentWindow(sh.capturedWindows[[0]])
+		_ = display
+		filter = screencapturekit.NewContentFilterWithDesktopIndependentWindow(sh.capturedWindows[0])
 	case CaptureTypeWindow:
 	}
 	return filter
@@ -163,12 +163,10 @@ var _ screencapturekit.PStreamOutput = (*StreamOutput)(nil)
 // HasStreamDidOutputSampleBufferOfType
 
 func (s StreamOutput) HasStreamDidOutputSampleBufferOfType() bool {
-	panic(errors.New("*streamHandler.HasStreamDidOutputSampleBufferOfType not implemented"))
 	return s.RespondsToSelector(objc.Sel("stream:didOutputSampleBuffer:ofType:"))
 }
 
 func (s StreamOutput) StreamDidOutputSampleBufferOfType(stream screencapturekit.Stream, sampleBuffer coremedia.SampleBufferRef, type_ screencapturekit.StreamOutputType) {
-	panic(errors.New("*streamHandler.StreamDidOutputSampleBufferOfType not implemented"))
 	fmt.Println("StreamDidOutputSampleBufferOfType", stream, sampleBuffer, type_)
 }
 
