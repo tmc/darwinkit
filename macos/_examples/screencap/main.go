@@ -40,8 +40,8 @@ func launched(app appkit.Application, delegate *appkit.ApplicationDelegate) {
 	s := screencapturekit.NewStreamWithFilterConfigurationDelegate(cf, sc, captureHandler.streamDelegate)
 
 	var dispatchQueue dispatch.Queue
-	//dispatchQueue = dispatch.CreateQueue("com.example.queue", dispatch.QueueTypeSerial)
-	dispatchQueue = dispatch.MainQueue()
+	dispatchQueue = dispatch.CreateQueue("com.example.queue", dispatch.QueueTypeSerial)
+	//dispatchQueue = dispatch.MainQueue()
 
 	StreamOutputClass := objc.NewClass[StreamOutput](
 		objc.Sel("stream:didOutputSampleBuffer:ofType:"),
@@ -96,6 +96,8 @@ func (h *screenCaptureHandler) refreshCapturableWindows() {
 			// 	fmt.Println("window", i, w.Description())
 			if w.IsOnScreen() && w.OwningApplication().ApplicationName() != "Finder" {
 				h.capturedWindows = append(h.capturedWindows, w)
+				
+				fmt.Println("captured window", w.Title()
 				w.Retain()
 			}
 
@@ -144,7 +146,8 @@ func (sh *screenCaptureHandler) GetContentFilter() screencapturekit.ContentFilte
 			// objc.Retain(&w)
 			// }
 		}
-		filter = screencapturekit.NewContentFilterWithDisplayIncludingWindows(display, sh.capturedWindows)
+		//filter = screencapturekit.NewContentFilterWithDisplayIncludingWindows(display, sh.capturedWindows)
+		filter = screencapturekit.NewContentFilterWithDesktopIndependentWindow(sh.capturedWindows[[0]])
 	case CaptureTypeWindow:
 	}
 	return filter
@@ -152,7 +155,10 @@ func (sh *screenCaptureHandler) GetContentFilter() screencapturekit.ContentFilte
 
 type StreamOutput struct {
 	objc.Object
+	//screencpaturekit.SCStreamOutput
 }
+
+var _ screencapturekit.PStreamOutput = (*StreamOutput)(nil)
 
 // HasStreamDidOutputSampleBufferOfType
 
