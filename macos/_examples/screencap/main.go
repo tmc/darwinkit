@@ -1,8 +1,57 @@
 package main
 
+/*
+// Adjust the CFLAGS and LDFLAGS if needed based on the frameworks and libraries CMSampleBufferCallForEachSample depends on.
+#cgo CFLAGS: -x objective-c
+#cgo LDFLAGS: -framework CoreMedia -framework CoreFoundation
+#include <CoreMedia/CoreMedia.h>
+
+// Wrapper function for CMSampleBufferCallForEachSample.
+// We're using void* for the callback and refcon parameters to keep it generic. You might need to adjust these types based on how you're going to use them in Go.
+OSStatus Go_CMSampleBufferCallForEachSample(CMSampleBufferRef sbuf, void* callback, void* refcon) {
+    // Cast the void* back to the appropriate function pointer type.
+    OSStatus (*callbackFunc)(CMSampleBufferRef, CMItemCount, void*) = (OSStatus (*)(CMSampleBufferRef, CMItemCount, void*))callback;
+
+    // Call CMSampleBufferCallForEachSample with the provided parameters.
+    return CMSampleBufferCallForEachSample(sbuf, callbackFunc, refcon);
+}
+
+// Trampoline function declaration.
+static OSStatus trampoline(CMSampleBufferRef sbuf, CMItemCount index, void *refcon);
+
+// Function pointer to store the Go callback.
+static OSStatus (*goCallback)(CMSampleBufferRef, CMItemCount, void *) = NULL;
+
+// Function to set the Go callback.
+void setGoCallback(OSStatus (*cb)(CMSampleBufferRef, CMItemCount, void *)) {
+    goCallback = cb;
+}
+
+// Trampoline function implementation.
+static OSStatus trampoline(CMSampleBufferRef sbuf, CMItemCount index, void *refcon) {
+    if (goCallback != NULL) {
+        return goCallback(sbuf, index, refcon);
+    }
+    return -1; // or another appropriate error code
+}
+
+// Function pointer type for the callback
+typedef OSStatus (*CallbackFunc)(CMSampleBufferRef, CMItemCount, void *);
+
+// Intermediary function
+OSStatus callGoFunction(CMSampleBufferRef sbuf, CMItemCount index, void* refcon) {
+    // The Go function must be exported using //export
+    extern OSStatus mySampleBufferCallback(CMSampleBufferRef, CMItemCount, void*);
+
+    // Call the Go function
+    return mySampleBufferCallback(sbuf, index, refcon);
+}
+*/
+import "C"
 import (
 	"fmt"
 	"os"
+	"unsafe"
 
 	"github.com/progrium/macdriver/dispatch"
 	"github.com/progrium/macdriver/macos"
@@ -74,6 +123,16 @@ const (
 	CaptureTypeDisplay CaptureType = iota
 	CaptureTypeWindow  CaptureType = iota
 )
+
+//export mySampleBufferCallback
+func mySampleBufferCallback(sbuf C.CMSampleBufferRef, index C.CMItemCount, refcon unsafe.Pointer) C.OSStatus {
+	// Your callback logic here
+	return 0
+}
+
+func callForEachSample(sbuf C.CMSampleBufferRef, refcon unsafe.Pointer) C.OSStatus {
+	return C.Go_CMSampleBufferCallForEachSample(sbuf, C.callGoFunction, refcon)
+}
 
 func (h *screenCaptureHandler) refreshCapturableWindows() {
 	fmt.Println("listing sharable content")
