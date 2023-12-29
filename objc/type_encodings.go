@@ -67,7 +67,7 @@ func getTypeEncoding(t reflect.Type) string {
 			return getStructTypeEncoding(t)
 		}
 	case reflect.Uintptr:
-		return "v"
+		return "?"
 	default:
 		spew.Dump(t.Kind())
 		panic("unsupported type:" + t.Name())

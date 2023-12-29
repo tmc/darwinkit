@@ -7,6 +7,7 @@ import (
 	"github.com/progrium/macdriver/dispatch"
 	"github.com/progrium/macdriver/macos"
 	"github.com/progrium/macdriver/macos/appkit"
+	"github.com/progrium/macdriver/macos/avfoundation"
 	"github.com/progrium/macdriver/macos/coremedia"
 	"github.com/progrium/macdriver/macos/foundation"
 	"github.com/progrium/macdriver/macos/screencapturekit"
@@ -47,6 +48,12 @@ func launched(app appkit.Application, delegate *appkit.ApplicationDelegate) {
 	)
 	objc.RegisterClass(StreamOutputClass)
 	o := StreamOutputClass.New()
+
+	outputSettings := map[string]objc.IObject{}
+	writer = avfoundation.NewAssetWriterInput().InitWithMediaTypeOutputSettings(
+		avfoundation.MediaTypeVideo,
+		outputSettings,
+	)
 
 	err := foundation.Error{}
 	ok := s.AddStreamOutputTypeSampleHandlerQueueError(o, screencapturekit.StreamOutputTypeScreen, dispatchQueue, err)
@@ -166,8 +173,15 @@ func (s StreamOutput) HasStreamDidOutputSampleBufferOfType() bool {
 	return s.RespondsToSelector(objc.Sel("stream:didOutputSampleBuffer:ofType:"))
 }
 
+var writer avfoundation.AssetWriterInput
+
 func (s StreamOutput) StreamDidOutputSampleBufferOfType(stream screencapturekit.Stream, sampleBuffer coremedia.SampleBufferRef, type_ screencapturekit.StreamOutputType) {
 	fmt.Println("StreamDidOutputSampleBufferOfType", stream, sampleBuffer, type_)
+	if type_ == screencapturekit.StreamOutputTypeScreen {
+		fmt.Println("StreamDidOutputSampleBufferOfType screencapturekit.StreamOutputTypeScreen")
+		// save data into a file:
+
+	}
 }
 
 // var _ screencapturekit.PStreamOutput = (*screenCaptureHandler)(nil)
