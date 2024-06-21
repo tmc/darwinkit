@@ -127,7 +127,7 @@ func (m *ModuleWriter) WriteStructs() {
 	}
 	cw.Indent()
 	imports.ForEach(func(value string) {
-		if value != "github.com/progrium/macdriver/macos/objc" {
+		if value != "github.com/progrium/darwinkit/macos/objc" {
 			cw.WriteLine("\"" + value + "\"")
 		}
 	})
@@ -210,11 +210,11 @@ func (m *ModuleWriter) WriteFunctions() {
 	}
 	cw.Indent()
 	imports.ForEach(func(value string) {
-		if value == "github.com/progrium/macdriver/macos/"+m.Module.Package {
+		if value == "github.com/progrium/darwinkit/macos/"+m.Module.Package {
 			return
 		}
 		// avoid cycles:
-		if value != "github.com/progrium/macdriver/macos/objc" {
+		if value != "github.com/progrium/darwinkit/macos/objc" {
 			cw.WriteLine("\"" + value + "\"")
 		}
 	})

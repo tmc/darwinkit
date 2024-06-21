@@ -3,8 +3,8 @@ package generate
 import (
 	"log"
 
-	"github.com/progrium/macdriver/generate/codegen"
-	"github.com/progrium/macdriver/generate/modules"
+	"github.com/progrium/darwinkit/generate/codegen"
+	"github.com/progrium/darwinkit/generate/modules"
 )
 
 func (db *Generator) ToStruct(fw string, sym Symbol) *codegen.Struct {

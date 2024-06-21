@@ -4,10 +4,10 @@ import (
 	"fmt"
 	"strings"
 
-	"github.com/progrium/macdriver/internal/set"
+	"github.com/progrium/darwinkit/internal/set"
 
-	"github.com/progrium/macdriver/generate/modules"
-	"github.com/progrium/macdriver/generate/typing"
+	"github.com/progrium/darwinkit/generate/modules"
+	"github.com/progrium/darwinkit/generate/typing"
 )
 
 // Function is code generator for objective-c (and c) functions.
@@ -322,7 +322,7 @@ func (f *Function) GoFuncDeclare(currentModule *modules.Module) string {
 
 // GoImports return all imports for go file
 func (f *Function) GoImports() set.Set[string] {
-	var imports = set.New("github.com/progrium/macdriver/objc")
+	var imports = set.New("github.com/progrium/darwinkit/objc")
 	for _, param := range f.Parameters {
 		imports.AddSet(param.Type.GoImports())
 	}

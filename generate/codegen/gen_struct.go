@@ -1,7 +1,7 @@
 package codegen
 
 import (
-	"github.com/progrium/macdriver/generate/typing"
+	"github.com/progrium/darwinkit/generate/typing"
 )
 
 // Struct is code generator for objective-c struct
