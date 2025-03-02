@@ -18,7 +18,6 @@ func NewTokenParser(stream *TokenStream) *TokenParser {
 
 // Parse parses the token stream and returns structured information about the declaration
 func (p *TokenParser) Parse() (*ParsedDeclaration, error) {
-	result := &ParsedDeclaration{}
 	p.stream.Reset()
 
 	// Determine the declaration type based on the first tokens

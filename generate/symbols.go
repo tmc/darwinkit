@@ -3,7 +3,6 @@ package generate
 import (
 	"encoding/json"
 	"fmt"
-	"io/fs"
 	"os"
 	"path/filepath"
 	"sort"
@@ -365,10 +364,10 @@ func (db *SymbolCache) loadFromFile(filePath string) (v Symbol, err error) {
 		}
 	}
 
-	if strIn(blacklist, v.Name) {
+	if strInList(blacklist, v.Name) {
 		return v, fmt.Errorf("blacklisted symbol: %s", v.Name)
 	}
-	if strIn(pathBlacklist, v.Path) {
+	if strInList(pathBlacklist, v.Path) {
 		return v, fmt.Errorf("blacklisted path: %s", v.Path)
 	}
 	if v.Kind != "Property" && v.Kind != "Method" && v.Kind != "Framework" {
@@ -566,7 +565,8 @@ func (db *SymbolCache) ModuleSymbols(module string) (symbols []Symbol) {
 	return
 }
 
-func strIn(list []string, s string) bool {
+// strInList checks if a string is in a list of strings
+func strInList(list []string, s string) bool {
 	for _, i := range list {
 		if i == s {
 			return true
