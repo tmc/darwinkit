@@ -5,9 +5,7 @@ jobs:
     strategy:
       matrix:
         go-version: [oldstable]
-        os: [macos-12, macos-13, macos-14]
-        # Note: As of March 2025, macOS 15 is not yet available in GitHub Actions runners.
-        # When it becomes available, add macos-15 to the matrix.
+        os: [macos-12, macos-13, macos-14, macos-15]
     runs-on: ${{ matrix.os }}
     steps:
     - name: Install Go
