@@ -1,0 +1,98 @@
+{
+  "abstract": [
+    {
+      "type": "text",
+      "text": "Encapsulates a file system object’s security information in a Core Foundation object."
+    }
+  ],
+  "identifier": {
+    "url": "doc://com.apple.documentation/documentation/corefoundation/cffilesecurity",
+    "interfaceLanguage": "swift"
+  },
+  "metadata": {
+    "title": "CFFileSecurity",
+    "role": "symbol",
+    "platforms": [
+      {
+        "name": "iOS",
+        "introducedAt": "5.0",
+        "current": "18.2"
+      },
+      {
+        "name": "iPadOS",
+        "introducedAt": "5.0",
+        "current": "18.2"
+      },
+      {
+        "name": "Mac Catalyst",
+        "introducedAt": "13.0",
+        "current": "18.2"
+      },
+      {
+        "name": "macOS",
+        "introducedAt": "10.7",
+        "current": "15.2"
+      },
+      {
+        "name": "tvOS",
+        "introducedAt": "9.0",
+        "current": "18.2"
+      },
+      {
+        "name": "visionOS",
+        "introducedAt": "1.0",
+        "current": "2.2"
+      },
+      {
+        "name": "watchOS",
+        "introducedAt": "2.0",
+        "current": "11.2"
+      }
+    ],
+    "externalID": "c:@T@CFFileSecurityRef"
+  },
+  "references": {
+    "doc://com.apple.documentation/documentation/corefoundation": {
+      "title": "Core Foundation",
+      "type": "topic",
+      "identifier": "doc://com.apple.documentation/documentation/corefoundation",
+      "kind": "symbol",
+      "role": "collection",
+      "url": "/documentation/corefoundation"
+    },
+    "doc://com.apple.documentation/documentation/technologies": {
+      "title": "Technologies",
+      "type": "topic",
+      "identifier": "doc://com.apple.documentation/documentation/technologies",
+      "kind": "technologies",
+      "role": "",
+      "url": "/documentation/technologies"
+    }
+  },
+  "primaryContentSections": [
+    {
+      "kind": "declarations",
+      "declarations": [
+        {
+          "languages": [
+            "swift"
+          ],
+          "tokens": [
+            {
+              "kind": "keyword",
+              "text": "class"
+            },
+            {
+              "kind": "text",
+              "text": " "
+            },
+            {
+              "kind": "identifier",
+              "text": "CFFileSecurity"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,106 @@
+{
+  "abstract": [
+    {
+      "type": "text",
+      "text": "A reference to a writable stream object."
+    }
+  ],
+  "identifier": {
+    "url": "doc://com.apple.documentation/documentation/corefoundation/cfwritestream",
+    "interfaceLanguage": "swift"
+  },
+  "metadata": {
+    "title": "CFWriteStream",
+    "role": "symbol",
+    "platforms": [
+      {
+        "name": "iOS",
+        "introducedAt": "2.0",
+        "current": "18.2"
+      },
+      {
+        "name": "iPadOS",
+        "introducedAt": "2.0",
+        "current": "18.2"
+      },
+      {
+        "name": "Mac Catalyst",
+        "introducedAt": "13.0",
+        "current": "18.2"
+      },
+      {
+        "name": "macOS",
+        "introducedAt": "10.1",
+        "current": "15.2"
+      },
+      {
+        "name": "tvOS",
+        "introducedAt": "9.0",
+        "current": "18.2"
+      },
+      {
+        "name": "visionOS",
+        "introducedAt": "1.0",
+        "current": "2.2"
+      },
+      {
+        "name": "watchOS",
+        "introducedAt": "2.0",
+        "current": "11.2"
+      }
+    ],
+    "externalID": "c:@T@CFWriteStreamRef"
+  },
+  "references": {
+    "doc://com.apple.documentation/documentation/corefoundation": {
+      "title": "Core Foundation",
+      "type": "topic",
+      "identifier": "doc://com.apple.documentation/documentation/corefoundation",
+      "kind": "symbol",
+      "role": "collection",
+      "url": "/documentation/corefoundation"
+    },
+    "doc://com.apple.documentation/documentation/corefoundation/cfwritestream-rc8": {
+      "title": "CFWriteStream",
+      "type": "topic",
+      "identifier": "doc://com.apple.documentation/documentation/corefoundation/cfwritestream-rc8",
+      "kind": "article",
+      "role": "collectionGroup",
+      "url": "/documentation/corefoundation/cfwritestream-rc8"
+    },
+    "doc://com.apple.documentation/documentation/technologies": {
+      "title": "Technologies",
+      "type": "topic",
+      "identifier": "doc://com.apple.documentation/documentation/technologies",
+      "kind": "technologies",
+      "role": "",
+      "url": "/documentation/technologies"
+    }
+  },
+  "primaryContentSections": [
+    {
+      "kind": "declarations",
+      "declarations": [
+        {
+          "languages": [
+            "swift"
+          ],
+          "tokens": [
+            {
+              "kind": "keyword",
+              "text": "class"
+            },
+            {
+              "kind": "text",
+              "text": " "
+            },
+            {
+              "kind": "identifier",
+              "text": "CFWriteStream"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}
