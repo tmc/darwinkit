@@ -38,7 +38,7 @@ for framework in "${FRAMEWORKS[@]}"; do
     echo "Fetching documentation for $framework..."
     
     # Call the fetch_apple_docs tool
-    go run generate/tools/fetch_apple_docs.go "$framework"
+    go run generate/tools/fetch_apple_docs/main.go "$framework"
     
     # Wait a bit to be nice to Apple's servers
     sleep 1
@@ -49,15 +49,15 @@ echo "Documentation download complete"
 echo "Running documentation analyzer..."
 
 # Run the docs analyzer
-go run generate/tools/docs_analyzer.go --outdir="$OUTPUT_DIR/analysis"
+go run generate/tools/docs_analyzer/main.go --outdir="$OUTPUT_DIR/analysis"
 
 echo "Analyzing darwinkit coverage..."
 # Run the coverage analyzer
-go run generate/tools/analyze_darwinkit_coverage.go --apple-docs="$OUTPUT_DIR" --out="$OUTPUT_DIR/analysis/coverage_report.json"
+go run generate/tools/coverage_analyzer/main.go --apple-docs="$OUTPUT_DIR" --out="$OUTPUT_DIR/analysis/coverage_report.json"
 
 echo "Generating coverage report..."
 # Generate the coverage report
-go run generate/tools/generate_coverage_report.go --coverage="$OUTPUT_DIR/analysis/coverage_report.json" --output="API_COVERAGE.md"
+go run generate/tools/report_generator/main.go --coverage="$OUTPUT_DIR/analysis/coverage_report.json" --output="API_COVERAGE.md"
 
 echo "All documentation processing complete"
 echo "Coverage report generated: API_COVERAGE.md"
