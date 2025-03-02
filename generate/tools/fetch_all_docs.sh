@@ -55,4 +55,9 @@ echo "Analyzing darwinkit coverage..."
 # Run the coverage analyzer
 go run generate/tools/analyze_darwinkit_coverage.go --apple-docs="$OUTPUT_DIR" --out="$OUTPUT_DIR/analysis/coverage_report.json"
 
+echo "Generating coverage report..."
+# Generate the coverage report
+go run generate/tools/generate_coverage_report.go --coverage="$OUTPUT_DIR/analysis/coverage_report.json" --output="API_COVERAGE.md"
+
 echo "All documentation processing complete"
+echo "Coverage report generated: API_COVERAGE.md"
