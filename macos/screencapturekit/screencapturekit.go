@@ -82,7 +82,7 @@ func (e SCError) IsTCCError() bool {
 
 // GetPermissionInstructions returns instructions for how to grant screen recording permissions
 func (e SCError) GetPermissionInstructions() string {
-	if \!e.IsTCCError() {
+	if !e.IsTCCError() {
 		return ""
 	}
 
@@ -161,13 +161,13 @@ func (m SCScreenshotManager) CaptureScreenshotWithCompletion(handler func(appkit
 func (m SCScreenshotManager) CaptureScreenshotWithRetry(maxRetries int, retryDelay time.Duration, handler func(appkit.Image, SCError, bool)) {
 	var attempt int
 	var lastError SCError
+	var retryHandler func(appkit.Image, SCError)
 
-	// Create the retry handler
-	retryHandler := func(image appkit.Image, err SCError) {
+	retryHandler = func(image appkit.Image, err SCError) {
 		attempt++
 		
 		// If no error or not a TCC error, we're done
-		if err.IsNil() || \!err.IsTCCError() {
+		if err.IsNil() || !err.IsTCCError() {
 			handler(image, err, true) // Final result
 			return
 		}
