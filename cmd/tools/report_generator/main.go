@@ -11,8 +11,8 @@ import (
 	"time"
 )
 
-// Framework represents an Apple framework and its coverage stats
-type Framework struct {
+// ReportFramework represents an Apple framework and its coverage stats
+type ReportFramework struct {
 	Name             string  `json:"name"`
 	TotalSymbols     int     `json:"totalSymbols"`
 	CoveredSymbols   int     `json:"coveredSymbols"`
@@ -27,7 +27,7 @@ type Framework struct {
 // ReportData contains all data needed for the report template
 type ReportData struct {
 	GeneratedDate    string
-	Frameworks       []*Framework
+	Frameworks       []*ReportFramework
 	TotalSymbols     int
 	TotalCovered     int
 	OverallPercent   float64
@@ -35,7 +35,7 @@ type ReportData struct {
 	CompletedCount   int
 	PartialCount     int
 	MissingCount     int
-	RecommendedNext  []*Framework // Top frameworks to work on next
+	RecommendedNext  []*ReportFramework // Top frameworks to work on next
 }
 
 const reportTemplate = `# Darwinkit API Coverage Report
@@ -76,13 +76,13 @@ Based on importance and current coverage, the following frameworks are recommend
 `
 
 // readCoverageData reads the coverage data from a JSON file
-func readCoverageData(filePath string) ([]*Framework, error) {
+func readCoverageData(filePath string) ([]*ReportFramework, error) {
 	data, err := os.ReadFile(filePath)
 	if err != nil {
 		return nil, fmt.Errorf("error reading coverage data: %v", err)
 	}
 
-	var frameworks []*Framework
+	var frameworks []*ReportFramework
 	if err := json.Unmarshal(data, &frameworks); err != nil {
 		return nil, fmt.Errorf("error parsing coverage data: %v", err)
 	}
@@ -91,9 +91,9 @@ func readCoverageData(filePath string) ([]*Framework, error) {
 }
 
 // getRecommendedFrameworks returns the top frameworks to work on next
-func getRecommendedFrameworks(frameworks []*Framework) []*Framework {
+func getRecommendedFrameworks(frameworks []*ReportFramework) []*ReportFramework {
 	// Create a copy for sorting
-	ranked := make([]*Framework, len(frameworks))
+	ranked := make([]*ReportFramework, len(frameworks))
 	copy(ranked, frameworks)
 
 	// Sort by priority score (combination of importance and current coverage gap)
@@ -134,7 +134,7 @@ func getRecommendedFrameworks(frameworks []*Framework) []*Framework {
 }
 
 // generateReport generates a coverage report using the template
-func generateReport(frameworks []*Framework, outputFile string) error {
+func generateReport(frameworks []*ReportFramework, outputFile string) error {
 	// Sort frameworks by coverage percentage (descending)
 	sort.Slice(frameworks, func(i, j int) bool {
 		return frameworks[i].CoveragePercent > frameworks[j].CoveragePercent
@@ -198,7 +198,7 @@ func main() {
 	flag.Parse()
 
 	// Read coverage data
-	var frameworks []*Framework
+	var frameworks []*ReportFramework
 	
 	// If coverage file is "sample" or doesn't exist, use sample data
 	if *coverageFile == "sample" {
@@ -229,8 +229,8 @@ func main() {
 }
 
 // generateSampleData creates sample framework data for testing
-func generateSampleData() []*Framework {
-	return []*Framework{
+func generateSampleData() []*ReportFramework {
+	return []*ReportFramework{
 		{
 			Name:             "foundation",
 			TotalSymbols:     750,

@@ -9,7 +9,6 @@ import (
 	"net/http"
 	"os"
 	"path/filepath"
-	"strings"
 	"sync"
 	"time"
 )
@@ -75,20 +74,35 @@ type AppleDocResponse struct {
 			Text string `json:"text"`
 		} `json:"abstract,omitempty"`
 	} `json:"references"`
+	TopicSections []struct {
+		Kind        string   `json:"kind"`
+		Title       string   `json:"title"`
+		Identifiers []string `json:"identifiers"`
+	} `json:"topicSections"`
+	PrimaryContentSections []struct {
+		Kind         string `json:"kind"`
+		Declarations []struct {
+			Languages []string `json:"languages"`
+			Tokens    []struct {
+				Kind string `json:"kind"`
+				Text string `json:"text"`
+			} `json:"tokens"`
+		} `json:"declarations"`
+	} `json:"primaryContentSections"`
 }
 
 // FrameworkStats holds statistics about a framework's documentation coverage
 type FrameworkStats struct {
-	Name         string
-	SymbolCount  int
-	ClassCount   int
+	Name          string
+	SymbolCount   int
+	ClassCount    int
 	FunctionCount int
-	EnumCount    int
-	StructCount  int
+	EnumCount     int
+	StructCount   int
 	ProtocolCount int
-	OtherCount   int
-	Platforms    map[string]bool
-	MacOSOnly    bool
+	OtherCount    int
+	Platforms     map[string]bool
+	MacOSOnly     bool
 }
 
 // fetchDoc fetches a document from Apple's documentation API
@@ -172,6 +186,16 @@ func analyzeFramework(framework string, baseURL string) (*FrameworkStats, error)
 	stats.MacOSOnly = stats.Platforms["macOS"] && !stats.Platforms["iOS"] && !stats.Platforms["tvOS"] && !stats.Platforms["watchOS"]
 	
 	return stats, nil
+}
+
+// contains checks if a slice contains a specific item
+func contains(slice []string, item string) bool {
+	for _, s := range slice {
+		if s == item {
+			return true
+		}
+	}
+	return false
 }
 
 func saveStatsToJSON(stats []*FrameworkStats, outPath string) error {

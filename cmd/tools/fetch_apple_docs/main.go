@@ -11,8 +11,8 @@ import (
 	"time"
 )
 
-// AppleDocResponse represents the root documentation response
-type AppleDocResponse struct {
+// AppleDocumentationResponse represents the root documentation response
+type AppleDocumentationResponse struct {
 	Abstract []struct {
 		Type string `json:"type"`
 		Text string `json:"text"`
@@ -47,6 +47,11 @@ type AppleDocResponse struct {
 			Text string `json:"text"`
 		} `json:"abstract,omitempty"`
 	} `json:"references"`
+	TopicSections []struct {
+		Kind        string   `json:"kind"`
+		Title       string   `json:"title"`
+		Identifiers []string `json:"identifiers"`
+	} `json:"topicSections"`
 	PrimaryContentSections []struct {
 		Kind         string `json:"kind"`
 		Declarations []struct {
@@ -57,15 +62,10 @@ type AppleDocResponse struct {
 			} `json:"tokens"`
 		} `json:"declarations"`
 	} `json:"primaryContentSections"`
-	TopicSections []struct {
-		Kind        string   `json:"kind"`
-		Title       string   `json:"title"`
-		Identifiers []string `json:"identifiers"`
-	} `json:"topicSections"`
 }
 
-// Symbol represents our simplified symbol format
-type Symbol struct {
+// SymbolSummary represents our simplified symbol format
+type SymbolSummary struct {
 	Name        string `json:"name"`
 	Path        string `json:"path"`
 	Kind        string `json:"kind"`
@@ -84,7 +84,7 @@ type Symbol struct {
 	} `json:"functions,omitempty"`
 }
 
-func fetchDoc(url string) (*AppleDocResponse, error) {
+func fetchDocument(url string) (*AppleDocumentationResponse, error) {
 	client := &http.Client{
 		Timeout: 30 * time.Second,
 	}
@@ -111,7 +111,7 @@ func fetchDoc(url string) (*AppleDocResponse, error) {
 		return nil, fmt.Errorf("error: received status code %d\nResponse body: %s", resp.StatusCode, string(body))
 	}
 
-	var docResponse AppleDocResponse
+	var docResponse AppleDocumentationResponse
 	if err := json.Unmarshal(body, &docResponse); err != nil {
 		return nil, fmt.Errorf("error parsing JSON: %v\nResponse body: %s", err, string(body))
 	}
@@ -119,7 +119,7 @@ func fetchDoc(url string) (*AppleDocResponse, error) {
 	return &docResponse, nil
 }
 
-func getObjCVariant(doc *AppleDocResponse) string {
+func getObjCVariant(doc *AppleDocumentationResponse) string {
 	for _, variant := range doc.TopicSections {
 		if variant.Kind == "taskGroup" && variant.Title == "Objective-C" {
 			for _, id := range variant.Identifiers {
@@ -132,7 +132,7 @@ func getObjCVariant(doc *AppleDocResponse) string {
 	return ""
 }
 
-func extractDeclaration(doc *AppleDocResponse) string {
+func extractDeclaration(doc *AppleDocumentationResponse) string {
 	for _, section := range doc.PrimaryContentSections {
 		if section.Kind == "declarations" {
 			for _, decl := range section.Declarations {
@@ -169,14 +169,14 @@ func processSymbol(baseURL string, ref struct {
 		Type string `json:"type"`
 		Text string `json:"text"`
 	} `json:"abstract,omitempty"`
-}, visited map[string]bool) (*Symbol, error) {
+}, visited map[string]bool) (*SymbolSummary, error) {
 	if visited[ref.URL] {
 		return nil, nil
 	}
 	visited[ref.URL] = true
 
 	url := baseURL + ref.URL + ".json"
-	doc, err := fetchDoc(url)
+	doc, err := fetchDocument(url)
 	if err != nil {
 		return nil, err
 	}
@@ -184,13 +184,13 @@ func processSymbol(baseURL string, ref struct {
 	// Try to get Objective-C variant
 	objcURL := getObjCVariant(doc)
 	if objcURL != "" {
-		doc, err = fetchDoc(baseURL + objcURL + ".json")
+		doc, err = fetchDocument(baseURL + objcURL + ".json")
 		if err != nil {
 			return nil, err
 		}
 	}
 
-	symbol := &Symbol{
+	symbol := &SymbolSummary{
 		Name:       doc.Metadata.Title,
 		Path:       strings.TrimPrefix(doc.Identifier.URL, "doc://com.apple.documentation/documentation/"),
 		Kind:       doc.Metadata.RoleHeading,
@@ -225,7 +225,7 @@ func main() {
 	baseURL := "https://developer.apple.com/tutorials/data/documentation"
 	url := fmt.Sprintf("%s/%s.json", baseURL, framework)
 
-	doc, err := fetchDoc(url)
+	doc, err := fetchDocument(url)
 	if err != nil {
 		fmt.Printf("Error fetching framework documentation: %v\n", err)
 		os.Exit(1)
@@ -237,7 +237,7 @@ func main() {
 		os.Exit(1)
 	}
 
-	var symbols []Symbol
+	var symbols []SymbolSummary
 	visited := make(map[string]bool)
 
 	// Process each reference
@@ -269,5 +269,19 @@ func main() {
 		os.Exit(1)
 	}
 
+	// Also save the original overview
+	overviewPath := filepath.Join(outDir, "overview.json")
+	overviewJSON, err := json.MarshalIndent(doc, "", "  ")
+	if err != nil {
+		fmt.Printf("Error formatting overview JSON: %v\n", err)
+		os.Exit(1)
+	}
+
+	if err := os.WriteFile(overviewPath, overviewJSON, 0644); err != nil {
+		fmt.Printf("Error writing overview file: %v\n", err)
+		os.Exit(1)
+	}
+
 	fmt.Printf("Successfully processed %d symbols for %s\n", len(symbols), framework)
+	fmt.Printf("Saved to %s and %s\n", outPath, overviewPath)
 }

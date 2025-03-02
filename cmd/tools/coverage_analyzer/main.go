@@ -7,19 +7,18 @@ import (
 	"log"
 	"os"
 	"path/filepath"
-	"strings"
 )
 
-// Framework represents an Apple framework and its coverage in darwinkit
-type Framework struct {
-	Name              string `json:"name"`
-	TotalSymbols      int    `json:"totalSymbols"`
-	CoveredSymbols    int    `json:"coveredSymbols"`
+// AnalysisFramework represents an Apple framework and its coverage in darwinkit
+type AnalysisFramework struct {
+	Name              string  `json:"name"`
+	TotalSymbols      int     `json:"totalSymbols"`
+	CoveredSymbols    int     `json:"coveredSymbols"`
 	CoveragePercent   float64 `json:"coveragePercent"`
-	Status            string `json:"status"` // "complete", "partial", "missing"
-	MacOSOnly         bool   `json:"macOSOnly"`
-	ImportantSymbols  int    `json:"importantSymbols"` 
-	ImportantCovered  int    `json:"importantCovered"`
+	Status            string  `json:"status"` // "complete", "partial", "missing"
+	MacOSOnly         bool    `json:"macOSOnly"`
+	ImportantSymbols  int     `json:"importantSymbols"` 
+	ImportantCovered  int     `json:"importantCovered"`
 	ImportantPercent  float64 `json:"importantPercent"`
 }
 
@@ -44,7 +43,7 @@ func main() {
 	}
 
 	// Print summary
-	printCoverageSummary(coverage)
+	printCoverageSummary(coverage, *outFile)
 }
 
 func loadAppleStats(docsDir string) (map[string]map[string]int, error) {
@@ -100,11 +99,11 @@ func loadAppleStats(docsDir string) (map[string]map[string]int, error) {
 	return stats, nil
 }
 
-func analyzeFrameworkCoverage(appleStats map[string]map[string]int, darwinkitDir string) []*Framework {
+func analyzeFrameworkCoverage(appleStats map[string]map[string]int, darwinkitDir string) []*AnalysisFramework {
 	// This would normally scan through the darwinkit code to see what's implemented
 	// For demonstration, we'll simulate coverage analysis
 	
-	var coverage []*Framework
+	var coverage []*AnalysisFramework
 	
 	for fw, stats := range appleStats {
 		totalSymbols := stats["symbols"]
@@ -125,7 +124,7 @@ func analyzeFrameworkCoverage(appleStats map[string]map[string]int, darwinkitDir
 		importantCovered := min(coveredSymbols, importantSymbols)
 		importantPercent := float64(importantCovered) / float64(importantSymbols) * 100.0
 		
-		coverage = append(coverage, &Framework{
+		coverage = append(coverage, &AnalysisFramework{
 			Name:             fw,
 			TotalSymbols:     totalSymbols,
 			CoveredSymbols:   coveredSymbols,
@@ -161,7 +160,7 @@ func estimateCoveredSymbols(framework string, darwinkitDir string) int {
 func isMacOSOnly(framework string) bool {
 	macOSOnlyFrameworks := []string{"appkit"}
 	for _, fw := range macOSOnlyFrameworks {
-		if strings.EqualFold(fw, framework) {
+		if fw == framework {
 			return true
 		}
 	}
@@ -175,7 +174,7 @@ func min(a, b int) int {
 	return b
 }
 
-func saveCoverageReport(coverage []*Framework, outFile string) error {
+func saveCoverageReport(coverage []*AnalysisFramework, outFile string) error {
 	data, err := json.MarshalIndent(coverage, "", "  ")
 	if err != nil {
 		return fmt.Errorf("error serializing coverage report: %v", err)
@@ -184,11 +183,11 @@ func saveCoverageReport(coverage []*Framework, outFile string) error {
 	return os.WriteFile(outFile, data, 0644)
 }
 
-func printCoverageSummary(coverage []*Framework) {
+func printCoverageSummary(coverage []*AnalysisFramework, outFile string) {
 	fmt.Println("\nDarwinkit Framework Coverage Summary:")
 	fmt.Println("====================================")
 	fmt.Printf("%-15s %-10s %-10s %-10s %-10s\n", "Framework", "Total", "Covered", "Coverage", "Status")
-	fmt.Println(strings.Repeat("-", 60))
+	fmt.Println("------------------------------------------------------------")
 	
 	var totalSymbols, totalCovered int
 	
@@ -200,7 +199,7 @@ func printCoverageSummary(coverage []*Framework) {
 		totalCovered += fw.CoveredSymbols
 	}
 	
-	fmt.Println(strings.Repeat("-", 60))
+	fmt.Println("------------------------------------------------------------")
 	totalPercent := float64(totalCovered) / float64(totalSymbols) * 100.0
 	fmt.Printf("%-15s %-10d %-10d %-10.1f%%\n", "TOTAL", totalSymbols, totalCovered, totalPercent)
 	
